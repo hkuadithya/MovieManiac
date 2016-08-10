@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rooLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="TITLE"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewMovieTitle"
+                style="@style/movieTVDetailsHeadingValue"
+                android:text="loading..."
+                app:fontType="medium" />
+
+            <include layout="@layout/app_divider" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="DESCRIPTION"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewDescription"
+                style="@style/movieTVDetailsHeadingValue"
+                android:layout_gravity="fill"
+                android:text="loading..."
+                app:fontType="medium" />
+
+            <include layout="@layout/app_divider" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="CAST"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewMovieCast"
+                style="@style/movieTVDetailsHeadingValue"
+                android:layout_gravity="fill"
+                android:text="loading..."
+                app:fontType="medium" />
+
+            <include layout="@layout/app_divider" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="GENRE"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewMovieGenre"
+                style="@style/movieTVDetailsHeadingValue"
+                android:text="loading..."
+                app:fontType="medium" />
+
+            <include layout="@layout/app_divider" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="LANGUAGE"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewLanguage"
+                style="@style/movieTVDetailsHeadingValue"
+                android:text="loading..."
+                app:fontType="medium" />
+
+            <include layout="@layout/app_divider" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="RELEASE DATE"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewReleaseDate"
+                style="@style/movieTVDetailsHeadingValue"
+                android:text="loading..."
+                app:fontType="medium" />
+
+            <include layout="@layout/app_divider" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="TMDB VOTE COUNT"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewVotes"
+                style="@style/movieTVDetailsHeadingValue"
+                android:text="loading..."
+                app:fontType="medium" />
+
+            <include layout="@layout/app_divider" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                style="@style/movieTVDetailsHeading"
+                android:text="TMDB AVERAGE VOTE"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewVoteAverage"
+                style="@style/movieTVDetailsHeadingValue"
+                android:text="loading..."
+                app:fontType="medium" />
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+    <!--<com.adithyaupadhya.uimodule.applicationfont.RobotoTextView-->
+    <!--android:id="@+id/textViewBanner"-->
+    <!--style="@style/movieTVDetailsHeading"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:background="@android:color/white"-->
+    <!--android:gravity="center"-->
+    <!--android:padding="10dp"-->
+    <!--android:text="SIMILAR CONTENT (Loading...)"-->
+    <!--android:textColor="#9C27B0"-->
+    <!--app:fontType="bold" />-->
+
+    <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
+        android:id="@+id/view_trailer"
+        style="@style/watchVideoButtonStyle"
+        android:visibility="visible"
+        app:fontType="bold" />
+
+    <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+        android:id="@+id/textViewBanner"
+        style="@style/movieTVDetailsHeading"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="SIMILAR CONTENT (Loading...)"
+        android:textColor="#9C27B0"
+        android:textSize="19sp"
+        app:fontType="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+    <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
+        android:id="@+id/share_button"
+        style="@style/shareButtonStyle"
+        android:visibility="gone"
+        app:fontType="bold" />
+
+
+</LinearLayout>

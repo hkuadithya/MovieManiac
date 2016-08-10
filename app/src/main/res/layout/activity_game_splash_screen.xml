@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background"
+    tools:context="com.adithyaupadhya.moviemaniac.games.GameSplashScreenActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/appTransparentTint" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/app_icon"
+            android:layout_marginBottom="30dp"/>
+
+
+        <com.adithyaupadhya.uimodule.roundcornerprogressbar.RoundCornerProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            app:rcBackgroundColor="@android:color/white"
+            app:rcMax="100"
+            app:rcProgress="10"
+            app:rcProgressColor="@color/colorPrimaryDark"
+            app:rcRadius="8dp" />
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:text="LOADING GAME. PLEASE WAIT..."
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                app:fontType="bold" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
+                android:id="@+id/buttonBeginGame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:background="@color/app_material_blue"
+                android:text="LET'S HAVE FUN!"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

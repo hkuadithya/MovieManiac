@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/appListBackgroundColor"
+    android:fillViewport="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="#D1C4E9"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+                <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="email"
+                    android:text="@string/application_credits"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    app:fontType="medium" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.facebook.share.widget.LikeView
+                        android:id="@+id/facebookLikeView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp" />
+
+                    <com.google.android.gms.plus.PlusOneButton
+                        android:id="@+id/googlePlusOneButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginStart="80dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
+                android:id="@+id/buttonShareApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_material_blue"
+                android:text="@string/share_this_app"
+                android:textAllCaps="false"
+                android:layout_marginBottom="20dp"
+                android:textSize="18sp"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</ScrollView>

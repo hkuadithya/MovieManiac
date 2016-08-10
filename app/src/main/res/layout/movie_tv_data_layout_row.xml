@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="7dp"
+        android:paddingRight="7dp">
+
+        <ImageView
+            android:id="@+id/networkImageView"
+            android:layout_width="110dp"
+            android:layout_height="165dp"
+            android:src="@drawable/default_img" />
+
+        <ImageView
+            android:id="@+id/imageViewLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/networkImageView"
+            android:layout_marginBottom="-2dp"
+            android:src="@drawable/china" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewMovieName"
+            style="@style/cardHeadingStyle"
+            android:layout_toEndOf="@id/networkImageView"
+            android:layout_toRightOf="@id/networkImageView"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="HELLO" />
+
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewGenre"
+            style="@style/cardItemHeadingStyle"
+            android:layout_below="@id/textViewMovieName"
+            android:layout_toEndOf="@id/networkImageView"
+            android:layout_toRightOf="@id/networkImageView"
+            android:text="Genre:"
+            android:textColor="@color/cardTitleColor"
+            app:fontType="medium" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewGenreValue"
+            style="@style/cardItemHeadingStyle"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textViewMovieName"
+            android:layout_toEndOf="@id/textViewGenre"
+            android:layout_toRightOf="@id/textViewGenre"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="2"
+            android:text="loading..."
+            app:fontType="medium" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewVoteCount"
+            style="@style/cardItemHeadingStyle"
+            android:layout_below="@id/textViewGenreValue"
+            android:layout_toEndOf="@id/networkImageView"
+            android:layout_toRightOf="@id/networkImageView"
+            android:text="Vote Count:"
+            android:textColor="@color/cardTitleColor"
+            app:fontType="medium" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewVoteCountValue"
+            style="@style/cardItemHeadingStyle"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textViewGenreValue"
+            android:text="loading..."
+            app:fontType="medium" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewVoteAverage"
+            style="@style/cardItemHeadingStyle"
+            android:layout_below="@id/textViewVoteCount"
+            android:layout_toEndOf="@id/networkImageView"
+            android:layout_toRightOf="@id/networkImageView"
+            android:text="Average Vote:"
+            android:textColor="@color/cardTitleColor"
+            app:fontType="medium" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewVoteAverageValue"
+            style="@style/cardItemHeadingStyle"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textViewVoteCount"
+            android:text="loading..."
+            app:fontType="medium" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewRelease"
+            style="@style/cardItemHeadingStyle"
+            android:layout_below="@id/textViewVoteAverage"
+            android:layout_toEndOf="@id/networkImageView"
+            android:layout_toRightOf="@id/networkImageView"
+            android:text="Release:"
+            android:textColor="@color/cardTitleColor"
+            app:fontType="medium" />
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+            android:id="@+id/textViewReleaseDate"
+            style="@style/cardItemHeadingStyle"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textViewVoteAverage"
+            android:text="loading..."
+
+            app:fontType="medium" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

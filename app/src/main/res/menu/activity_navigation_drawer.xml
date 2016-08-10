@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_movie"
+            android:checked="true"
+            android:icon="@drawable/vector_drawer_movie"
+            android:title="Movie Maniac" />
+        <item
+            android:id="@+id/nav_tvseries"
+            android:icon="@drawable/vector_drawer_tv"
+            android:title="TV Series" />
+        <item
+            android:id="@+id/nav_celebrity"
+            android:icon="@drawable/vector_drawer_celebrity"
+            android:title="Celebrity Club" />
+        <item
+            android:id="@+id/nav_game"
+            android:icon="@drawable/vector_drawer_game"
+            android:title="Fun Game :)" />
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_support"
+                android:icon="@drawable/vector_drawer_thumbs"
+                android:title="Support developers" />
+            <item
+                android:id="@+id/nav_rateapp"
+                android:icon="@drawable/vector_drawer_rating"
+                android:title="Rate five stars" />
+            <item
+                android:id="@+id/nav_bug"
+                android:icon="@drawable/vector_drawer_bug"
+                android:title="Report Bugs" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/vector_drawer_logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

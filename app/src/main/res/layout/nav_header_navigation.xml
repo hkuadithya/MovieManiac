@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/navdrawer_background"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+
+    <com.adithyaupadhya.uimodule.circularimageview.CircularNetworkImageView
+        android:id="@+id/circularImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/vector_default_person"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="1dp" />
+
+    <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:paddingTop="5dp"
+        android:singleLine="true"
+        android:text="Loading..."
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        app:fontType="medium" />
+
+    <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Loading..."
+        app:fontType="light" />
+
+</LinearLayout>

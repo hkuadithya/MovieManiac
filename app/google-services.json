@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "754483475794",
+    "project_id": "moviemaniac-d0a3f"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754483475794:android:f380193239c16775",
+        "android_client_info": {
+          "package_name": "com.adithyaupadhya.moviemaniac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754483475794-tc3upvtnhc8k4tnp908654ob5r4ra666.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adithyaupadhya.moviemaniac",
+            "certificate_hash": "4AE93A6795FA3CD5D116CF23D9AC054F44316680"
+          }
+        },
+        {
+          "client_id": "754483475794-vhpktbp18ac5842mt78vrd493c3cubsd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqgJVOByGW5Wg_MKJlhKHugkUk0Fj2jxc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

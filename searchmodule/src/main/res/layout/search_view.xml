@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="invisible">
+
+    <View
+        android:id="@+id/transparent_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/search_layover_bg"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/search_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="2dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true">
+
+            <EditText
+                android:id="@+id/searchTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"
+                android:paddingLeft="@dimen/search_view_text_padding"
+                android:paddingRight="@dimen/search_view_text_padding"
+                android:singleLine="true"
+                android:textColor="#212121"
+                android:textColorHint="#727272"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/action_empty_btn"
+                style="@style/MSV_ImageButton"
+                android:layout_gravity="end|center_vertical"
+                android:src="@drawable/ic_action_navigation_close"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/action_voice_btn"
+                style="@style/MSV_ImageButton"
+                android:layout_gravity="end|center_vertical"
+                android:src="@drawable/ic_action_voice_search" />
+
+            <ImageButton
+                android:id="@+id/action_up_btn"
+                style="@style/MSV_ImageButton"
+                android:layout_gravity="start|center_vertical"
+                android:src="@drawable/ic_action_navigation_arrow_back" />
+
+        </android.support.v7.widget.CardView>
+
+
+        <ListView
+            android:id="@+id/suggestion_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:divider="@android:color/transparent" />
+    </LinearLayout>
+</FrameLayout>
