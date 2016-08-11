@@ -23,14 +23,16 @@ import com.android.volley.VolleyError;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 
-import io.fabric.sdk.android.Fabric;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
 
+import io.fabric.sdk.android.Fabric;
+
 public class AppMainActivity extends AppCompatActivity implements Response.ErrorListener, View.OnClickListener {
     private boolean mMovieGenreLoaded, mTvGenreLoaded;
+    private AppPreferenceManager mPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
         APIConstants instance = APIConstants.getInstance();
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        mPrefManager = AppPreferenceManager.getAppPreferenceInstance(this);
 
         if (instance.areGenreMapsEmpty())
             establishNetworkCall();
@@ -65,10 +69,9 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
 
 
     public void launchNewActivity() {
-        AppPreferenceManager manager = AppPreferenceManager.getAppPreferenceInstance(AppMainActivity.this);
 
         //  FIRST TIME USER: DIRECT HIM/HER TO SIGN IN ACTIVITY
-        if (manager.getPreferenceData(DBConstants.USER_ID) == null) {
+        if (mPrefManager.getPreferenceData(DBConstants.USER_ID) == null) {
             startActivity(new Intent(AppMainActivity.this, SignInActivity.class));
         }
         //  APP VISITED BEFORE: DIRECT HIM/HER TO NAVIGATION ACTIVITY
@@ -112,7 +115,15 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
 
                 APIConstants.getInstance().setMovieGenreMap(movieMap);
                 mMovieGenreLoaded = true;
+
+                if (mPrefManager.getPreferenceData(DBConstants.MOVIE_GENRE_CACHE) == null) {
+                    mPrefManager.setPreferenceData(DBConstants.MOVIE_GENRE_CACHE,
+                            APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(movieMap));
+                }
+
                 proceedIfBothItemsLoaded();
+
+
                 // Log.d("MMVOLLEY", jsonObject.toString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -134,6 +145,12 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
 
                 APIConstants.getInstance().setTvGenreMap(tvMap);
                 mTvGenreLoaded = true;
+
+                if (mPrefManager.getPreferenceData(DBConstants.TV_GENRE_CACHE) == null) {
+                    mPrefManager.setPreferenceData(DBConstants.TV_GENRE_CACHE,
+                            APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(tvMap));
+                }
+
                 proceedIfBothItemsLoaded();
                 // Log.d("MMVOLLEY", jsonObject.toString());
             } catch (IOException e) {

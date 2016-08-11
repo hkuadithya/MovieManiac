@@ -3,10 +3,14 @@ package com.adithyaupadhya.newtorkmodule.volley.networkconstants;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.adithyaupadhya.database.DBConstants;
+import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.newtorkmodule.R;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +29,34 @@ public class APIConstants {
         mObjectMapper = new ObjectMapper();
         mObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         initializeLanguageCountryMap();
+    }
+
+    private void loadMovieTVGenresFromCache(Context context) {
+        synchronized (this) {
+            if(mMovieGenre == null) {
+                AppPreferenceManager manager = AppPreferenceManager.getAppPreferenceInstance(context);
+
+                try {
+                    mMovieGenre = mObjectMapper.readValue(manager.getPreferenceData(DBConstants.MOVIE_GENRE_CACHE),
+                            new TypeReference<HashMap<Integer, String>>(){});
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(mTVGenre == null) {
+                AppPreferenceManager manager = AppPreferenceManager.getAppPreferenceInstance(context);
+
+                try {
+                    mTVGenre = mObjectMapper.readValue(manager.getPreferenceData(DBConstants.TV_GENRE_CACHE),
+                            new TypeReference<HashMap<Integer, String>>(){});
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public static APIConstants getInstance() {
@@ -92,8 +124,12 @@ public class APIConstants {
         this.mTVGenre = tvGenreMap;
     }
 
-    public String getMovieGenreList(List<Integer> genreIds) {
+    public String getMovieGenreList(List<Integer> genreIds, Context context) {
         ArrayList<String> genreList = new ArrayList<>(genreIds.size());
+
+        if(mMovieGenre == null)
+            loadMovieTVGenresFromCache(context);
+
         for (int genre : genreIds)
             if (mMovieGenre.containsKey(genre))
                 genreList.add(mMovieGenre.get(genre));
@@ -101,8 +137,11 @@ public class APIConstants {
         return (genreList.size() > 0) ? TextUtils.join(", ", genreList) : "N/A";
     }
 
-    public String getTVGenreList(List<Integer> genreIds) {
+    public String getTVGenreList(List<Integer> genreIds, Context context) {
         ArrayList<String> genreList = new ArrayList<>(genreIds.size());
+
+        if(mTVGenre == null)
+            loadMovieTVGenresFromCache(context);
 
         for (int genre : genreIds)
             if (mTVGenre.containsKey(genre))

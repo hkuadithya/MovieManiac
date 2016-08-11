@@ -64,4 +64,7 @@ public interface DBConstants {
     String USER_NAME = "user_name";
     String GAME_HIGH_SCORE = "_high_score";
     String APP_FIRST_TIME_LAUNCHED = "first_launch_flag";
+
+    String MOVIE_GENRE_CACHE = "movie_genre_cache";
+    String TV_GENRE_CACHE = "tv_genre_cache";
 }

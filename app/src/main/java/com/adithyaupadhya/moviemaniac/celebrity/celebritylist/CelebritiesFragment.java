@@ -17,7 +17,6 @@ import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnLoadMoreListener;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
 import com.adithyaupadhya.uimodule.materialprogress.ProgressWheel;
 import com.android.volley.VolleyError;
