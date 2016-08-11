@@ -73,7 +73,7 @@ public class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSer
         recyclerVH.textViewVoteCountValue.setText(Utils.toString(results.vote_count));
         recyclerVH.textViewReleaseDate.setText(results.first_air_date);
         recyclerVH.textViewVoteAverageValue.setText(APIConstants.getFormattedDecimal(results.vote_average));
-        recyclerVH.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids));
+        recyclerVH.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids, mContext));
 
         recyclerVH.imageViewLanguage.setImageDrawable(APIConstants.getInstance().getCountryFlag(results.original_language) != null ?
                 ContextCompat.getDrawable(mContext, APIConstants.getInstance().getCountryFlag(results.original_language)) : null);

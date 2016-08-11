@@ -79,7 +79,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.RecyclerVi
         holder.textViewVoteCountValue.setText(String.valueOf(results.vote_count.toString()));
         holder.textViewReleaseDate.setText(results.release_date);
         holder.textViewVoteAverageValue.setText(APIConstants.getFormattedDecimal(results.vote_average));
-        holder.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids));
+        holder.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids, mContext));
 
         holder.imageViewLanguage.setImageDrawable(APIConstants.getInstance().getCountryFlag(results.original_language) != null ?
                 ContextCompat.getDrawable(mContext, APIConstants.getInstance().getCountryFlag(results.original_language)) : null);

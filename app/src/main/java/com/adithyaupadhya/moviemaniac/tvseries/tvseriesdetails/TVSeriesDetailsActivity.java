@@ -79,7 +79,7 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity implements 
     private void bindMovieData(View view) {
         ((TextView) view.findViewById(R.id.textViewMovieTitle)).setText(results.name);
         ((TextView) view.findViewById(R.id.textViewDescription)).setText(results.overview);
-        ((TextView) view.findViewById(R.id.textViewMovieGenre)).setText(APIConstants.getInstance().getTVGenreList(results.genre_ids));
+        ((TextView) view.findViewById(R.id.textViewMovieGenre)).setText(APIConstants.getInstance().getTVGenreList(results.genre_ids, this));
         ((TextView) view.findViewById(R.id.textViewLanguage)).setText(results.original_language.toUpperCase());
         ((TextView) view.findViewById(R.id.textViewReleaseDate)).setText(results.first_air_date);
         ((TextView) view.findViewById(R.id.textViewVotes)).setText(String.valueOf(results.vote_count));
@@ -123,7 +123,7 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity implements 
     public String retrieveShareBody() {
 
         return "TV SERIES TITLE\n" + results.name +
-                "\n\nGENRE\n" + APIConstants.getInstance().getTVGenreList(results.genre_ids) +
+                "\n\nGENRE\n" + APIConstants.getInstance().getTVGenreList(results.genre_ids, this) +
                 "\n\nCREDITS\n" + ((TextView) findViewById(R.id.textViewMovieCast)).getText() +
                 "\n\nRELEASE DATE\n" + results.first_air_date +
                 "\n\nLANGUAGE\n" + results.original_language +

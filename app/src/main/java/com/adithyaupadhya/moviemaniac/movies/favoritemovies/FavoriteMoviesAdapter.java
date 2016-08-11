@@ -73,7 +73,7 @@ public class FavoriteMoviesAdapter extends AbstractCursorAdapter<FavoriteMoviesA
         recyclerVH.textViewVoteCountValue.setText(String.valueOf(results.vote_count));
         recyclerVH.textViewReleaseDate.setText(results.release_date);
         recyclerVH.textViewVoteAverageValue.setText(APIConstants.getFormattedDecimal(results.vote_average));
-        recyclerVH.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids));
+        recyclerVH.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids, mContext));
 
         recyclerVH.imageViewLanguage.setImageDrawable(APIConstants.getInstance().getCountryFlag(results.original_language) != null ?
                 ContextCompat.getDrawable(mContext, APIConstants.getInstance().getCountryFlag(results.original_language)) : null);

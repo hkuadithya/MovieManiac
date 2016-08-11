@@ -79,7 +79,7 @@ public class TVSeriesAdapter extends RecyclerView.Adapter<TVSeriesAdapter.Recycl
         holder.textViewVoteCountValue.setText(Utils.toString(results.vote_count));
         holder.textViewReleaseDate.setText(results.first_air_date);
         holder.textViewVoteAverageValue.setText(APIConstants.getFormattedDecimal(results.vote_average));
-        holder.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids));
+        holder.textViewGenreValue.setText(APIConstants.getInstance().getMovieGenreList(results.genre_ids, mContext));
 
         holder.imageViewLanguage.setImageDrawable(APIConstants.getInstance().getCountryFlag(results.origin_country) != null ?
                 ContextCompat.getDrawable(mContext, APIConstants.getInstance().getCountryFlag(results.origin_country)) : null);
