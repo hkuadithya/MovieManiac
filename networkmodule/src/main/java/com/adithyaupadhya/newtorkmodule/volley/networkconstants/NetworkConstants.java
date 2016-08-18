@@ -4,8 +4,8 @@ package com.adithyaupadhya.newtorkmodule.volley.networkconstants;
  * Created by adithya.upadhya on 17-01-2016.
  */
 public interface NetworkConstants {
-    //String API_KEY = "api_key=cc4b67c52acb514bdf4931f7cedfd12b";
-    String API_KEY = "api_key=3db61f99f5b86b7f997e3141af909031";
+    // Please obtain your own private TMDb api key through registration.
+    String API_KEY = "api_key=";
 
     //  URL'S PERTAINING TO MOVIES
     String UPCOMING_MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/upcoming?" + API_KEY + "&page=";

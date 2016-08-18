@@ -106,7 +106,12 @@ public class SignInActivity extends AppCompatActivity implements
     }
 
     private void googlePlusLogin() {
-        mApiClient.clearDefaultAccountAndReconnect();
+        if (mApiClient.isConnected()) {
+            mApiClient.clearDefaultAccountAndReconnect();
+        } else {
+            mApiClient.connect();
+        }
+
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
