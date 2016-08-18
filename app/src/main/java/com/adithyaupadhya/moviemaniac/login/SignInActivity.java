@@ -190,9 +190,9 @@ public class SignInActivity extends AppCompatActivity implements
                 mProgressLayout.setVisibility(View.GONE);
 
                 if (Utils.isNetworkAvailable(this))
-                    Toast.makeText(SignInActivity.this, "Google Authentication Failed! Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Google Authentication Failed! Please try again", Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(SignInActivity.this, "Network Error! Please connect to your wifi.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Network Error! Please connect to your wifi.", Toast.LENGTH_LONG).show();
             }
         } else {
             mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
@@ -207,8 +207,7 @@ public class SignInActivity extends AppCompatActivity implements
         preference.setPreferenceData(DBConstants.USER_PROFILE_PIC, profilePic);
         preference.setPreferenceData(DBConstants.USER_NAME, name);
 
-        //Fabric.with(getApplicationContext(), Crashlytics.getInstance());
-        // Crashlytics logging user information
+        //Crashlytics user logging
         Crashlytics.setUserName(name);
         Crashlytics.setUserEmail(email);
     }

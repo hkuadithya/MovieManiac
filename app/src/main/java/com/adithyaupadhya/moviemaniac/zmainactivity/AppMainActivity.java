@@ -76,6 +76,10 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
         }
         //  APP VISITED BEFORE: DIRECT HIM/HER TO NAVIGATION ACTIVITY
         else {
+            // Crashlytics user logging
+            Crashlytics.setUserName(mPrefManager.getPreferenceData(DBConstants.USER_NAME));
+            Crashlytics.setUserEmail(mPrefManager.getPreferenceData(DBConstants.USER_EMAIL));
+
             startActivity(new Intent(AppMainActivity.this, NavigationActivity.class));
         }
 

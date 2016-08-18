@@ -11,6 +11,6 @@ public interface VolleyNetworkListener extends Response.Listener<JSONObject>, Re
 }
 
 
-                                                                                                                                                                                                                                                                                                            //    String API_KEY = "api_key=cc4b67c52acb514bdf4931f7cedfd12b";
-                                                                                                                                                                                                                                                                                                            //    String API_KEY = "api_key=3db61f99f5b86b7f997e3141af909031";
+                                                                                                                                                                                                                                                                                                            //      cc4b67c52acb514bdf4931f7cedfd12b
+                                                                                                                                                                                                                                                                                                            //      3db61f99f5b86b7f997e3141af909031
 
