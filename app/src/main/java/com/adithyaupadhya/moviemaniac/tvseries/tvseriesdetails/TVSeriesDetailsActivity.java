@@ -183,10 +183,10 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity implements 
 
             if (results != null)
                 for (TMDBTrailerResponse.Results result : results) {
-                    if (result.key != null && result.site.equalsIgnoreCase("youtube") && result.type.equalsIgnoreCase("opening credits")) {
+                    if (result.key != null && result.site != null && result.type != null && result.site.equalsIgnoreCase("youtube")) {
                         super.mYouTubeKey = result.key;
                         if (viewTrailer != null) {
-                            viewTrailer.setText(R.string.tv_series_opening_credits);
+                            viewTrailer.setText(result.type.toUpperCase());
                             viewTrailer.setVisibility(View.VISIBLE);
                         }
                         break;

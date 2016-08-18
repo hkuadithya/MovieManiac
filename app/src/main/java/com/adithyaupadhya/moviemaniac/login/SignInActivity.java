@@ -208,6 +208,7 @@ public class SignInActivity extends AppCompatActivity implements
         preference.setPreferenceData(DBConstants.USER_NAME, name);
 
         //Fabric.with(getApplicationContext(), Crashlytics.getInstance());
+        // Crashlytics logging user information
         Crashlytics.setUserName(name);
         Crashlytics.setUserEmail(email);
     }

@@ -104,6 +104,7 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
                     startActivity(intent);
                 }
                 break;
+
             default:
                 // This is to handle SnackBar click event.
                 VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);

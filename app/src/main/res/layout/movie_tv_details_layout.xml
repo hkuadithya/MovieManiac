@@ -146,7 +146,7 @@
     <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
         android:id="@+id/view_trailer"
         style="@style/watchVideoButtonStyle"
-        android:visibility="visible"
+        android:visibility="gone"
         app:fontType="bold" />
 
     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView

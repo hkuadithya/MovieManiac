@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.adithyaupadhya.database.DBConstants;
@@ -151,7 +152,8 @@ public class MovieDetailsActivity extends AbstractDetailsActivity implements Res
     @Override
     public void onResponse(JSONObject jsonObject) {
         TextView textViewMovieCast = (TextView) findViewById(R.id.textViewMovieCast);
-        View shareButton = findViewById(R.id.share_button), viewTrailer = findViewById(R.id.view_trailer);
+        View shareButton = findViewById(R.id.share_button);
+        Button viewTrailer = (Button) findViewById(R.id.view_trailer);
 
         try {
             TMDBMovieSimilarCreditsVideosResponse response = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBMovieSimilarCreditsVideosResponse.class);
@@ -185,10 +187,12 @@ public class MovieDetailsActivity extends AbstractDetailsActivity implements Res
 
             if (videoResults != null)
                 for (TMDBTrailerResponse.Results result : videoResults) {
-                    if (result.key != null && result.site.equalsIgnoreCase("youtube") && result.type.equalsIgnoreCase("trailer")) {
+                    if (result.key != null && result.site != null && result.type != null && result.site.equalsIgnoreCase("youtube")) {
                         super.mYouTubeKey = result.key;
-                        if (viewTrailer != null)
+                        if (viewTrailer != null) {
+                            viewTrailer.setText(result.type.toUpperCase());
                             viewTrailer.setVisibility(View.VISIBLE);
+                        }
                         break;
                     }
                 }
