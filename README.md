@@ -3,7 +3,10 @@
 Movie Maiac is an open source Android project developed by Adithya H K Upadhya. Movie Maniac is powered by TMDb APIs.
 It is in active state of develpment and is rich in features such as Movies, TV Series, Celebrities and Game.
 
-![Movie Maniac App logo](app/src/main/res/drawable/app_icon.png)
+![Movie Maniac App logo](app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+
+## App Background
+<img src="app/src/main/res/drawable/app_background.jpg" width="300" height="450"/>
 
 ## Getting Started
 
@@ -24,9 +27,11 @@ If you wish to get this project up and running, you'll need to follow these step
 
 ## Authors
 
-**Adithya H K Upadhya**
-[Linkedin](https://in.linkedin.com/in/adithya-upadhya-2021b582)
-[Facebook](https://www.facebook.com/hkuadithya)
+**Adithya H K Upadhya** 
+
+You can contact me through
+* [Linkedin](https://in.linkedin.com/in/adithya-upadhya-2021b582)
+* [Facebook](https://www.facebook.com/hkuadithya)
 
 ## License
 
