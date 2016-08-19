@@ -37,7 +37,7 @@ public interface NetworkConstants {
     String IMG_BASE_POSTER_URL = "http://image.tmdb.org/t/p/w154";
     String IMG_BASE_DIALOG_POSTER_URL = "http://image.tmdb.org/t/p/w342";
     String IMG_BASE_BACKDROP_URL = "http://image.tmdb.org/t/p/w342";
-    String FACEBOOK_PROFILE_PIC_URL = "http://graph.facebook.com/v2.6/userid/picture?type=normal";
+    String FACEBOOK_PROFILE_PIC_URL = "https://graph.facebook.com/v2.6/userid/picture?type=normal";
 
     String IMG_GAME_POSTER_URL = "http://image.tmdb.org/t/p/w185";
     String IMG_GAME_BACKDROP_URL = "http://image.tmdb.org/t/p/w342";
