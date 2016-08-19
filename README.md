@@ -1,7 +1,8 @@
 # Movie Maniac
 
-Movie Maniac is an open source Android project powered by [TMDb](https://www.themoviedb.org/) APIs.
-It is in active state of develpment and is rich in features such as Movies, TV Series, Celebrities and Game.
+Movie Maniac is an open source Android project powered by [TMDb](https://www.themoviedb.org/) APIs.<br/>
+I strive to keep it in an active state of development. Your suggestions for improvements and feedback are most welcome.<br/>
+Movie Maniac currently consists of features pertaining to movies, tv series, celebrities and game.
 
 ![Movie Maniac App logo](app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 
@@ -32,6 +33,7 @@ If you wish to get this project up and running, you'll need to follow these step
 You can contact me through
 * [Linkedin](https://in.linkedin.com/in/adithya-upadhya-2021b582)
 * [Facebook](https://www.facebook.com/hkuadithya)
+* [Gmail](mailto:developer.moviemaniac@gmail.com)
 
 ## License
 
