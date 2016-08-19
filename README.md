@@ -35,7 +35,7 @@ You can contact me through
 
 ## License
 
-This project is licensed under the Apache2.0 LICENSE - check the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the  GNU GENERAL PUBLIC LICENSE - check the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
