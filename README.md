@@ -5,7 +5,7 @@ It is in active state of develpment and is rich in features such as Movies, TV S
 
 ![Movie Maniac App logo](app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 
-## App Background
+## Background Screen
 <img src="app/src/main/res/drawable/app_background.jpg" align="middle" width="300" height="450"/>
 
 ## Getting Started
