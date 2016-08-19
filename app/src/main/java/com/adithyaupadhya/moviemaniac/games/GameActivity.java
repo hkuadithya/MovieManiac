@@ -193,7 +193,11 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
             } else {
                 // THIS IS THE LAST QUESTION
                 int correctAnswers = getIntent().getIntExtra(AppIntentConstants.CORRECT_ANS_COUNT, 0);
-                getIntent().getExtras().clear();
+
+                getIntent().removeExtra(AppIntentConstants.MOVIE_LIST);
+                getIntent().removeExtra(AppIntentConstants.TV_LIST);
+                getIntent().removeExtra(AppIntentConstants.CELEBRITY_LIST);
+                
                 intent = new Intent(this, GameSummaryActivity.class);
                 intent.putExtra(AppIntentConstants.CORRECT_ANS_COUNT, correctAnswers);
             }
