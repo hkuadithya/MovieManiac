@@ -28,7 +28,7 @@
 
     <color name="gameWrongAnswer">#FF8A80</color>
 
-    <color name="appTransparentTint">#99000000</color>
+    <color name="appTransparentTint">#59000000</color>
     
     <color name="appMaterialGray600">#757575</color>
 </resources>

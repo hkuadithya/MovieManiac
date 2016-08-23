@@ -5,7 +5,7 @@ package com.adithyaupadhya.newtorkmodule.volley.networkconstants;
  */
 public interface NetworkConstants {
     // Please obtain your own private TMDb api key through registration.
-    String API_KEY = "api_key=";
+    String API_KEY = "";
 
     //  URL'S PERTAINING TO MOVIES
     String UPCOMING_MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/upcoming?" + API_KEY + "&page=";
@@ -45,4 +45,8 @@ public interface NetworkConstants {
     // WIDTH AND HEIGHT DIMENSIONS OF THE IMAGES: (FORMAT: WIDTH X HEIGHT).
     int[] backdropDim = {300, 169};     // aspect ratio.
     int[] posterDim = {2, 3};
+
+    // FB AND GOOGLE URL
+    String GOOGLE_PLUS_URL = "http://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac";
+    String FACEBOOK_PAGE_URL = "https://www.facebook.com/Movie-Maniac-App-1738984046368507/";
 }

@@ -21,6 +21,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -125,6 +126,8 @@ public class SignInActivity extends AppCompatActivity implements
 
     //  HANDLING FACEBOOK SIGN IN:
     private void initializeFacebookSignIn() {
+        // Always logout of facebook when sign in button is shown.
+        LoginManager.getInstance().logOut();
         LoginButton facebookSignInButton = (LoginButton) findViewById(R.id.facebook_sign_in);
         facebookSignInButton.setReadPermissions("public_profile", "email");
         mFacebookCallbackManager = CallbackManager.Factory.create();
@@ -208,8 +211,10 @@ public class SignInActivity extends AppCompatActivity implements
         preference.setPreferenceData(DBConstants.USER_NAME, name);
 
         //Crashlytics user logging
-        Crashlytics.setUserName(name);
-        Crashlytics.setUserEmail(email);
+        if(Crashlytics.getInstance() != null) {
+            Crashlytics.setUserName(name);
+            Crashlytics.setUserEmail(email);
+        }
     }
 
     @Override

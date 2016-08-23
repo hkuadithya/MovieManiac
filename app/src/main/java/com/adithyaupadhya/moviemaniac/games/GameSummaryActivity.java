@@ -9,6 +9,7 @@ import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
 import com.facebook.FacebookSdk;
 import com.facebook.share.widget.LikeView;
 import com.google.android.gms.plus.PlusOneButton;
@@ -16,8 +17,6 @@ import com.google.android.gms.plus.PlusOneButton;
 public class GameSummaryActivity extends AppCompatActivity implements View.OnClickListener {
     private PlusOneButton mPlusOneButton;
     private static final int PLUS_ONE_REQUEST_CODE = 0;
-    private static final String GOOGLE_PLUS_URL = "http://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac";
-    private static final String FACEBOOK_PAGE_URL = "https://www.facebook.com/MovieManiacApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class GameSummaryActivity extends AppCompatActivity implements View.OnCli
 
         LikeView likeView = (LikeView) findViewById(R.id.facebookLikeView);
         if (likeView != null) {
-            likeView.setObjectIdAndType(FACEBOOK_PAGE_URL, LikeView.ObjectType.PAGE);
+            likeView.setObjectIdAndType(NetworkConstants.FACEBOOK_PAGE_URL, LikeView.ObjectType.PAGE);
             likeView.setLikeViewStyle(LikeView.Style.BOX_COUNT);
         }
 
@@ -55,7 +54,7 @@ public class GameSummaryActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        mPlusOneButton.initialize(GOOGLE_PLUS_URL, PLUS_ONE_REQUEST_CODE);
+        mPlusOneButton.initialize(NetworkConstants.GOOGLE_PLUS_URL, PLUS_ONE_REQUEST_CODE);
     }
 
     @Override
