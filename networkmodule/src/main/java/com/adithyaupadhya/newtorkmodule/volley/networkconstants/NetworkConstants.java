@@ -5,7 +5,7 @@ package com.adithyaupadhya.newtorkmodule.volley.networkconstants;
  */
 public interface NetworkConstants {
     // Please obtain your own private TMDb api key through registration.
-    String API_KEY = "";
+    String API_KEY = "api_key=";
 
     //  URL'S PERTAINING TO MOVIES
     String UPCOMING_MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/upcoming?" + API_KEY + "&page=";
