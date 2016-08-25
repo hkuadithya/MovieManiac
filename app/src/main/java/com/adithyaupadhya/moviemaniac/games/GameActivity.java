@@ -27,6 +27,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -197,7 +198,7 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
                 getIntent().removeExtra(AppIntentConstants.MOVIE_LIST);
                 getIntent().removeExtra(AppIntentConstants.TV_LIST);
                 getIntent().removeExtra(AppIntentConstants.CELEBRITY_LIST);
-                
+
                 intent = new Intent(this, GameSummaryActivity.class);
                 intent.putExtra(AppIntentConstants.CORRECT_ANS_COUNT, correctAnswers);
             }
@@ -242,7 +243,7 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     @Override
     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
         // Handling connection error
-        if (e != null && (e instanceof NoConnectionError || e.getCause() instanceof NoConnectionError)) {
+        if (e != null && (e instanceof NoConnectionError || e.getCause() instanceof NoConnectionError || e.getCause() instanceof TimeoutError)) {
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
             return true;
         }
