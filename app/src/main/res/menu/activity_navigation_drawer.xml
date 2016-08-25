@@ -31,7 +31,7 @@
             <item
                 android:id="@+id/nav_rateapp"
                 android:icon="@drawable/vector_drawer_rating"
-                android:title="Rate five stars" />
+                android:title="Rate this App" />
             <item
                 android:id="@+id/nav_bug"
                 android:icon="@drawable/vector_drawer_bug"

@@ -1,7 +1,9 @@
 package com.adithyaupadhya.moviemaniac.games;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -176,6 +178,11 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
             RadioButton radioButtonAnswer = (RadioButton) group.findViewById(checkedId);
             String answer = mDataList.get(currentIndex - offset).name;
 
+            try {
+                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(80);
+            } catch (Exception ignored) {
+
+            }
 
             if (radioButtonAnswer.getText().equals(answer)) {
                 radioButtonAnswer.setBackgroundColor(ContextCompat.getColor(this, R.color.gameCorrectAnswer));
