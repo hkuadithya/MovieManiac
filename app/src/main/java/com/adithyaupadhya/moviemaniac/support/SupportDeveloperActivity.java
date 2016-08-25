@@ -27,7 +27,7 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
-        toolbar.setTitle(R.string.support_developers_string);
+        setTitle(R.string.support_developers_string);
 
         LikeView likeView = (LikeView) findViewById(R.id.facebookLikeView);
         if (likeView != null) {
