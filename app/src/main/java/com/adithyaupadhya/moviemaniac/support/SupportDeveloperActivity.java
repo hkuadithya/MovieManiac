@@ -3,6 +3,8 @@ package com.adithyaupadhya.moviemaniac.support;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.adithyaupadhya.moviemaniac.R;
@@ -21,6 +23,11 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
         setContentView(R.layout.activity_support_developer);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
+        toolbar.setTitle(R.string.support_developers_string);
 
         LikeView likeView = (LikeView) findViewById(R.id.facebookLikeView);
         if (likeView != null) {
@@ -47,5 +54,15 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "MovieManiac Android Application");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.share_app_string));
         startActivity(Intent.createChooser(sharingIntent, "Share this app via"));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
