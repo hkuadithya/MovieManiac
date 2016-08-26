@@ -35,7 +35,6 @@ import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstan
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
-import com.facebook.login.LoginManager;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnImageClickListener, MaterialDialog.SingleButtonCallback {
@@ -205,7 +204,7 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public void onClick(MaterialDialog dialog, DialogAction which) {
         // Facebook Logout
-        LoginManager.getInstance().logOut();
+        //LoginManager.getInstance().logOut();
         AppPreferenceManager.getAppPreferenceInstance(this).clearAllUserPreferenceData();
         startActivity(new Intent(this, SignInActivity.class));
         finish();
