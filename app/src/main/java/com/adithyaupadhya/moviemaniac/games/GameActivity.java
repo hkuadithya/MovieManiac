@@ -7,6 +7,8 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -68,7 +70,11 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
 
         currentIndex = getIntent().getIntExtra(AppIntentConstants.CURRENT_INDEX, 0);
 
-        ((TextView) (findViewById(R.id.textViewHeading))).setText("Question " + (currentIndex + 1) + "/9");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((TextView) (toolbar.findViewById(R.id.textViewHeading))).setText("Question " + (currentIndex + 1) + "/9");
 
         imageView1 = (ImageView) findViewById(R.id.imageView1);
         imageView2 = (ImageView) findViewById(R.id.imageView2);
@@ -221,6 +227,16 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         super.onBackPressed();
         mDataList = null;
         getIntent().getExtras().clear();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

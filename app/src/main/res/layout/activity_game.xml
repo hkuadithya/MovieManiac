@@ -4,153 +4,162 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8EAF6"
+    android:background="#7986CB"
     tools:context="com.adithyaupadhya.moviemaniac.games.GameActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                 android:id="@+id/textViewHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Question 1/9"
+                android:layout_gravity="center"
                 android:textColor="@android:color/white"
                 android:textSize="28sp"
-                app:fontType="bold" />
+                app:fontType="medium" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/black" />
+        </android.support.v7.widget.Toolbar>
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/vector_loader" />
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="300dp"
-                    android:layout_height="200dp" />
-            </FrameLayout>
-
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/vector_loader" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="300dp"
-                    android:layout_height="200dp" />
-            </FrameLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/black" />
-
-            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
-                android:id="@+id/textViewQuestion"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:background="@color/appGameBackground"
                 android:gravity="center"
-                android:padding="10dp"
-                android:text="Identify this Movie"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                app:fontType="bold" />
+                android:orientation="vertical"
+                android:padding="15dp">
 
-            <RadioGroup
-                android:id="@+id/radioGroupOptions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:padding="10dp">
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
-                    android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/vector_loader" />
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="300dp"
+                        android:layout_height="200dp" />
+
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_rectangle"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="HELLO WORLD"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    app:fontType="medium" />
+                    android:layout_marginTop="10dp">
 
-                <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/rounded_rectangle"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="HELLO WORLD"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    app:fontType="medium" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/vector_loader" />
 
-                <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/rounded_rectangle"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="HELLO WORLD"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    app:fontType="medium" />
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="300dp"
+                        android:layout_height="200dp" />
+                </FrameLayout>
 
-                <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
+                <View
                     android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@android:color/black" />
+
+                <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                    android:id="@+id/textViewQuestion"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/rounded_rectangle"
-                    android:button="@null"
+                    android:background="@drawable/capsule_rectangle"
                     android:gravity="center"
-                    android:padding="10dp"
-                    android:text="HELLO WORLD"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    app:fontType="medium" />
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="10dp"
+                    android:text="Identify this Movie"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:fontType="bold" />
 
-            </RadioGroup>
+                <RadioGroup
+                    android:id="@+id/radioGroupOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp">
 
-        </LinearLayout>
+                    <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_rectangle"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        app:fontType="medium" />
 
-    </ScrollView>
+                    <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/rounded_rectangle"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        app:fontType="medium" />
+
+                    <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/rounded_rectangle"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        app:fontType="medium" />
+
+                    <com.adithyaupadhya.uimodule.applicationfont.RobotoRadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/rounded_rectangle"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        app:fontType="medium" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
