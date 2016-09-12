@@ -14,26 +14,26 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/sign_in_app_logo_dimen"
+            android:layout_height="@dimen/sign_in_app_logo_dimen"
             android:layout_marginBottom="15dp"
             android:src="@drawable/app_icon" />
 
         <ImageView
-            android:layout_width="250dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/sign_in_tmdb_width"
+            android:layout_height="@dimen/sign_in_tmdb_height"
             android:layout_marginBottom="30dp"
             android:src="@drawable/main_tmdb_logo" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_sign_in"
-            android:layout_width="250dp"
+            android:layout_width="@dimen/sign_in_tmdb_width"
             android:layout_height="50dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="20dp" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/facebook_sign_in"
-            android:layout_width="245dp"
+            android:layout_width="@dimen/sign_in_fb_width"
             android:layout_height="50dp"
             android:paddingBottom="12.5dp"
             android:paddingTop="12.5dp"

@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "754483475794",
-    "project_id": "moviemaniac-d0a3f"
+    "firebase_url": "https://moviemaniac-d0a3f.firebaseio.com",
+    "project_id": "moviemaniac-d0a3f",
+    "storage_bucket": "moviemaniac-d0a3f.appspot.com"
   },
   "client": [
     {
@@ -21,6 +23,10 @@
           }
         },
         {
+          "client_id": "754483475794-hg15l0t63bqf7fmthvujchnrr0lf45mv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "754483475794-vhpktbp18ac5842mt78vrd493c3cubsd.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -35,11 +41,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754483475794-hg15l0t63bqf7fmthvujchnrr0lf45mv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

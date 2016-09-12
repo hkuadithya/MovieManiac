@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.ImageView;
 
 import com.adithyaupadhya.moviemaniac.R;
+import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
 import com.bumptech.glide.Glide;
@@ -39,19 +40,23 @@ public class ImageDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_image_dialog, container, false);
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.networkImageView);
+        imageView.requestLayout();
+
+        // 75% width of the screen taken by the image
+        imageView.getLayoutParams().width = (int) (APIConstants.getScreenWidthPixels(getContext()) * 0.75);
+        // height = 1.5 * width
+        imageView.getLayoutParams().height = (int) (imageView.getLayoutParams().width * 1.5);
+
         String networkUrl = getArguments().getString(AppIntentConstants.BUNDLE_URL);
-//        ImageView imageView = (ImageView) view.findViewById(R.id.networkImageView);
-//        imageView.setDefaultImageResId(R.drawable.default_img);
-//        imageView.setErrorImageResId(R.drawable.not_found);
-//        imageView.setImageUrl(
-//                NetworkConstants.IMG_BASE_DIALOG_POSTER_URL + url, VolleySingleton.getInstance().getVolleyImageLoader());
 
         Glide.with(this)
                 .load(NetworkConstants.IMG_BASE_DIALOG_POSTER_URL + networkUrl)
                 .placeholder(R.drawable.default_img)
                 .error(R.drawable.not_found)
                 .dontAnimate()
-                .into((ImageView) view.findViewById(R.id.networkImageView));
+                .into(imageView);
 
         return view;
     }

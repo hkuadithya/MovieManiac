@@ -6,4 +6,9 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">170dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="sign_in_app_logo_dimen">200dp</dimen>
+    <dimen name="sign_in_tmdb_width">250dp</dimen>
+    <dimen name="sign_in_tmdb_height">70dp</dimen>
+    <dimen name="sign_in_fb_width">245dp</dimen>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sign_in_app_logo_dimen">220dp</dimen>
+    <dimen name="sign_in_tmdb_width">270dp</dimen>
+    <dimen name="sign_in_tmdb_height">90dp</dimen>
+    <dimen name="sign_in_fb_width">265dp</dimen>
+</resources>

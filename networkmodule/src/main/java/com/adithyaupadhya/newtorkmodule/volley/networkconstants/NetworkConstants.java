@@ -35,7 +35,7 @@ public interface NetworkConstants {
     //  URL'S PERTAINING TO IMAGES
     String IMG_SIMILAR_ITEMS_POSTER_URL = "http://image.tmdb.org/t/p/w92";
     String IMG_BASE_POSTER_URL = "http://image.tmdb.org/t/p/w154";
-    String IMG_BASE_DIALOG_POSTER_URL = "http://image.tmdb.org/t/p/w342";
+    String IMG_BASE_DIALOG_POSTER_URL = "http://image.tmdb.org/t/p/w300";
     String IMG_BASE_BACKDROP_URL = "http://image.tmdb.org/t/p/w342";
     String FACEBOOK_PROFILE_PIC_URL = "https://graph.facebook.com/v2.6/userid/picture?type=normal";
 
@@ -44,7 +44,6 @@ public interface NetworkConstants {
 
     // WIDTH AND HEIGHT DIMENSIONS OF THE IMAGES: (FORMAT: WIDTH X HEIGHT).
     int[] backdropDim = {300, 169};     // aspect ratio.
-    int[] posterDim = {2, 3};
 
     // FB AND GOOGLE URL
     String GOOGLE_PLUS_URL = "http://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac";
