@@ -1,46 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/features"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_movie"
             android:checked="true"
             android:icon="@drawable/vector_drawer_movie"
-            android:title="Movie Maniac" />
+            android:title="Movies" />
+
         <item
             android:id="@+id/nav_tvseries"
             android:icon="@drawable/vector_drawer_tv"
             android:title="TV Series" />
+
         <item
             android:id="@+id/nav_celebrity"
             android:icon="@drawable/vector_drawer_celebrity"
-            android:title="Celebrity Club" />
+            android:title="Celebrities" />
+
         <item
             android:id="@+id/nav_game"
             android:icon="@drawable/vector_drawer_game"
-            android:title="Fun Game :)" />
+            android:title="Fun Quiz" />
 
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_support"
-                android:icon="@drawable/vector_drawer_thumbs"
-                android:title="Support developers" />
-            <item
-                android:id="@+id/nav_rateapp"
-                android:icon="@drawable/vector_drawer_rating"
-                android:title="Rate this App" />
-            <item
-                android:id="@+id/nav_bug"
-                android:icon="@drawable/vector_drawer_bug"
-                android:title="Report Bugs" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/vector_drawer_logout"
-                android:title="Logout" />
-        </menu>
-    </item>
+    <group android:id="@+id/communication">
+        <item android:title="Communicate">
+            <menu>
+                <item
+                    android:id="@+id/nav_support"
+                    android:icon="@drawable/vector_drawer_thumbs"
+                    android:title="Support developers" />
+
+                <item
+                    android:id="@+id/nav_share_app"
+                    android:icon="@drawable/vector_menu_share"
+                    android:title="Share this App" />
+
+                <item
+                    android:id="@+id/nav_rate_app"
+                    android:icon="@drawable/vector_drawer_rating"
+                    android:title="Rate this App" />
+
+            </menu>
+        </item>
+    </group>
+
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/vector_drawer_logout"
+        android:title="Logout" />
 
 </menu>

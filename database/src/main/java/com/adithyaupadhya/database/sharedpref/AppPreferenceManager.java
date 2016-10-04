@@ -10,7 +10,6 @@ import com.adithyaupadhya.database.DBConstants;
  */
 public class AppPreferenceManager {
     private static final String PREF_FILE_NAME = "com.adithyaupadhya.moviemaniac.APP_PREF_FILE";
-    private static AppPreferenceManager mPreferenceManager;
     private final SharedPreferences mPreference;
 
     private AppPreferenceManager(Context context) {
@@ -18,9 +17,7 @@ public class AppPreferenceManager {
     }
 
     public static AppPreferenceManager getAppPreferenceInstance(Context context) {
-        if (mPreferenceManager == null)
-            mPreferenceManager = new AppPreferenceManager(context);
-        return mPreferenceManager;
+        return new AppPreferenceManager(context);
     }
 
     public void setPreferenceData(String key, String value) {

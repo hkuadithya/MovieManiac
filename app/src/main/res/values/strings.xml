@@ -35,18 +35,18 @@
         \n\n* Github and the Android open source community
         \n\n* Freepik and Flaticons
 
-        \n\nYou can report bugs or request new features by sending me an email developer.moviemaniac@gmail.com
+        \n\nYou can report bugs or request new features by clicking on report bugs button below.
         \n\nDon\'t forget to share this app with your friends and family.(click on the share button below)
         \n\nThis open source project is available at https://github.com/hkuadithya/MovieManiac under GNU GPL license.
         \n\nYours Truly,
         \nAdithya H K Upadhya
     </string>
 
-    <string name="share_this_app">SHARE THIS APP</string>
+    <string name="report_bugs">REPORT BUGS</string>
 
     <string name="share_app_string">Hey There…
         \nCheckout this new app called \'MovieManiac\'
-        \nIt\'s got some great features(Movies, TVSeries, Celebrities &amp; Game)!
+        \nIt\'s got some great features(Movies, TVSeries, Celebrities &amp; Quiz)!
         \n\nDownload from Play Store Now
         \nhttp://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac
     </string>

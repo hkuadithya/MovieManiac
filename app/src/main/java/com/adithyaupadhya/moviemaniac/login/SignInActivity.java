@@ -37,6 +37,8 @@ import com.google.android.gms.common.api.Scope;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.fabric.sdk.android.Fabric;
+
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener,
@@ -211,7 +213,7 @@ public class SignInActivity extends AppCompatActivity implements
         preference.setPreferenceData(DBConstants.USER_NAME, name);
 
         //Crashlytics user logging
-        if(Crashlytics.getInstance() != null) {
+        if (Fabric.isInitialized()) {
             Crashlytics.setUserName(name);
             Crashlytics.setUserEmail(email);
         }

@@ -2,6 +2,7 @@ package com.adithyaupadhya.moviemaniac.games;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -61,6 +62,7 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     private String url1, url2;
     private RadioGroup mRadioGroupOptions;
     private List<TMDBGenericGameResponse.Results> mDataList;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         super.onResume();
         successImageCount = 0;
         establishNetworkCall();
+        mediaPlayer = MediaPlayer.create(this, R.raw.bell);
     }
 
     public void establishNetworkCall() {
@@ -137,9 +140,11 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         try {
             if (currentIndex < 2 * TOTAL_QUESTIONS / 3) {
                 imageList = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBImageBackdropResponse.class).backdrops;
+
                 baseImageUrl = NetworkConstants.IMG_GAME_BACKDROP_URL;
             } else {
                 imageList = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBImageProfileResponse.class).profiles;
+
                 baseImageUrl = NetworkConstants.IMG_GAME_POSTER_URL;
             }
 
@@ -184,17 +189,18 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
             RadioButton radioButtonAnswer = (RadioButton) group.findViewById(checkedId);
             String answer = mDataList.get(currentIndex - offset).name;
 
-            try {
-                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(80);
-            } catch (Exception ignored) {
-
-            }
-
             if (radioButtonAnswer.getText().equals(answer)) {
+                mediaPlayer.start();
+
                 radioButtonAnswer.setBackgroundColor(ContextCompat.getColor(this, R.color.gameCorrectAnswer));
+
                 int correctAnswers = getIntent().getIntExtra(AppIntentConstants.CORRECT_ANS_COUNT, 0);
+
                 getIntent().putExtra(AppIntentConstants.CORRECT_ANS_COUNT, correctAnswers + 1);
             } else {
+
+                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(80);
+
                 radioButtonAnswer.setBackgroundColor(ContextCompat.getColor(this, R.color.gameWrongAnswer));
             }
 
@@ -202,7 +208,9 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
             if (currentIndex < TOTAL_QUESTIONS - 1) {
                 // FIRST TO LAST BUT ONE QUESTION
                 intent = new Intent(this, GameActivity.class);
+
                 intent.putExtras(getIntent());
+
                 intent.putExtra(AppIntentConstants.CURRENT_INDEX, getIntent().getIntExtra(AppIntentConstants.CURRENT_INDEX, 0) + 1);
             } else {
                 // THIS IS THE LAST QUESTION
@@ -213,11 +221,16 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
                 getIntent().removeExtra(AppIntentConstants.CELEBRITY_LIST);
 
                 intent = new Intent(this, GameSummaryActivity.class);
+
                 intent.putExtra(AppIntentConstants.CORRECT_ANS_COUNT, correctAnswers);
             }
             startActivity(intent);
+
             finish();
+
             overridePendingTransition(R.anim.enter_anim, R.anim.exit_anim);
+
+            //mediaPlayer.release();
         }
     }
 
@@ -249,6 +262,7 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     protected void onStop() {
         super.onStop();
         VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);
+        //mediaPlayer.release();
     }
 
     @Override

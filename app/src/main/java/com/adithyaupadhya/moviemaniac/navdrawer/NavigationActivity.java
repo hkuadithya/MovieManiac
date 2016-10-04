@@ -2,7 +2,6 @@ package com.adithyaupadhya.moviemaniac.navdrawer;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -36,8 +35,10 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 
-public class NavigationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnImageClickListener, MaterialDialog.SingleButtonCallback {
+public class NavigationActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        OnImageClickListener,
+        MaterialDialog.SingleButtonCallback {
 
     private DrawerLayout mDrawerLayout;
     private FragmentManager mFragmentManager;
@@ -60,8 +61,7 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
         View headerView = mNavigationView.getHeaderView(0);
-//        ImageView imageView = (ImageView) headerView.findViewById(R.id.circularImageView);
-//        imageView.setImageUrl(preferences.getPreferenceData(DBConstants.USER_PROFILE_PIC), VolleySingleton.getInstance().getVolleyImageLoader());
+
         Glide.with(this)
                 .load(preferences.getPreferenceData(DBConstants.USER_PROFILE_PIC))
                 .placeholder(R.drawable.vector_default_person)
@@ -131,31 +131,23 @@ public class NavigationActivity extends AppCompatActivity
                             startActivity(new Intent(NavigationActivity.this, SupportDeveloperActivity.class));
                             break;
 
-                        case R.id.nav_rateapp:
+                        case R.id.nav_share_app:
+                            resetPreviouslySelectedItem = true;
+                            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Movie Maniac Android Application");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.share_app_string));
+                            startActivity(Intent.createChooser(sharingIntent, "Share this app via"));
+                            break;
+
+                        case R.id.nav_rate_app:
                             resetPreviouslySelectedItem = true;
                             try {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
                             } catch (android.content.ActivityNotFoundException exception) {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
-                            }
-                            break;
-
-                        case R.id.nav_bug:
-                            resetPreviouslySelectedItem = true;
-                            String personalDetails = "Manufacturer : " + Build.MANUFACTURER +
-                                    "\nDevice Model : " + Build.MODEL +
-                                    "\nAndroid OS version : " + Build.VERSION.RELEASE +
-                                    "\nSDK version : " + Build.VERSION.SDK_INT +
-                                    "\n\nPLEASE NOTE: Device data is used only for Debugging purposes. Your identity is completely safe :)" +
-                                    "\n++++++++++++++++++++++++++++++++++++++\n\n";
-
-                            try {
-                                Intent emailIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "developer.moviemaniac@gmail.com"));
-                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MovieManiac: Raise a bug / Request new features");
-                                emailIntent.putExtra(Intent.EXTRA_TEXT, personalDetails);
-                                startActivity(emailIntent);
-                            } catch (Exception exception) {
-                                Toast.makeText(NavigationActivity.this, "Error: No email client found in your device...", Toast.LENGTH_LONG).show();
+                            } catch (Exception e) {
+                                Toast.makeText(NavigationActivity.this, "Unable to launch Google Play Store...", Toast.LENGTH_SHORT).show();
                             }
                             break;
 
@@ -215,4 +207,5 @@ public class NavigationActivity extends AppCompatActivity
         super.onDestroy();
         mBackPressListener = null;
     }
+
 }

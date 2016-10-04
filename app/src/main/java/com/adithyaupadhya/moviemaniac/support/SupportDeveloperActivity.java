@@ -1,11 +1,14 @@
 package com.adithyaupadhya.moviemaniac.support;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
@@ -35,7 +38,7 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
             likeView.setLikeViewStyle(LikeView.Style.BOX_COUNT);
         }
 
-        findViewById(R.id.buttonShareApp).setOnClickListener(this);
+        findViewById(R.id.buttonReportBugs).setOnClickListener(this);
     }
 
     @Override
@@ -49,11 +52,21 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
 
     @Override
     public void onClick(View v) {
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "MovieManiac Android Application");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.share_app_string));
-        startActivity(Intent.createChooser(sharingIntent, "Share this app via"));
+        String personalDetails = "Manufacturer : " + Build.MANUFACTURER +
+                "\nDevice Model : " + Build.MODEL +
+                "\nAndroid OS version : " + Build.VERSION.RELEASE +
+                "\nSDK version : " + Build.VERSION.SDK_INT +
+                "\n\nPLEASE NOTE: Device data is used only for Debugging purposes. Your identity is completely safe. \n\n\n";
+
+        try {
+            Intent emailIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "developer.moviemaniac@gmail.com"));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MovieManiac: Raise a bug / Request new features");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, personalDetails);
+            startActivity(emailIntent);
+        } catch (Exception exception) {
+            Toast.makeText(this, "Error: No email client found in your device...", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

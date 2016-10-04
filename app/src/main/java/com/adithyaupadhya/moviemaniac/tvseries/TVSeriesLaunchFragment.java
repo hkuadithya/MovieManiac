@@ -26,7 +26,7 @@ public class TVSeriesLaunchFragment extends AbstractTabFragment {
 
     @Override
     public List<Fragment> getViewPagerFragmentList() {
-        List<Fragment> mFragmentList = new ArrayList<>();
+        List<Fragment> mFragmentList = new ArrayList<>(3);
         Fragment fragment;
 
         Bundle bundle = new Bundle();
@@ -54,14 +54,25 @@ public class TVSeriesLaunchFragment extends AbstractTabFragment {
     @Override
     public int[] getTabDrawableIcon() {
         return new int[]{
-                R.drawable.vector_ongoing,
+                R.drawable.vector_flame,
                 R.drawable.vector_popular,
                 R.drawable.vector_favorite
         };
     }
 
+
+    //-----------------------------------------------------------------------------------------------------
+    //          SEARCH VIEW QUERY HANDLER
+    //-----------------------------------------------------------------------------------------------------
     @Override
-    public void searchQuerySubmission(String searchQuery) {
-        startActivity(TVSeriesSearchActivity.getActivityIntent(getContext(), searchQuery));
+    public boolean onQueryTextSubmit(String query) {
+        startActivity(TVSeriesSearchActivity.getActivityIntent(getContext(), query));
+        return true;
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

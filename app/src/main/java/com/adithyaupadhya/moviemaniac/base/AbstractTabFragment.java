@@ -27,6 +27,7 @@ import com.adithyaupadhya.searchmodule.MaterialSearchView;
 import com.adithyaupadhya.uimodule.slidingtabs.BaseSlidingTabs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -44,17 +45,16 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     private Toolbar mToolbar;
     private String[] mToolbarTitle;
     private FloatingActionButton mFab;
-    private MaterialSearchView mSearchView;
+    protected MaterialSearchView mSearchView;
     private NavigationActivity mParentActivity;
     private WeakHashMap<Integer, Fragment> mFragmentMap;
+
 
     public abstract List<Fragment> getViewPagerFragmentList();
 
     public abstract String[] getSearchAndToolbarTitle();
 
     public abstract int[] getTabDrawableIcon();
-
-    public abstract void searchQuerySubmission(String searchQuery);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +89,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
         slidingTabs.setViewPager(viewPager);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setOnSearchViewListener(this);
+        mSearchView.setSuggestions(Arrays.asList("Titanic", "Jaws 3", "The Martian", "The Gods must be crazy"));
         return view;
     }
 
@@ -166,21 +167,6 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
 
 
     //-----------------------------------------------------------------------------------------------------
-    //          SEARCH VIEW QUERY HANDLER
-    //-----------------------------------------------------------------------------------------------------
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        searchQuerySubmission(query);
-        return true;
-    }
-
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
-    //-----------------------------------------------------------------------------------------------------
     //          SEARCH VIEW OPEN AND CLOSE HANDLER
     //-----------------------------------------------------------------------------------------------------
     @Override
@@ -211,7 +197,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     private class ViewPagerAdapter extends FragmentStatePagerAdapter implements BaseSlidingTabs.IconTabProvider {
         private int[] mDrawableList;
 
-        public ViewPagerAdapter(FragmentManager fm) {
+        ViewPagerAdapter(FragmentManager fm) {
             super(fm);
             mDrawableList = getTabDrawableIcon();
         }

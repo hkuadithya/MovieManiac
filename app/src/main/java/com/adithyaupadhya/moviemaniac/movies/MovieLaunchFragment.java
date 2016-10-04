@@ -12,6 +12,10 @@ import com.adithyaupadhya.moviemaniac.movies.movies.MoviesFragment;
 import com.adithyaupadhya.moviemaniac.movies.moviesearch.MovieSearchActivity;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +32,7 @@ public class MovieLaunchFragment extends AbstractTabFragment {
 
     @Override
     public List<Fragment> getViewPagerFragmentList() {
-        List<Fragment> mFragmentList = new ArrayList<>();
+        List<Fragment> mFragmentList = new ArrayList<>(3);
         Fragment fragment;
 
         Bundle bundle = new Bundle();
@@ -60,9 +64,21 @@ public class MovieLaunchFragment extends AbstractTabFragment {
                 R.drawable.vector_favorite};
     }
 
+
+    //-----------------------------------------------------------------------------------------------------
+    //          SEARCH VIEW QUERY HANDLER
+    //-----------------------------------------------------------------------------------------------------
     @Override
-    public void searchQuerySubmission(String searchQuery) {
-        startActivity(MovieSearchActivity.getActivityIntent(getContext(), searchQuery));
+    public boolean onQueryTextSubmit(String query) {
+        startActivity(MovieSearchActivity.getActivityIntent(getContext(), query));
+        return true;
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        return false;
     }
 
 }

@@ -26,7 +26,7 @@ public class CelebrityLaunchFragment extends AbstractTabFragment {
 
     @Override
     public List<Fragment> getViewPagerFragmentList() {
-        List<Fragment> mFragmentList = new ArrayList<>();
+        List<Fragment> mFragmentList = new ArrayList<>(2);
         Fragment fragment;
 
         Bundle bundle = new Bundle();
@@ -50,8 +50,18 @@ public class CelebrityLaunchFragment extends AbstractTabFragment {
         return new int[]{R.drawable.vector_popular, R.drawable.vector_favorite};
     }
 
+    //-----------------------------------------------------------------------------------------------------
+    //          SEARCH VIEW QUERY HANDLER
+    //-----------------------------------------------------------------------------------------------------
     @Override
-    public void searchQuerySubmission(String searchQuery) {
-        startActivity(CelebritySearchActivity.getActivityIntent(getContext(), searchQuery));
+    public boolean onQueryTextSubmit(String query) {
+        startActivity(CelebritySearchActivity.getActivityIntent(getContext(), query));
+        return true;
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

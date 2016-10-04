@@ -73,16 +73,12 @@
 
 
                 <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
-                    android:id="@+id/buttonShareApp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="15dp"
+                    style="@style/shareButtonStyle"
+                    android:id="@+id/buttonReportBugs"
                     android:background="@color/app_material_blue"
-                    android:text="@string/share_this_app"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:visibility="visible" />
+                    android:drawableEnd="@drawable/vector_drawer_bug"
+                    android:drawableRight="@drawable/vector_drawer_bug"
+                    android:text="@string/report_bugs" />
 
             </LinearLayout>
 

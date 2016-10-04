@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
@@ -95,13 +96,15 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
 
             case R.id.view_trailer:
                 if (mYouTubeKey != null) {
-                    Intent intent;
+
                     try {
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + mYouTubeKey));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + mYouTubeKey)));
                     } catch (ActivityNotFoundException exception) {
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mYouTubeKey));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mYouTubeKey)));
+                    } catch (Exception exception) {
+                        Toast.makeText(this, "Unable to launch YouTube...", Toast.LENGTH_SHORT).show();
                     }
-                    startActivity(intent);
+
                 }
                 break;
 

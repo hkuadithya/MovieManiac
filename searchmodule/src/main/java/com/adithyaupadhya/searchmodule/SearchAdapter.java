@@ -22,20 +22,19 @@ import java.util.List;
  */
 public class SearchAdapter extends BaseAdapter implements Filterable {
 
-    private ArrayList<String> data;
-    private String[] suggestions;
-    private List<String> mSuggestions;
+    private List<String> data;
+    private List<String> suggestions;
     private Drawable suggestionIcon;
     private LayoutInflater inflater;
     private boolean ellipsize;
 
-    public SearchAdapter(Context context, String[] suggestions) {
+    public SearchAdapter(Context context, List<String> suggestions) {
         inflater = LayoutInflater.from(context);
         data = new ArrayList<>();
         this.suggestions = suggestions;
     }
 
-    public SearchAdapter(Context context, String[] suggestions, Drawable suggestionIcon, boolean ellipsize) {
+    public SearchAdapter(Context context, List<String> suggestions, Drawable suggestionIcon, boolean ellipsize) {
         inflater = LayoutInflater.from(context);
         data = new ArrayList<>();
         this.suggestions = suggestions;
@@ -43,12 +42,9 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
         this.ellipsize = ellipsize;
     }
 
-    public SearchAdapter(Context mContext, List<String> suggestions, Drawable suggestionIcon, boolean ellipsize) {
-        inflater = LayoutInflater.from(mContext);
-        data = new ArrayList<>();
-        this.mSuggestions = suggestions;
-        this.suggestionIcon = suggestionIcon;
-        this.ellipsize = ellipsize;
+    public void setNewSuggestions(List<String> suggestions) {
+        this.suggestions = suggestions;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -60,17 +56,17 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
                 if (!TextUtils.isEmpty(constraint)) {
 
                     // Retrieve the autocomplete results.
-                    List<String> searchData = new ArrayList<>();
-
-                    for (String string : mSuggestions) {
-                        if (string.toLowerCase().startsWith(constraint.toString().toLowerCase())) {
-                            searchData.add(string);
-                        }
-                    }
+//                    List<String> searchData = new ArrayList<>();
+//
+//                    for (String string : suggestions) {
+//                        if (string.toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+//                            searchData.add(string);
+//                        }
+//                    }
 
                     // Assign the data to the FilterResults
-                    filterResults.values = searchData;
-                    filterResults.count = searchData.size();
+                    filterResults.values = suggestions;
+                    filterResults.count = suggestions.size();
                 }
                 return filterResults;
             }
@@ -78,7 +74,7 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results.values != null) {
-                    data = (ArrayList<String>) results.values;
+                    data = (List<String>) results.values;
                     notifyDataSetChanged();
                 }
             }
