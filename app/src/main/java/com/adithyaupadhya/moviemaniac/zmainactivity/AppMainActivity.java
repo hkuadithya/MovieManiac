@@ -52,7 +52,7 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
 
         VolleySingleton.initInstance(this);
 
-        AlarmManagerUtils.createAlarmInstance(this);
+        //AlarmManagerUtils.createAlarmInstance(this);
 
         APIConstants instance = APIConstants.getInstance();
 

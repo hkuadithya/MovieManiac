@@ -10,13 +10,14 @@ import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.movies.favoritemovies.FavoriteMoviesFragment;
 import com.adithyaupadhya.moviemaniac.movies.movies.MoviesFragment;
 import com.adithyaupadhya.moviemaniac.movies.moviesearch.MovieSearchActivity;
+import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
+import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.android.volley.Request;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,23 @@ public class MovieLaunchFragment extends AbstractTabFragment {
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        if (!mIsDataLoading) {
+            mIsDataLoading = true;
+            try {
+                VolleySingleton.getInstance(
+                        getContext())
+                        .getVolleyRequestQueue()
+                        .add(new CustomJsonObjectRequest(
+                                Request.Method.GET,
+                                NetworkConstants.MOVIE_SEARCH_BASE_URL.replaceFirst("query_string", URLEncoder.encode(newText, "utf-8")),
+                                this,
+                                this,
+                                this));
 
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         return false;
     }
 

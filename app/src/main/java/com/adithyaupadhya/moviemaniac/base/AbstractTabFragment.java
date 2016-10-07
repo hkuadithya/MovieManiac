@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,11 +24,19 @@ import android.widget.Toast;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnFragmentBackPress;
 import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
+import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
+import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBGenericSearchResults;
+import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
 import com.adithyaupadhya.searchmodule.MaterialSearchView;
 import com.adithyaupadhya.uimodule.slidingtabs.BaseSlidingTabs;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -39,7 +48,8 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
         ViewPager.OnPageChangeListener,
         MaterialSearchView.OnQueryTextListener,
         OnFragmentBackPress,
-        MaterialSearchView.SearchViewListener {
+        MaterialSearchView.SearchViewListener,
+        Response.ErrorListener, Response.Listener<JSONObject> {
 
     private List<Fragment> mFragmentList;
     private Toolbar mToolbar;
@@ -48,7 +58,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     protected MaterialSearchView mSearchView;
     private NavigationActivity mParentActivity;
     private WeakHashMap<Integer, Fragment> mFragmentMap;
-
+    protected boolean mIsDataLoading;
 
     public abstract List<Fragment> getViewPagerFragmentList();
 
@@ -89,7 +99,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
         slidingTabs.setViewPager(viewPager);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setOnSearchViewListener(this);
-        mSearchView.setSuggestions(Arrays.asList("Titanic", "Jaws 3", "The Martian", "The Gods must be crazy"));
+
         return view;
     }
 
@@ -232,4 +242,59 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
         }
     }
 
+    //------------------------------------------------------------------------------------------------------
+    //          SEARCH SUGGESTIONS
+    //------------------------------------------------------------------------------------------------------
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        mIsDataLoading = false;
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        mIsDataLoading = false;
+
+        try {
+
+            Log.d("MMVOLLEY", "suggestion response " + response);
+
+            TMDBGenericSearchResults searchResults = APIConstants.getInstance()
+                    .getJacksonObjectMapper()
+                    .readValue(response.toString(), TMDBGenericSearchResults.class);
+
+            HashSet<String> resultSet = new HashSet<>(6);
+            ArrayList<String> resultList = new ArrayList<>(4);
+
+            if (searchResults.results != null) {
+                for (TMDBGenericSearchResults.Results result : searchResults.results) {
+                    if (!resultSet.contains(result.name)) {
+                        resultList.add(result.name);
+                        if (resultList.size() >= 4)
+                            break;
+
+                        resultSet.add(result.name);
+                    }
+                }
+
+                mSearchView.setNewSuggestions(resultList);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        VolleySingleton.getInstance(getContext()).getVolleyRequestQueue().cancelAll(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mSearchView.setOnQueryTextListener(null);
+        mSearchView.setOnSearchViewListener(null);
+        mParentActivity = null;
+    }
 }

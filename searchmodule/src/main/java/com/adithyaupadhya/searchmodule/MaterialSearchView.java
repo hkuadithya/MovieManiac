@@ -11,6 +11,8 @@ import android.os.Parcelable;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,18 +22,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -39,9 +35,11 @@ import java.util.List;
  * @author Miguel Catalan Bañuls
  */
 public class MaterialSearchView extends FrameLayout implements
-        Filter.FilterListener,
         View.OnClickListener,
-        AdapterView.OnItemClickListener {
+        TextView.OnEditorActionListener,
+        TextWatcher,
+        View.OnFocusChangeListener,
+        SearchRecyclerAdapter.SearchItemClickListener {
 
     public static final int REQUEST_VOICE = 10000;
 
@@ -52,30 +50,26 @@ public class MaterialSearchView extends FrameLayout implements
     //Views
     private View mSearchLayout;
     private View mTintView;
-    private ListView mSuggestionsListView;
+    private RecyclerView mRecyclerView;
     private EditText mSearchSrcTextView;
     private ImageButton mBackBtn;
     private ImageButton mVoiceBtn;
     private ImageButton mEmptyBtn;
     private RelativeLayout mSearchTopBar;
 
-    private CharSequence mOldQueryText;
     private CharSequence mUserQuery;
 
     private OnQueryTextListener mOnQueryChangeListener;
     private SearchViewListener mSearchViewListener;
 
-    private SearchAdapter mAdapter;
-
     private SavedState mSavedState;
 
-    private boolean ellipsize = true;
-
     private boolean allowVoiceSearch;
-    private Drawable suggestionIcon;
 
-    private Context mContext;
     private Fragment mVoiceSearchFragment;
+    private long mOldTimestamp;
+
+    private SearchRecyclerAdapter mSearchAdapter;
 
     public MaterialSearchView(Context context) {
         this(context, null);
@@ -88,15 +82,13 @@ public class MaterialSearchView extends FrameLayout implements
     public MaterialSearchView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs);
 
-        mContext = context;
-
         initiateView();
 
         initStyle(attrs, defStyleAttr);
     }
 
     private void initStyle(AttributeSet attrs, int defStyleAttr) {
-        TypedArray a = mContext.obtainStyledAttributes(attrs, R.styleable.MaterialSearchView, defStyleAttr, 0);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MaterialSearchView, defStyleAttr, 0);
 
         if (a != null) {
             if (a.hasValue(R.styleable.MaterialSearchView_searchBackground)) {
@@ -131,24 +123,24 @@ public class MaterialSearchView extends FrameLayout implements
                 setSuggestionBackground(a.getDrawable(R.styleable.MaterialSearchView_searchSuggestionBackground));
             }
 
-            if (a.hasValue(R.styleable.MaterialSearchView_searchSuggestionIcon)) {
-                setSuggestionIcon(a.getDrawable(R.styleable.MaterialSearchView_searchSuggestionIcon));
-            }
 
             a.recycle();
         }
     }
 
     private void initiateView() {
-        LayoutInflater.from(mContext).inflate(R.layout.search_view, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.search_view, this, true);
         mSearchLayout = findViewById(R.id.search_layout);
 
         mSearchTopBar = (RelativeLayout) mSearchLayout.findViewById(R.id.search_top_bar);
-        mSuggestionsListView = (ListView) mSearchLayout.findViewById(R.id.suggestion_list);
-        mSearchSrcTextView = (EditText) mSearchLayout.findViewById(R.id.searchTextView);
-        mBackBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_up_btn);
-        mVoiceBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_voice_btn);
-        mEmptyBtn = (ImageButton) mSearchLayout.findViewById(R.id.action_empty_btn);
+        mRecyclerView = (RecyclerView) mSearchLayout.findViewById(R.id.suggestion_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mSearchSrcTextView = (EditText) mSearchTopBar.findViewById(R.id.searchTextView);
+        mBackBtn = (ImageButton) mSearchTopBar.findViewById(R.id.action_up_btn);
+        mVoiceBtn = (ImageButton) mSearchTopBar.findViewById(R.id.action_voice_btn);
+        mEmptyBtn = (ImageButton) mSearchTopBar.findViewById(R.id.action_empty_btn);
+
         mTintView = mSearchLayout.findViewById(R.id.transparent_view);
 
         mSearchSrcTextView.setOnClickListener(this);
@@ -163,97 +155,30 @@ public class MaterialSearchView extends FrameLayout implements
 
         initSearchView();
 
-        mSuggestionsListView.setVisibility(GONE);
         setAnimationDuration(AnimationUtil.ANIMATION_DURATION_MEDIUM);
 
-        mAdapter = new SearchAdapter(mContext, Collections.<String> emptyList(), suggestionIcon, ellipsize);
-        mSuggestionsListView.setAdapter(mAdapter);
+        mSearchAdapter = new SearchRecyclerAdapter(getContext(), this);
 
-        mSuggestionsListView.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(mSearchAdapter);
+
     }
 
     private void initSearchView() {
-        mSearchSrcTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                onSubmitQuery();
-                return true;
-            }
-        });
-
-        mSearchSrcTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUserQuery = s;
-                MaterialSearchView.this.onTextChanged(s);
-                startFilter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        mSearchSrcTextView.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showKeyboard(mSearchSrcTextView);
-                    showSuggestions();
-                    mTintView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
-
-    private void startFilter(CharSequence s) {
-        if (mAdapter != null) {
-            mAdapter.getFilter().filter(s, MaterialSearchView.this);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.action_up_btn) {
-            closeSearch();
-
-        } else if (i == R.id.action_voice_btn) {
-            onVoiceClicked();
-
-        } else if (i == R.id.action_empty_btn) {
-            mSearchSrcTextView.setText(null);
-
-        } else if (i == R.id.searchTextView) {
-            showSuggestions();
-
-        } else if (i == R.id.transparent_view) {
-            closeSearch();
-
-        }
+        mSearchSrcTextView.setOnEditorActionListener(this);
+        mSearchSrcTextView.addTextChangedListener(this);
+        mSearchSrcTextView.setOnFocusChangeListener(this);
     }
 
     private void onVoiceClicked() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        //intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak an item name or number");    // user hint
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);    // setting recognition model, optimized for short phrases – search queries
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);    // quantity of results we want to receive
-       /* if (mContext instanceof Activity) {
-            ((Activity) mContext).startActivityForResult(intent, REQUEST_VOICE);
-        }*/
+
         if (mVoiceSearchFragment != null) {
             hideKeyboard(this);
             mVoiceSearchFragment.startActivityForResult(intent, REQUEST_VOICE);
         }
 
-//        mSearchSrcTextView.requestFocus();
-//        ((InputMethodManager) mSearchSrcTextView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mSearchSrcTextView, InputMethodManager.SHOW_FORCED);
     }
 
     private void onTextChanged(CharSequence newText) {
@@ -268,10 +193,13 @@ public class MaterialSearchView extends FrameLayout implements
             showVoice(true);
         }
 
-        if (mOnQueryChangeListener != null && !TextUtils.equals(newText, mOldQueryText)) {
+        if (mOnQueryChangeListener != null &&
+                newText.length() > 2 &&
+                (System.currentTimeMillis() - mOldTimestamp) > 500) {
+            // More than 3 characters and 500 ms should have elapsed
+            mOldTimestamp = System.currentTimeMillis();
             mOnQueryChangeListener.onQueryTextChange(newText.toString());
         }
-        mOldQueryText = newText.toString();
     }
 
     private void onSubmitQuery() {
@@ -285,7 +213,7 @@ public class MaterialSearchView extends FrameLayout implements
     }
 
     private boolean isVoiceAvailable() {
-        return isInEditMode() || SpeechRecognizer.isRecognitionAvailable(mContext);
+        return isInEditMode() || SpeechRecognizer.isRecognitionAvailable(getContext());
     }
 
     public void hideKeyboard(View view) {
@@ -342,26 +270,12 @@ public class MaterialSearchView extends FrameLayout implements
         mBackBtn.setImageDrawable(drawable);
     }
 
-    public void setSuggestionIcon(Drawable drawable) {
-        suggestionIcon = drawable;
-    }
 
     public void setSuggestionBackground(Drawable background) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mSuggestionsListView.setBackground(background);
+            mRecyclerView.setBackground(background);
         } else {
-            mSuggestionsListView.setBackgroundDrawable(background);
-        }
-    }
-
-    public void setCursorDrawable(int drawable) {
-        try {
-            // https://github.com/android/platform_frameworks_base/blob/kitkat-release/core/java/android/widget/TextView.java#L562-564
-            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
-            f.setAccessible(true);
-            f.set(mSearchSrcTextView, drawable);
-        } catch (Exception ignored) {
-            // Log.e("MaterialSearchView", ignored.toString());
+            mRecyclerView.setBackgroundDrawable(background);
         }
     }
 
@@ -372,39 +286,27 @@ public class MaterialSearchView extends FrameLayout implements
 
     //Public Methods
 
-    /**
-     * Call this method to show suggestions list. This shows up when adapter is set. Call  before calling this.
-     */
     public void showSuggestions() {
-        if (mAdapter != null && mAdapter.getCount() > 0 && mSuggestionsListView.getVisibility() == GONE) {
-            mSuggestionsListView.setVisibility(VISIBLE);
+        if (mRecyclerView != null && mSearchAdapter.getItemCount() > 0 && mRecyclerView.getVisibility() == GONE) {
+            mRecyclerView.setVisibility(VISIBLE);
         }
     }
 
 
-    /**
-     * Set Adapter for suggestions list with the given suggestion array
-     *
-     * @param suggestions array of suggestions
-     */
-    public void setSuggestions(List<String> suggestions) {
+    public void setNewSuggestions(List<String> suggestions) {
         if (suggestions != null && suggestions.size() > 0) {
             mTintView.setVisibility(VISIBLE);
-            mAdapter.setNewSuggestions(suggestions);
+            mSearchAdapter.setNewSuggestions(suggestions);
 
-            startFilter(mSearchSrcTextView.getText());
         } else {
             mTintView.setVisibility(GONE);
         }
     }
 
 
-    /**
-     * Dismiss the suggestions list.
-     */
     public void dismissSuggestions() {
-        if (mSuggestionsListView.getVisibility() == VISIBLE) {
-            mSuggestionsListView.setVisibility(GONE);
+        if (mRecyclerView.getVisibility() == VISIBLE) {
+            mRecyclerView.setVisibility(GONE);
         }
     }
 
@@ -546,6 +448,9 @@ public class MaterialSearchView extends FrameLayout implements
 
         mSearchSrcTextView.setText(null);
         dismissSuggestions();
+
+        mSearchAdapter.setNewSuggestions(null);
+        
         clearFocus();
 
         mSearchLayout.setVisibility(GONE);
@@ -574,23 +479,6 @@ public class MaterialSearchView extends FrameLayout implements
         mSearchViewListener = listener;
     }
 
-    /**
-     * Ellipsize suggestions longer than one line.
-     *
-     * @param ellipsize
-     */
-    public void setEllipsize(boolean ellipsize) {
-        this.ellipsize = ellipsize;
-    }
-
-    @Override
-    public void onFilterComplete(int count) {
-        if (count > 0) {
-            showSuggestions();
-        } else {
-            dismissSuggestions();
-        }
-    }
 
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
@@ -635,11 +523,6 @@ public class MaterialSearchView extends FrameLayout implements
         }
 
         super.onRestoreInstanceState(mSavedState.getSuperState());
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        setQuery((String) mAdapter.getItem(position), true);
     }
 
     static class SavedState extends BaseSavedState {
@@ -707,5 +590,71 @@ public class MaterialSearchView extends FrameLayout implements
         void onSearchViewClosed();
     }
 
+
+    // SEARCH TEXT VIEW LISTENER CALLBACK METHODS
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        onSubmitQuery();
+        return true;
+    }
+
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mUserQuery = s;
+        onTextChanged(s);
+//        startFilter(s);
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            showKeyboard(mSearchSrcTextView);
+            showSuggestions();
+            mTintView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    // RECYCLER VIEW ON CLICK & VIEW ON CLICK
+
+    @Override
+    public void onSearchItemClick(String searchString) {
+        setQuery(searchString, true);
+    }
+    // ON CLICK EVENT HANDLER
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.action_up_btn) {
+            closeSearch();
+
+        } else if (i == R.id.action_voice_btn) {
+            onVoiceClicked();
+
+        } else if (i == R.id.action_empty_btn) {
+            mSearchSrcTextView.setText(null);
+            mSearchAdapter.setNewSuggestions(null);
+
+        } else if (i == R.id.searchTextView) {
+            showSuggestions();
+
+        } else if (i == R.id.transparent_view) {
+            closeSearch();
+
+        }
+    }
 
 }
