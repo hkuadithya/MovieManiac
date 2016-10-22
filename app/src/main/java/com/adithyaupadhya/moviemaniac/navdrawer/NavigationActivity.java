@@ -178,7 +178,7 @@ public class NavigationActivity extends AppCompatActivity implements
         else if (mBackPressListener != null)
             mBackPressListener.handleFragmentSearchView();
         else {
-            if (mBackPressedTime == 0 || System.currentTimeMillis() - mBackPressedTime >= 2000) {
+            if (mBackPressedTime == 0 || System.currentTimeMillis() - mBackPressedTime >= 2500) {
                 mBackPressedTime = System.currentTimeMillis();
                 Toast.makeText(this, "Press back once again to exit Movie Maniac", Toast.LENGTH_SHORT).show();
             } else {
