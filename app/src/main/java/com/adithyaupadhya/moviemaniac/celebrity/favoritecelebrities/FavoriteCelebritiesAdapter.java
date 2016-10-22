@@ -14,7 +14,6 @@ import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractCursorAdapter;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.celebrity.celebritydetails.CelebrityDetailsActivity;
 import com.adithyaupadhya.moviemaniac.celebrity.celebritylist.CelebritiesKnownForAdapter;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
@@ -31,12 +30,11 @@ import java.io.IOException;
 /**
  * Created by adithya.upadhya on 01-03-2016.
  */
-public class FavoriteCelebritiesAdapter extends AbstractCursorAdapter<FavoriteCelebritiesAdapter.RecyclerVH> {
+class FavoriteCelebritiesAdapter extends AbstractCursorAdapter<FavoriteCelebritiesAdapter.RecyclerVH> {
     private Context mContext;
     private ObjectMapper mObjectMapper;
-    private OnImageClickListener mImageClickListener;
 
-    public FavoriteCelebritiesAdapter(Context context, Cursor cursor) {
+    FavoriteCelebritiesAdapter(Context context, Cursor cursor) {
         super(cursor);
         mContext = context;
         mObjectMapper = APIConstants.getInstance().getJacksonObjectMapper();
@@ -69,7 +67,7 @@ public class FavoriteCelebritiesAdapter extends AbstractCursorAdapter<FavoriteCe
     }
 
 
-    public class RecyclerVH extends RecyclerView.ViewHolder implements
+    class RecyclerVH extends RecyclerView.ViewHolder implements
             View.OnClickListener,
             View.OnLongClickListener,
             MaterialDialog.SingleButtonCallback {
@@ -79,7 +77,7 @@ public class FavoriteCelebritiesAdapter extends AbstractCursorAdapter<FavoriteCe
         private RecyclerView recyclerView;
         private CelebritiesKnownForAdapter adapter;
 
-        public RecyclerVH(View itemView) {
+        RecyclerVH(View itemView) {
             super(itemView);
             networkImageView = (ImageView) itemView.findViewById(R.id.networkImageView);
             textViewCelebrityName = (RobotoTextView) itemView.findViewById(R.id.textViewCelebrityName);
@@ -105,7 +103,7 @@ public class FavoriteCelebritiesAdapter extends AbstractCursorAdapter<FavoriteCe
             }
 
             if (v.getId() == R.id.networkImageView)
-                mImageClickListener.onImageClick(results.profile_path);
+                Utils.showImageDialogFragment(mContext, results.profile_path);
             else {
                 CelebrityDetailsActivity.startActivityIntent(mContext, results);
             }
@@ -128,7 +126,4 @@ public class FavoriteCelebritiesAdapter extends AbstractCursorAdapter<FavoriteCe
         }
     }
 
-    public void setOnImageClickListener(OnImageClickListener listener) {
-        this.mImageClickListener = listener;
-    }
 }

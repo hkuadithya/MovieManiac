@@ -8,8 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityR
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -235,4 +238,11 @@ public class Utils {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
+    public static void showImageDialogFragment(Context context, String url) {
+        ImageDialogFragment dialogFragment = new ImageDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppIntentConstants.BUNDLE_URL, url);
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "ImageDialog");
+    }
 }

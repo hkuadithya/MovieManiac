@@ -20,30 +20,27 @@ import android.widget.Toast;
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.moviemaniac.base.ImageDialogFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnFragmentBackPress;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.celebrity.CelebrityLaunchFragment;
 import com.adithyaupadhya.moviemaniac.games.GameSplashScreenActivity;
 import com.adithyaupadhya.moviemaniac.login.SignInActivity;
 import com.adithyaupadhya.moviemaniac.movies.MovieLaunchFragment;
 import com.adithyaupadhya.moviemaniac.support.SupportDeveloperActivity;
 import com.adithyaupadhya.moviemaniac.tvseries.TVSeriesLaunchFragment;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 
 public class NavigationActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        OnImageClickListener,
         MaterialDialog.SingleButtonCallback {
 
     private DrawerLayout mDrawerLayout;
     private FragmentManager mFragmentManager;
     private int mSelectedNavItem;
     private OnFragmentBackPress mBackPressListener;
+    private long mBackPressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,15 +166,6 @@ public class NavigationActivity extends AppCompatActivity implements
         return true;
     }
 
-    @Override
-    public void onImageClick(String url) {
-        ImageDialogFragment dialogFragment = new ImageDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppIntentConstants.BUNDLE_URL, url);
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(mFragmentManager, "ImageDialog");
-    }
-
     public void setOnFragmentBackPressListener(OnFragmentBackPress listener) {
         mBackPressListener = listener;
     }
@@ -189,8 +177,15 @@ public class NavigationActivity extends AppCompatActivity implements
             drawer.closeDrawer(GravityCompat.START);
         else if (mBackPressListener != null)
             mBackPressListener.handleFragmentSearchView();
-        else
-            super.onBackPressed();
+        else {
+            if (mBackPressedTime == 0 || System.currentTimeMillis() - mBackPressedTime >= 2000) {
+                mBackPressedTime = System.currentTimeMillis();
+                Toast.makeText(this, "Press back once again to exit Movie Maniac", Toast.LENGTH_SHORT).show();
+            } else {
+                super.onBackPressed();
+            }
+
+        }
     }
 
     @Override

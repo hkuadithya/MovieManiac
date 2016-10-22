@@ -16,7 +16,6 @@ import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
 import com.adithyaupadhya.uimodule.materialprogress.ProgressWheel;
 import com.android.volley.VolleyError;
@@ -55,7 +54,7 @@ public class CelebritiesFragment extends AbstractListFragment {
         mRecyclerView = (RecyclerView) mSwipeRefreshLayout.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new CelebritiesAdapter(getContext(), mRecyclerView, this, (OnImageClickListener) getActivity());
+        mAdapter = new CelebritiesAdapter(getContext(), mRecyclerView, this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -144,7 +143,6 @@ public class CelebritiesFragment extends AbstractListFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mAdapter.setOnImageClickListener(null);
         mAdapter.setOnLoadMoreListener(null);
     }
 }

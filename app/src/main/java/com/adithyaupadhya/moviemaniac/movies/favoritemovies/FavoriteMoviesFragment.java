@@ -16,7 +16,6 @@ import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.base.interfaces.ZeroStateImageListener;
 
 public class FavoriteMoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AbstractTabFragment.OnFabSnackBarClickListener, ZeroStateImageListener {
@@ -48,7 +47,6 @@ public class FavoriteMoviesFragment extends Fragment implements LoaderManager.Lo
         super.onActivityCreated(savedInstanceState);
         mCursorAdapter = new FavoriteMoviesAdapter(getContext(), null);
         mCursorAdapter.setZeroStateImageListener(this);
-        mCursorAdapter.setOnImageClickListener((OnImageClickListener) getActivity());
         mRecyclerView.setAdapter(mCursorAdapter);
     }
 

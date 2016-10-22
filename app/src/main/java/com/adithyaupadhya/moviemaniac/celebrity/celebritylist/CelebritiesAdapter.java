@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnLoadMoreListener;
 import com.adithyaupadhya.moviemaniac.celebrity.celebritydetails.CelebrityDetailsActivity;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
@@ -25,41 +24,35 @@ import com.bumptech.glide.Glide;
 /**
  * Created by adithya.upadhya on 09-01-2016.
  */
-public class CelebritiesAdapter extends RecyclerView.Adapter<CelebritiesAdapter.RecyclerViewHolder> {
+class CelebritiesAdapter extends RecyclerView.Adapter<CelebritiesAdapter.RecyclerViewHolder> {
 
-//    private final ImageLoader mImageLoader;
     private TMDBCelebrityResponse mResponse;
     private Context mContext;
     private OnLoadMoreListener mLoadMoreListener;
-    private OnImageClickListener mImageClickListener;
     private LinearLayoutManager mLayoutManager;
     private boolean loading = false;
 
-    public CelebritiesAdapter(Context context,
-                              RecyclerView recyclerView,
-                              OnLoadMoreListener onLoadMoreListener,
-                              OnImageClickListener onImageClickListener) {
+    CelebritiesAdapter(Context context,
+                       RecyclerView recyclerView,
+                       OnLoadMoreListener onLoadMoreListener) {
 
         mContext = context;
         mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         mLoadMoreListener = onLoadMoreListener;
-        mImageClickListener = onImageClickListener;
     }
 
-    public void setNewAPIResponse(TMDBCelebrityResponse response) {
+    void setNewAPIResponse(TMDBCelebrityResponse response) {
         mResponse = response;
     }
 
 
-    public void setLoaded() {
+    void setLoaded() {
         loading = false;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerViewHolder viewHolder = new RecyclerViewHolder(LayoutInflater.from(mContext).inflate(R.layout.celebrity_layout_row, parent, false), mContext);
-        viewHolder.onImageClickListener = mImageClickListener;
-        return viewHolder;
+        return new RecyclerViewHolder(LayoutInflater.from(mContext).inflate(R.layout.celebrity_layout_row, parent, false), mContext);
     }
 
     @Override
@@ -88,15 +81,11 @@ public class CelebritiesAdapter extends RecyclerView.Adapter<CelebritiesAdapter.
         return mResponse != null ? mResponse.results.size() : 0;
     }
 
-    public void setOnImageClickListener(OnImageClickListener onImageClickListener) {
-        this.mImageClickListener = onImageClickListener;
-    }
-
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+    void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.mLoadMoreListener = onLoadMoreListener;
     }
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements
+    static class RecyclerViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener,
             View.OnLongClickListener,
             MaterialDialog.SingleButtonCallback {
@@ -108,10 +97,9 @@ public class CelebritiesAdapter extends RecyclerView.Adapter<CelebritiesAdapter.
         private CelebritiesKnownForAdapter adapter;
 
         private Context context;
-        private OnImageClickListener onImageClickListener;
         private TMDBCelebrityResponse.Results results;
 
-        public RecyclerViewHolder(View itemView, Context context) {
+        RecyclerViewHolder(View itemView, Context context) {
             super(itemView);
             networkImageView = (ImageView) itemView.findViewById(R.id.networkImageView);
             textViewCelebrityName = (RobotoTextView) itemView.findViewById(R.id.textViewCelebrityName);
@@ -135,7 +123,7 @@ public class CelebritiesAdapter extends RecyclerView.Adapter<CelebritiesAdapter.
 
             switch (v.getId()) {
                 case R.id.networkImageView:
-                    onImageClickListener.onImageClick(results.profile_path);
+                    Utils.showImageDialogFragment(context, results.profile_path);
                     break;
 
                 default:

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnLoadMoreListener;
 import com.adithyaupadhya.moviemaniac.movies.moviedetails.MovieDetailsActivity;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
@@ -31,26 +30,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.RecyclerVi
     private TMDBMoviesResponse mResponse;
     private Context mContext;
     private OnLoadMoreListener mLoadMoreListener;
-    private OnImageClickListener mImageClickListener;
     private LinearLayoutManager mLayoutManager;
     private boolean loading = false;
 
-    public MoviesAdapter(Context context,
-                         RecyclerView recyclerView,
-                         OnLoadMoreListener onLoadMoreListener,
-                         OnImageClickListener onImageClickListener) {
+    MoviesAdapter(Context context,
+                  RecyclerView recyclerView,
+                  OnLoadMoreListener onLoadMoreListener) {
 
         mContext = context;
         mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         mLoadMoreListener = onLoadMoreListener;
-        mImageClickListener = onImageClickListener;
     }
 
-    public void setNewAPIResponse(TMDBMoviesResponse response) {
+    void setNewAPIResponse(TMDBMoviesResponse response) {
         mResponse = response;
     }
 
-    public void setLoaded() {
+    void setLoaded() {
         loading = false;
     }
 
@@ -58,7 +54,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.RecyclerVi
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerViewHolder viewHolder = new RecyclerViewHolder(LayoutInflater.from(mContext).inflate(R.layout.movie_tv_data_layout_row, parent, false));
         viewHolder.context = mContext;
-        viewHolder.onImageClickListener = mImageClickListener;
         return viewHolder;
     }
 
@@ -96,7 +91,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.RecyclerVi
     }
 
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements
+    static class RecyclerViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener,
             View.OnLongClickListener,
             MaterialDialog.SingleButtonCallback {
@@ -107,10 +102,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.RecyclerVi
         private boolean isFavoriteItem;
 
         private TMDBMoviesResponse.Results results;
-        private OnImageClickListener onImageClickListener;
         private Context context;
 
-        public RecyclerViewHolder(View itemView) {
+        RecyclerViewHolder(View itemView) {
             super(itemView);
             networkImageView = (ImageView) itemView.findViewById(R.id.networkImageView);
             imageViewLanguage = (ImageView) itemView.findViewById(R.id.imageViewLanguage);
@@ -130,7 +124,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.RecyclerVi
 
             switch (v.getId()) {
                 case R.id.networkImageView:
-                    onImageClickListener.onImageClick((results.poster_path != null) ? results.poster_path : results.backdrop_path);
+                    Utils.showImageDialogFragment(context, (results.poster_path != null) ? results.poster_path : results.backdrop_path);
                     break;
 
                 default:

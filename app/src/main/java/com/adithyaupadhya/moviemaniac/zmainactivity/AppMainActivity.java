@@ -12,7 +12,6 @@ import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.login.SignInActivity;
 import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
-import com.adithyaupadhya.moviemaniac.notification.AlarmManagerUtils;
 import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
 import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBGenreResponse;

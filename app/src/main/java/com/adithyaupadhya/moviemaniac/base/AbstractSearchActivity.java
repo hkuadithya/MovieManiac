@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
 
 import java.io.UnsupportedEncodingException;
@@ -17,7 +16,7 @@ import java.net.URLEncoder;
 /**
  * Created by adithya.upadhya on 12-02-2016.
  */
-public abstract class AbstractSearchActivity extends AppCompatActivity implements OnImageClickListener, View.OnClickListener {
+public abstract class AbstractSearchActivity extends AppCompatActivity implements View.OnClickListener {
     private AbstractTabFragment.OnFabSnackBarClickListener listener;
 
     @Override
@@ -55,15 +54,6 @@ public abstract class AbstractSearchActivity extends AppCompatActivity implement
     protected abstract Fragment getLaunchFragment();
 
     protected abstract String getToolbarTitle();
-
-    @Override
-    public void onImageClick(String url) {
-        ImageDialogFragment dialogFragment = new ImageDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppIntentConstants.BUNDLE_URL, url);
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(getSupportFragmentManager(), "ImageDialog");
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

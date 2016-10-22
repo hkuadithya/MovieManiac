@@ -14,7 +14,6 @@ import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractCursorAdapter;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.tvseries.tvseriesdetails.TVSeriesDetailsActivity;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
 import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
@@ -30,12 +29,11 @@ import java.io.IOException;
 /**
  * Created by adithya.upadhya on 01-03-2016.
  */
-public class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSeriesAdapter.RecyclerVH> {
+class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSeriesAdapter.RecyclerVH> {
     private Context mContext;
     private ObjectMapper mObjectMapper;
-    private OnImageClickListener mImageClickListener;
 
-    public FavoriteTVSeriesAdapter(Context context, Cursor cursor) {
+    FavoriteTVSeriesAdapter(Context context, Cursor cursor) {
         super(cursor);
         mContext = context;
         mObjectMapper = APIConstants.getInstance().getJacksonObjectMapper();
@@ -79,18 +77,14 @@ public class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSer
                 ContextCompat.getDrawable(mContext, APIConstants.getInstance().getCountryFlag(results.original_language)) : null);
     }
 
-    public void setOnImageClickListener(OnImageClickListener listener) {
-        this.mImageClickListener = listener;
-    }
-
-    public class RecyclerVH extends RecyclerView.ViewHolder implements View.OnClickListener,
+    class RecyclerVH extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener,
             MaterialDialog.SingleButtonCallback {
         private ImageView networkImageView;
         private ImageView imageViewLanguage;
         private TextView textViewMovieName, textViewGenreValue, textViewVoteCountValue, textViewVoteAverageValue, textViewReleaseDate;
 
-        public RecyclerVH(View itemView) {
+        RecyclerVH(View itemView) {
             super(itemView);
             networkImageView = (ImageView) itemView.findViewById(R.id.networkImageView);
             imageViewLanguage = (ImageView) itemView.findViewById(R.id.imageViewLanguage);
@@ -100,8 +94,6 @@ public class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSer
             textViewVoteAverageValue = (RobotoTextView) itemView.findViewById(R.id.textViewVoteAverageValue);
             textViewReleaseDate = (RobotoTextView) itemView.findViewById(R.id.textViewReleaseDate);
 
-//            networkImageView.setErrorImageResId(R.drawable.not_found);
-//            networkImageView.setDefaultImageResId(R.drawable.default_img);
             networkImageView.setOnClickListener(this);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -119,11 +111,10 @@ public class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSer
             }
 
             if (v.getId() == R.id.networkImageView)
-                mImageClickListener.onImageClick((results.poster_path != null) ?
+                Utils.showImageDialogFragment(mContext, (results.poster_path != null) ?
                         results.poster_path : results.backdrop_path);
             else {
-                /*mContext.startActivity(TVSeriesDetailsActivity.getActivityIntent(mContext,
-                        cursor.getString(cursor.getColumnIndex(DBConstants.TVSERIES_DETAILS))));*/
+
                 try {
                     TMDBTVSeriesResponse.Results response = APIConstants.getInstance().getJacksonObjectMapper().readValue(cursor.getString(cursor.getColumnIndex(DBConstants.TVSERIES_DETAILS)), TMDBTVSeriesResponse.Results.class);
                     TVSeriesDetailsActivity.startActivityIntent(mContext, response);

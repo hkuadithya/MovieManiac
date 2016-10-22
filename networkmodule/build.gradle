@@ -33,7 +33,4 @@ dependencies {
     compile 'com.github.bumptech.glide:volley-integration:1.4.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-jackson:2.1.0'
-    compile files('libs/jackson-annotations-2.7.0.jar')
-    compile files('libs/jackson-databind-2.6.4.jar')
-    compile files('libs/jackson-core-2.7.0.jar')
 }

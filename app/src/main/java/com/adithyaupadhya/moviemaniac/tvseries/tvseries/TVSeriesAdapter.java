@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnLoadMoreListener;
 import com.adithyaupadhya.moviemaniac.tvseries.tvseriesdetails.TVSeriesDetailsActivity;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
@@ -26,31 +25,28 @@ import com.bumptech.glide.Glide;
 /**
  * Created by adithya.upadhya on 09-01-2016.
  */
-public class TVSeriesAdapter extends RecyclerView.Adapter<TVSeriesAdapter.RecyclerViewHolder> {
+class TVSeriesAdapter extends RecyclerView.Adapter<TVSeriesAdapter.RecyclerViewHolder> {
 
     private TMDBTVSeriesResponse mResponse;
     private Context mContext;
     private OnLoadMoreListener mLoadMoreListener;
-    private OnImageClickListener mImageClickListener;
     private LinearLayoutManager mLayoutManager;
     private boolean loading = false;
 
-    public TVSeriesAdapter(Context context,
-                           RecyclerView recyclerView,
-                           OnLoadMoreListener onLoadMoreListener,
-                           OnImageClickListener onImageClickListener) {
+    TVSeriesAdapter(Context context,
+                    RecyclerView recyclerView,
+                    OnLoadMoreListener onLoadMoreListener) {
 
         mContext = context;
         mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         mLoadMoreListener = onLoadMoreListener;
-        mImageClickListener = onImageClickListener;
     }
 
-    public void setNewAPIResponse(TMDBTVSeriesResponse response) {
+    void setNewAPIResponse(TMDBTVSeriesResponse response) {
         mResponse = response;
     }
 
-    public void setLoaded() {
+    void setLoaded() {
         loading = false;
     }
 
@@ -58,7 +54,6 @@ public class TVSeriesAdapter extends RecyclerView.Adapter<TVSeriesAdapter.Recycl
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerViewHolder viewHolder = new RecyclerViewHolder(LayoutInflater.from(mContext).inflate(R.layout.movie_tv_data_layout_row, parent, false));
         viewHolder.context = mContext;
-        viewHolder.onImageClickListener = mImageClickListener;
         return viewHolder;
     }
 
@@ -96,7 +91,7 @@ public class TVSeriesAdapter extends RecyclerView.Adapter<TVSeriesAdapter.Recycl
     }
 
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements
+    static class RecyclerViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener,
             View.OnLongClickListener,
             MaterialDialog.SingleButtonCallback {
@@ -108,9 +103,8 @@ public class TVSeriesAdapter extends RecyclerView.Adapter<TVSeriesAdapter.Recycl
 
         private TMDBTVSeriesResponse.Results results;
         private Context context;
-        private OnImageClickListener onImageClickListener;
 
-        public RecyclerViewHolder(View itemView) {
+        RecyclerViewHolder(View itemView) {
             super(itemView);
             networkImageView = (ImageView) itemView.findViewById(R.id.networkImageView);
             imageViewLanguage = (ImageView) itemView.findViewById(R.id.imageViewLanguage);
@@ -129,7 +123,7 @@ public class TVSeriesAdapter extends RecyclerView.Adapter<TVSeriesAdapter.Recycl
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.networkImageView:
-                    onImageClickListener.onImageClick((results.poster_path != null) ? results.poster_path : results.backdrop_path);
+                    Utils.showImageDialogFragment(context, (results.poster_path != null) ? results.poster_path : results.backdrop_path);
                     break;
 
                 default:

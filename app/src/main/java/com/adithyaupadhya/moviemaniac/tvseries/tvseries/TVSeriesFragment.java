@@ -16,7 +16,6 @@ import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
 import com.adithyaupadhya.uimodule.materialprogress.ProgressWheel;
 import com.android.volley.VolleyError;
@@ -57,7 +56,7 @@ public class TVSeriesFragment extends AbstractListFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new TVSeriesAdapter(getContext(), mRecyclerView, this, (OnImageClickListener) getActivity());
+        mAdapter = new TVSeriesAdapter(getContext(), mRecyclerView, this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);

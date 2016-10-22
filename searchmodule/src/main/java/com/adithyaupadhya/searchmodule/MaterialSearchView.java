@@ -39,7 +39,7 @@ public class MaterialSearchView extends FrameLayout implements
         TextView.OnEditorActionListener,
         TextWatcher,
         View.OnFocusChangeListener,
-        SearchRecyclerAdapter.SearchItemClickListener {
+        SearchRecyclerAdapter.SearchItemClickListener, MenuItem.OnMenuItemClickListener {
 
     public static final int REQUEST_VOICE = 10000;
 
@@ -295,11 +295,7 @@ public class MaterialSearchView extends FrameLayout implements
 
     public void setNewSuggestions(List<String> suggestions) {
         if (suggestions != null && suggestions.size() > 0) {
-            mTintView.setVisibility(VISIBLE);
             mSearchAdapter.setNewSuggestions(suggestions);
-
-        } else {
-            mTintView.setVisibility(GONE);
         }
     }
 
@@ -314,8 +310,8 @@ public class MaterialSearchView extends FrameLayout implements
     /**
      * Calling this will set the query to search text box. if submit is true, it'll submit the query.
      *
-     * @param query
-     * @param submit
+     * @param query  query string shown in search view
+     * @param submit flag to indicate whether search action to be taken.
      */
     public void setQuery(CharSequence query, boolean submit) {
         mSearchSrcTextView.setText(query);
@@ -332,7 +328,7 @@ public class MaterialSearchView extends FrameLayout implements
     /**
      * if show is true, this will enable voice search. If voice is not available on the device, this method call has not effect.
      *
-     * @param show
+     * @param show flag to disable/enable voice search
      */
     public void showVoice(boolean show) {
         if (show && isVoiceAvailable() && allowVoiceSearch) {
@@ -348,13 +344,7 @@ public class MaterialSearchView extends FrameLayout implements
      * @param menuItem
      */
     public void setMenuItem(MenuItem menuItem) {
-        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                showSearch();
-                return true;
-            }
-        });
+        menuItem.setOnMenuItemClickListener(this);
     }
 
     /**
@@ -450,7 +440,7 @@ public class MaterialSearchView extends FrameLayout implements
         dismissSuggestions();
 
         mSearchAdapter.setNewSuggestions(null);
-        
+
         clearFocus();
 
         mSearchLayout.setVisibility(GONE);
@@ -655,6 +645,13 @@ public class MaterialSearchView extends FrameLayout implements
             closeSearch();
 
         }
+    }
+
+    // ON MENU ITEM CLICK
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        showSearch();
+        return true;
     }
 
 }
