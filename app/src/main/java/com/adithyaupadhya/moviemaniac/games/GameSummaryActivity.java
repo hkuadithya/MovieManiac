@@ -8,8 +8,8 @@ import android.widget.TextView;
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.facebook.FacebookSdk;
 import com.facebook.share.widget.LikeView;
 import com.google.android.gms.plus.PlusOneButton;
@@ -25,7 +25,7 @@ public class GameSummaryActivity extends AppCompatActivity implements View.OnCli
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         AppPreferenceManager manager = AppPreferenceManager.getAppPreferenceInstance(this);
-        
+
         int correctAnswers = getIntent().getIntExtra(AppIntentConstants.CORRECT_ANS_COUNT, 0);
         String userHighScorePrefKey = manager.getPreferenceData(DBConstants.USER_ID) + DBConstants.GAME_HIGH_SCORE;
         String highScore = manager.getPreferenceData(userHighScorePrefKey);

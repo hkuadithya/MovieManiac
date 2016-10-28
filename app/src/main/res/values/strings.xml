@@ -28,12 +28,11 @@
     <string name="application_credits">
        Thank you for downloading this App!\nPlease like us on Facebook and Google+ (click on the like buttons below :D ).
         \n\nTHIS PRODUCT USES THE TMDb API BUT IS NOT ENDORSED OR CERTIFIED BY TMDb.
-        \n\nThe developer would like to thank his family and :-
-        \n* Mayur Devatwal(UI/UX Engineer) for developing the app icons
-        \n  Mayur\'s Portfolio : https://www.behance.net/mayurdevatwal
-        \n\n* The Movie Database(TMDb) APIs
-        \n\n* Github and the Android open source community
-        \n\n* Freepik and Flaticons
+        \n\nThe developer would like to thank his family and \u279f
+        \n\u2022 Mayur Devatwal(UI/UX Engineer) for developing the app icons. Mayur\'s Portfolio : https://www.behance.net/mayurdevatwal
+        \n\u2022 The Movie Database(TMDb) APIs
+        \n\u2022 Github and the Android open source community
+        \n\u2022 Freepik and Flaticons
 
         \n\nYou can report bugs or request new features by clicking on report bugs button below.
         \n\nDon\'t forget to share this app with your friends and family.(click on the share button below)
@@ -53,4 +52,13 @@
 
     <string name="support_developers_string">Support Developers</string>
     <string name="image_reload">RELOAD</string>
+    <string name="celeb_view_more">VIEW MORE</string>
+    <string name="string_loading">loading…</string>
+    <string name="string_genre">Genre:</string>
+    <string name="string_vote_count">Vote Count:</string>
+    <string name="string_release">Release:</string>
+    <string name="string_average_vote">Average Vote:</string>
+    <string name="game_identify_movie">Identify this Movie</string>
+    <string name="game_identify_tv_series">Identify this TV Series</string>
+    <string name="game_identify_celebrity">Identify this Celebrity</string>
 </resources>

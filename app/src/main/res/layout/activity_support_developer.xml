@@ -42,8 +42,7 @@
                         android:linksClickable="true"
                         android:text="@string/application_credits"
                         android:textColor="@android:color/black"
-                        android:textColorLink="#05c5cf"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:fontType="medium" />
 
                     <LinearLayout
@@ -75,6 +74,7 @@
                 <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
                     style="@style/shareButtonStyle"
                     android:id="@+id/buttonReportBugs"
+                    android:layout_marginTop="15dp"
                     android:background="@color/app_material_blue"
                     android:drawableEnd="@drawable/vector_drawer_bug"
                     android:drawableRight="@drawable/vector_drawer_bug"

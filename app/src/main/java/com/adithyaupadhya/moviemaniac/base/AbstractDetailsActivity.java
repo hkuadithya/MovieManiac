@@ -18,16 +18,22 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * Created by adithya.upadhya on 07-01-2016.
  */
-public abstract class AbstractDetailsActivity extends AppCompatActivity implements View.OnClickListener, MaterialDialog.SingleButtonCallback {
+public abstract class AbstractDetailsActivity<APIResponseClass> extends AppCompatActivity implements
+        View.OnClickListener,
+        MaterialDialog.SingleButtonCallback,
+        Callback<APIResponseClass> {
+
     protected FloatingActionButton mActionButton;
     protected boolean isFavoriteItem;
     protected String mYouTubeKey;
@@ -110,7 +116,6 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
 
             default:
                 // This is to handle SnackBar click event.
-                VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);
                 establishNetworkCall();
         }
     }
@@ -133,6 +138,10 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
     @Override
     protected void onStop() {
         super.onStop();
-        VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);
+    }
+
+    @Override
+    public void onFailure(Call<APIResponseClass> call, Throwable t) {
+        showNetworkErrorSnackbar();
     }
 }

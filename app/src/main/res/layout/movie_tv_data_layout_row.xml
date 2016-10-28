@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
@@ -39,7 +40,7 @@
             android:layout_toRightOf="@id/networkImageView"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="HELLO" />
+            tools:text="HELLO" />
 
 
         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
@@ -48,7 +49,7 @@
             android:layout_below="@id/textViewMovieName"
             android:layout_toEndOf="@id/networkImageView"
             android:layout_toRightOf="@id/networkImageView"
-            android:text="Genre:"
+            android:text="@string/string_genre"
             android:textColor="@color/cardTitleColor"
             app:fontType="medium" />
 
@@ -62,8 +63,8 @@
             android:layout_toRightOf="@id/textViewGenre"
             android:ellipsize="end"
             android:gravity="end"
-            android:maxLines="2"
-            android:text="loading..."
+            android:maxLines="1"
+            android:text="@string/string_loading"
             app:fontType="medium" />
 
         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
@@ -72,7 +73,7 @@
             android:layout_below="@id/textViewGenreValue"
             android:layout_toEndOf="@id/networkImageView"
             android:layout_toRightOf="@id/networkImageView"
-            android:text="Vote Count:"
+            android:text="@string/string_vote_count"
             android:textColor="@color/cardTitleColor"
             app:fontType="medium" />
 
@@ -82,7 +83,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/textViewGenreValue"
-            android:text="loading..."
+            android:text="@string/string_loading"
             app:fontType="medium" />
 
         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
@@ -91,7 +92,7 @@
             android:layout_below="@id/textViewVoteCount"
             android:layout_toEndOf="@id/networkImageView"
             android:layout_toRightOf="@id/networkImageView"
-            android:text="Average Vote:"
+            android:text="@string/string_average_vote"
             android:textColor="@color/cardTitleColor"
             app:fontType="medium" />
 
@@ -101,7 +102,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/textViewVoteCount"
-            android:text="loading..."
+            android:text="@string/string_loading"
             app:fontType="medium" />
 
         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
@@ -110,7 +111,7 @@
             android:layout_below="@id/textViewVoteAverage"
             android:layout_toEndOf="@id/networkImageView"
             android:layout_toRightOf="@id/networkImageView"
-            android:text="Release:"
+            android:text="@string/string_release"
             android:textColor="@color/cardTitleColor"
             app:fontType="medium" />
 
@@ -120,8 +121,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/textViewVoteAverage"
-            android:text="loading..."
-
+            android:text="@string/string_loading"
             app:fontType="medium" />
 
     </RelativeLayout>

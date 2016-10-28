@@ -13,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,22 +23,19 @@ import android.widget.Toast;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnFragmentBackPress;
 import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBGenericSearchResults;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericSearchResults;
 import com.adithyaupadhya.searchmodule.MaterialSearchView;
 import com.adithyaupadhya.uimodule.slidingtabs.BaseSlidingTabs;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by adithya.upadhya on 09-02-2016.
@@ -48,8 +44,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
         ViewPager.OnPageChangeListener,
         MaterialSearchView.OnQueryTextListener,
         OnFragmentBackPress,
-        MaterialSearchView.SearchViewListener,
-        Response.ErrorListener, Response.Listener<JSONObject> {
+        MaterialSearchView.SearchViewListener, Callback<TMDBGenericSearchResults> {
 
     private List<Fragment> mFragmentList;
     private Toolbar mToolbar;
@@ -58,7 +53,6 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     protected MaterialSearchView mSearchView;
     private NavigationActivity mParentActivity;
     private WeakHashMap<Integer, Fragment> mFragmentMap;
-    protected boolean mIsDataLoading;
 
     public abstract List<Fragment> getViewPagerFragmentList();
 
@@ -245,48 +239,38 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     //------------------------------------------------------------------------------------------------------
     //          SEARCH SUGGESTIONS
     //------------------------------------------------------------------------------------------------------
+
     @Override
-    public void onErrorResponse(VolleyError error) {
-        mIsDataLoading = false;
+    public void onResponse(Call<TMDBGenericSearchResults> call, Response<TMDBGenericSearchResults> response) {
+        HashSet<String> resultSet = new HashSet<>(7);
+        ArrayList<String> resultList = new ArrayList<>(5);
+
+        if (response.body().results != null) {
+            for (TMDBGenericSearchResults.Results result : response.body().results) {
+                if (!resultSet.contains(result.name)) {
+
+                    resultList.add(result.name);
+
+                    if (resultList.size() > 4) {
+                        break;
+                    }
+
+                    resultSet.add(result.name);
+                }
+            }
+
+            mSearchView.setNewSuggestions(resultList);
+        }
     }
 
     @Override
-    public void onResponse(JSONObject response) {
-        mIsDataLoading = false;
+    public void onFailure(Call<TMDBGenericSearchResults> call, Throwable t) {
 
-        try {
-
-            Log.d("MMVOLLEY", "suggestion response " + response);
-
-            TMDBGenericSearchResults searchResults = APIConstants.getInstance()
-                    .getJacksonObjectMapper()
-                    .readValue(response.toString(), TMDBGenericSearchResults.class);
-
-            HashSet<String> resultSet = new HashSet<>(6);
-            ArrayList<String> resultList = new ArrayList<>(4);
-
-            if (searchResults.results != null) {
-                for (TMDBGenericSearchResults.Results result : searchResults.results) {
-                    if (!resultSet.contains(result.name)) {
-                        resultList.add(result.name);
-                        if (resultList.size() >= 4)
-                            break;
-
-                        resultSet.add(result.name);
-                    }
-                }
-
-                mSearchView.setNewSuggestions(resultList);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        VolleySingleton.getInstance(getContext()).getVolleyRequestQueue().cancelAll(this);
     }
 
     @Override

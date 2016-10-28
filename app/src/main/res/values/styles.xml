@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textPrimaryColor</item>
         <item name="android:textColorSecondary">@color/textSecondaryColor</item>
+        <item name="android:textColorLink">@color/appHyperlinkColor</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

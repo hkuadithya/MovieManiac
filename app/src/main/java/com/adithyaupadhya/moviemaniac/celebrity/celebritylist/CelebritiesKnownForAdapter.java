@@ -10,10 +10,10 @@ import android.widget.ImageView;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.movies.moviedetails.MovieDetailsActivity;
 import com.adithyaupadhya.moviemaniac.tvseries.tvseriesdetails.TVSeriesDetailsActivity;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
 import com.bumptech.glide.Glide;
 
 import java.util.List;

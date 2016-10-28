@@ -1,4 +1,4 @@
-package com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses;
+package com.adithyaupadhya.newtorkmodule.volley.pojos;
 
 /**
  * Created by adithya.upadhya on 05-06-2016.

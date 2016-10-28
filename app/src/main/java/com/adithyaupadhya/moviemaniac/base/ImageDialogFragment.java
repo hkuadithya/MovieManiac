@@ -14,11 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
-import com.android.volley.NoConnectionError;
-import com.android.volley.TimeoutError;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -80,7 +78,7 @@ public class ImageDialogFragment extends DialogFragment implements RequestListen
 
     @Override
     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-        if (e != null && (e instanceof NoConnectionError || e.getCause() instanceof NoConnectionError || e.getCause() instanceof TimeoutError)) {
+        if (model != null && model.contains("null")) {
             mTextViewRetry.setVisibility(View.VISIBLE);
             return true;
         }

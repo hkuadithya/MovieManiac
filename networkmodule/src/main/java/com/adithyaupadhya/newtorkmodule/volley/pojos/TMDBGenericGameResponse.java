@@ -1,4 +1,4 @@
-package com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses;
+package com.adithyaupadhya.newtorkmodule.volley.pojos;
 
 import android.os.Parcel;
 import android.os.Parcelable;

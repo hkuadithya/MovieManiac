@@ -1,31 +1,79 @@
 package com.adithyaupadhya.newtorkmodule.volley.retrofit;
 
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityBiodataResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericGameResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericSearchResults;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenreResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBImageResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieSimilarCreditsVideosResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSimilarCreditsVideosResponse;
 
+import java.io.IOException;
+
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
  * Created by adithya.upadhya on 07-10-2016.
  */
-public class RetrofitClient {
+public class RetrofitClient implements Interceptor {
 
     private static RetrofitClient mRetrofitClientInstance = new RetrofitClient();
     private APIClient mApiClient;
 
     private RetrofitClient() {
+
+        OkHttpClient okHttpClient = new OkHttpClient
+                .Builder()
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(this)
+                .build();
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(NetworkConstants.NETWORK_BASE_URL)
-                .addConverterFactory(JacksonConverterFactory.create(APIConstants.getInstance().getJacksonObjectMapper()))
+                .addConverterFactory(JacksonConverterFactory.create(APIConstants.getInstance().getObjectMapper()))
+                .client(okHttpClient)
                 .build();
 
         mApiClient = retrofit.create(APIClient.class);
     }
+
+
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+
+        Request request = chain.request();
+
+        HttpUrl url = request.url()
+                .newBuilder()
+                .addQueryParameter("api_key", "3db61f99f5b86b7f997e3141af909031")
+                .build();
+
+        request = request.newBuilder()
+                .url(url)
+                .header("Cache-Control", "public, max-age=3600")
+                .build();
+
+        return chain.proceed(request);
+
+    }
+
 
     public static RetrofitClient getInstance() {
         if (mRetrofitClientInstance == null) {
@@ -34,14 +82,90 @@ public class RetrofitClient {
         return mRetrofitClientInstance;
     }
 
+
     public APIClient getNetworkClient() {
         return mApiClient;
     }
 
-    private interface APIClient {
+
+    public interface APIClient {
+
+        // MOVIES       --------------------------------------------------------------------------------------
 
         @GET("movie/upcoming")
-        Call<TMDBMoviesResponse> getUpcomingMovies(@Query("page") int page, @Query("api_key") String apiKey);
+        Call<TMDBMoviesResponse> getUpcomingMovies(@Query("page") int page);
+
+        @GET("movie/popular")
+        Call<TMDBMoviesResponse> getPopularMovies(@Query("page") int page);
+
+        @GET("movie/{movie_id}?append_to_response=similar,credits,videos")
+        Call<TMDBMovieSimilarCreditsVideosResponse> getMovieDetails(@Path("movie_id") int movieId);
+
+        @GET("genre/movie/list")
+        Call<TMDBGenreResponse> getMovieGenreList();
+
+        @GET("search/movie")
+        Call<TMDBMoviesResponse> getMovieSearchResults(@Query("query") String queryString, @Query("page") int pageNumber);
+
+        @GET("search/movie")
+        Call<TMDBGenericSearchResults> getMovieSearchSuggestions(@Query("query") String queryString, @Query("page") int pageNumber);
+
+        @GET("movie/{movie_id}/images")
+        Call<TMDBImageResponse> getMovieImages(@Path("movie_id") int movieId);
+
+
+        // TV SERIES    --------------------------------------------------------------------------------------
+
+        @GET("tv/on_the_air")
+        Call<TMDBTVSeriesResponse> getOnTheAirTVSeries(@Query("page") int page);
+
+        @GET("tv/popular")
+        Call<TMDBTVSeriesResponse> getPopularTVSeries(@Query("page") int page);
+
+        @GET("tv/{tv_id}?append_to_response=similar,credits,videos")
+        Call<TMDBTVSimilarCreditsVideosResponse> getTVSeriesDetails(@Path("tv_id") int tvId);
+
+        @GET("genre/tv/list")
+        Call<TMDBGenreResponse> getTVGenreList();
+
+        @GET("search/tv")
+        Call<TMDBTVSeriesResponse> getTVSearchResults(@Query("query") String queryString, @Query("page") int pageNumber);
+
+        @GET("search/tv")
+        Call<TMDBGenericSearchResults> getTVSeriesSearchSuggestions(@Query("query") String queryString, @Query("page") int pageNumber);
+
+        @GET("tv/{tv_id}/images")
+        Call<TMDBImageResponse> getTVSeriesImages(@Path("tv_id") int tvId);
+
+
+        // CELEBRITIES  --------------------------------------------------------------------------------------
+
+        @GET("person/popular")
+        Call<TMDBCelebrityResponse> getPopularCelebrities(@Query("page") int page);
+
+        @GET("person/{celeb_id}?append_to_response=movie_credits,tv_credits")
+        Call<TMDBCelebrityBiodataResponse> getCelebrityDetails(@Path("celeb_id") int celebId);
+
+        @GET("search/person")
+        Call<TMDBCelebrityResponse> getCelebritySearchResults(@Query("query") String queryString, @Query("page") int pageNumber);
+
+        @GET("search/person")
+        Call<TMDBGenericSearchResults> getCelebritySearchSuggestions(@Query("query") String queryString, @Query("page") int pageNumber);
+
+        @GET("person/{celeb_id}/images")
+        Call<TMDBImageResponse> getCelebrityImages(@Path("celeb_id") int celebId);
+
+
+        // GAMES        --------------------------------------------------------------------------------------
+
+        @GET("movie/popular")
+        Call<TMDBGenericGameResponse> getGameMovies(@Query("page") int page);
+
+        @GET("tv/popular")
+        Call<TMDBGenericGameResponse> getGameTVSeries(@Query("page") int page);
+
+        @GET("person/popular")
+        Call<TMDBGenericGameResponse> getGameCelebrities(@Query("page") int page);
 
     }
 }

@@ -12,29 +12,24 @@ import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.login.SignInActivity;
 import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBGenreResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenreResponse;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.HashMap;
 
 import io.fabric.sdk.android.Fabric;
+import retrofit2.Call;
+import retrofit2.Callback;
 
-public class AppMainActivity extends AppCompatActivity implements Response.ErrorListener, View.OnClickListener {
+public class AppMainActivity extends AppCompatActivity implements View.OnClickListener {
     private boolean mMovieGenreLoaded, mTvGenreLoaded;
     private AppPreferenceManager mPrefManager;
+    private RetrofitClient.APIClient mApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,32 +44,23 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
                         .build())
                 .build());
 
-        VolleySingleton.initInstance(this);
-
+        mApiClient = RetrofitClient.getInstance().getNetworkClient();
         //AlarmManagerUtils.createAlarmInstance(this);
-
-        APIConstants instance = APIConstants.getInstance();
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         mPrefManager = AppPreferenceManager.getAppPreferenceInstance(this);
 
-        if (instance.areGenreMapsEmpty())
-            establishNetworkCall();
-        else
-            launchNewActivity();
+        establishNetworkCall();
 
     }
 
 
     private void establishNetworkCall() {
 
-        RequestQueue requestQueue = VolleySingleton.getInstance(this).getVolleyRequestQueue();
+        mApiClient.getMovieGenreList().enqueue(movieGenreResponse);
 
-        requestQueue.add(new CustomJsonObjectRequest(Request.Method.GET, NetworkConstants.MOVIE_GENRE_URL, this, new MovieGenreResponse(), this));
-
-        requestQueue.add(new CustomJsonObjectRequest(Request.Method.GET, NetworkConstants.TV_GENRE_URL, this, new TvGenreResponse(), this));
-
+        mApiClient.getTVGenreList().enqueue(tvGenreResponse);
     }
 
 
@@ -87,21 +73,17 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
         //  APP VISITED BEFORE: DIRECT HIM/HER TO NAVIGATION ACTIVITY
         else {
             // Crashlytics user logging
-            Crashlytics.setUserName(mPrefManager.getPreferenceData(DBConstants.USER_NAME));
+            if (Fabric.isInitialized()) {
+                Crashlytics.setUserName(mPrefManager.getPreferenceData(DBConstants.USER_NAME));
 
-            Crashlytics.setUserEmail(mPrefManager.getPreferenceData(DBConstants.USER_EMAIL));
+                Crashlytics.setUserEmail(mPrefManager.getPreferenceData(DBConstants.USER_EMAIL));
+            }
 
             startActivity(new Intent(AppMainActivity.this, NavigationActivity.class));
         }
 
         overridePendingTransition(R.anim.enter_anim, R.anim.exit_anim);
 
-    }
-
-
-    @Override
-    public void onErrorResponse(VolleyError volleyError) {
-        Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
     }
 
 
@@ -120,61 +102,67 @@ public class AppMainActivity extends AppCompatActivity implements Response.Error
         }
     }
 
-    private class MovieGenreResponse implements Response.Listener<JSONObject> {
+
+    private Callback<TMDBGenreResponse> movieGenreResponse = new Callback<TMDBGenreResponse>() {
         @Override
-        public void onResponse(JSONObject jsonObject) {
-                try {
-                    HashMap<Integer, String> movieMap = new HashMap<>();
-                    TMDBGenreResponse response = APIConstants.getInstance()
-                            .getJacksonObjectMapper()
-                            .readValue(jsonObject.toString(), TMDBGenreResponse.class);
+        public void onResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
+            HashMap<Integer, String> movieMap = new HashMap<>();
 
-                    for (TMDBGenreResponse.Genres genres : response.genres)
-                        movieMap.put(genres.id, genres.name);
+            for (TMDBGenreResponse.Genres genres : response.body().genres)
+                movieMap.put(genres.id, genres.name);
 
-                    APIConstants.getInstance().setMovieGenreMap(movieMap);
-                    mMovieGenreLoaded = true;
+            APIConstants.getInstance().setMovieGenreMap(movieMap);
+            mMovieGenreLoaded = true;
 
-                    if (mPrefManager.getPreferenceData(DBConstants.MOVIE_GENRE_CACHE) == null) {
-                        mPrefManager.setPreferenceData(DBConstants.MOVIE_GENRE_CACHE,
-                                APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(movieMap));
-                    }
-
-                    proceedIfBothItemsLoaded();
-
-
-                    // Log.d("MMVOLLEY", jsonObject.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
-    }
-
-    private class TvGenreResponse implements Response.Listener<JSONObject> {
-        @Override
-        public void onResponse(JSONObject jsonObject) {
             try {
-                HashMap<Integer, String> tvMap = new HashMap<>();
-                TMDBGenreResponse response = APIConstants.getInstance()
-                        .getJacksonObjectMapper()
-                        .readValue(jsonObject.toString(), TMDBGenreResponse.class);
-
-                for (TMDBGenreResponse.Genres genres : response.genres)
-                    tvMap.put(genres.id, genres.name);
-
-                APIConstants.getInstance().setTvGenreMap(tvMap);
-                mTvGenreLoaded = true;
-
-                if (mPrefManager.getPreferenceData(DBConstants.TV_GENRE_CACHE) == null) {
-                    mPrefManager.setPreferenceData(DBConstants.TV_GENRE_CACHE,
-                            APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(tvMap));
+                if (mPrefManager.getPreferenceData(DBConstants.MOVIE_GENRE_CACHE) == null) {
+                    mPrefManager.setPreferenceData(DBConstants.MOVIE_GENRE_CACHE,
+                            APIConstants.getInstance().getObjectMapper().writeValueAsString(movieMap));
                 }
-
-                proceedIfBothItemsLoaded();
-                // Log.d("MMVOLLEY", jsonObject.toString());
-            } catch (IOException e) {
+            } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+
+
+            proceedIfBothItemsLoaded();
         }
-    }
+
+        @Override
+        public void onFailure(Call<TMDBGenreResponse> call, Throwable t) {
+            Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), AppMainActivity.this);
+        }
+    };
+
+    private Callback<TMDBGenreResponse> tvGenreResponse = new Callback<TMDBGenreResponse>() {
+        @Override
+        public void onResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
+
+            HashMap<Integer, String> tvMap = new HashMap<>();
+
+            for (TMDBGenreResponse.Genres genres : response.body().genres)
+                tvMap.put(genres.id, genres.name);
+
+            APIConstants.getInstance().setTvGenreMap(tvMap);
+            mTvGenreLoaded = true;
+
+
+            try {
+                if (mPrefManager.getPreferenceData(DBConstants.TV_GENRE_CACHE) == null) {
+                    mPrefManager.setPreferenceData(DBConstants.TV_GENRE_CACHE,
+                            APIConstants.getInstance().getObjectMapper().writeValueAsString(tvMap));
+                }
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+
+            proceedIfBothItemsLoaded();
+        }
+
+        @Override
+        public void onFailure(Call<TMDBGenreResponse> call, Throwable t) {
+            Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), AppMainActivity.this);
+        }
+    };
+
 }

@@ -1,4 +1,4 @@
-package com.adithyaupadhya.newtorkmodule.volley.networkconstants;
+package com.adithyaupadhya.newtorkmodule.volley.constants;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -33,24 +33,26 @@ public class APIConstants {
 
     private void loadMovieTVGenresFromCache(Context context) {
         synchronized (this) {
-            if(mMovieGenre == null) {
+            if (mMovieGenre == null) {
                 AppPreferenceManager manager = AppPreferenceManager.getAppPreferenceInstance(context);
 
                 try {
                     mMovieGenre = mObjectMapper.readValue(manager.getPreferenceData(DBConstants.MOVIE_GENRE_CACHE),
-                            new TypeReference<HashMap<Integer, String>>(){});
+                            new TypeReference<HashMap<Integer, String>>() {
+                            });
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-            if(mTVGenre == null) {
+            if (mTVGenre == null) {
                 AppPreferenceManager manager = AppPreferenceManager.getAppPreferenceInstance(context);
 
                 try {
                     mTVGenre = mObjectMapper.readValue(manager.getPreferenceData(DBConstants.TV_GENRE_CACHE),
-                            new TypeReference<HashMap<Integer, String>>(){});
+                            new TypeReference<HashMap<Integer, String>>() {
+                            });
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -112,7 +114,7 @@ public class APIConstants {
         return mMovieGenre == null || mMovieGenre.size() == 0 || mTVGenre == null || mTVGenre.size() == 0;
     }
 
-    public ObjectMapper getJacksonObjectMapper() {
+    public ObjectMapper getObjectMapper() {
         return mObjectMapper;
     }
 
@@ -127,7 +129,7 @@ public class APIConstants {
     public String getMovieGenreList(List<Integer> genreIds, Context context) {
         ArrayList<String> genreList = new ArrayList<>(genreIds.size());
 
-        if(mMovieGenre == null)
+        if (mMovieGenre == null)
             loadMovieTVGenresFromCache(context);
 
         for (int genre : genreIds)
@@ -140,7 +142,7 @@ public class APIConstants {
     public String getTVGenreList(List<Integer> genreIds, Context context) {
         ArrayList<String> genreList = new ArrayList<>(genreIds.size());
 
-        if(mTVGenre == null)
+        if (mTVGenre == null)
             loadMovieTVGenresFromCache(context);
 
         for (int genre : genreIds)

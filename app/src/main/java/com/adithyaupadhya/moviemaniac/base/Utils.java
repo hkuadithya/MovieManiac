@@ -19,11 +19,11 @@ import android.widget.Toast;
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -110,7 +110,7 @@ public class Utils {
             values.put(DBConstants.USER_ID, userId);
             values.put(idColumn, itemId);
             try {
-                values.put(detailsColumn, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(detailsObject));
+                values.put(detailsColumn, APIConstants.getInstance().getObjectMapper().writeValueAsString(detailsObject));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -133,7 +133,7 @@ public class Utils {
             values.put(DBConstants.MOVIE_ID, results.id);
             values.put(DBConstants.RELEASE_DATE, results.release_date);
             try {
-                values.put(DBConstants.MOVIE_DETAILS, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(results));
+                values.put(DBConstants.MOVIE_DETAILS, APIConstants.getInstance().getObjectMapper().writeValueAsString(results));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -156,7 +156,7 @@ public class Utils {
             values.put(DBConstants.USER_ID, userId);
             values.put(DBConstants.TVSERIES_ID, results.id);
             try {
-                values.put(DBConstants.TVSERIES_DETAILS, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(results));
+                values.put(DBConstants.TVSERIES_DETAILS, APIConstants.getInstance().getObjectMapper().writeValueAsString(results));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -179,7 +179,7 @@ public class Utils {
             values.put(DBConstants.USER_ID, userId);
             values.put(DBConstants.CELEBRITY_ID, results.id);
             try {
-                values.put(DBConstants.CELEBRITY_DETAILS, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(results));
+                values.put(DBConstants.CELEBRITY_DETAILS, APIConstants.getInstance().getObjectMapper().writeValueAsString(results));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

@@ -19,35 +19,27 @@ import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBGenericGameResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBImageBackdropResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBImageProfileResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericGameResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBImageResponse;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameActivity extends AppCompatActivity implements Response.ErrorListener,
-        Response.Listener<JSONObject>,
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class GameActivity extends AppCompatActivity implements Callback<TMDBImageResponse>,
         View.OnClickListener,
         RadioGroup.OnCheckedChangeListener,
         MaterialDialog.SingleButtonCallback,
@@ -83,15 +75,15 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         mRadioGroupOptions = (RadioGroup) findViewById(R.id.radioGroupOptions);
 
         if (currentIndex < TOTAL_QUESTIONS / 3) {
-            ((TextView) (findViewById(R.id.textViewQuestion))).setText("Identify this Movie");
+            ((TextView) (findViewById(R.id.textViewQuestion))).setText(R.string.game_identify_movie);
             mDataList = getIntent().getParcelableArrayListExtra(AppIntentConstants.MOVIE_LIST);
             offset = 0;
         } else if (currentIndex < 2 * TOTAL_QUESTIONS / 3) {
-            ((TextView) (findViewById(R.id.textViewQuestion))).setText("Identify this TV Series");
+            ((TextView) (findViewById(R.id.textViewQuestion))).setText(R.string.game_identify_tv_series);
             mDataList = getIntent().getParcelableArrayListExtra(AppIntentConstants.TV_LIST);
             offset = TOTAL_QUESTIONS / 3;
         } else {
-            ((TextView) (findViewById(R.id.textViewQuestion))).setText("Identify this Celebrity");
+            ((TextView) (findViewById(R.id.textViewQuestion))).setText(R.string.game_identify_celebrity);
             mDataList = getIntent().getParcelableArrayListExtra(AppIntentConstants.CELEBRITY_LIST);
             offset = 2 * TOTAL_QUESTIONS / 3;
         }
@@ -118,39 +110,30 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     }
 
     public void establishNetworkCall() {
-        String url;
-        if (currentIndex < TOTAL_QUESTIONS / 3)
-            url = NetworkConstants.MOVIE_IMAGES.replaceFirst("movie_id", String.valueOf(mDataList.get(currentIndex - offset).id));
-        else if (currentIndex < 2 * TOTAL_QUESTIONS / 3)
-            url = NetworkConstants.TV_SERIES_IMAGES.replaceFirst("tv_id", String.valueOf(mDataList.get(currentIndex - offset).id));
-        else
-            url = NetworkConstants.CELEBRITY_IMAGES.replaceFirst("person_id", String.valueOf(mDataList.get(currentIndex - offset).id));
+        RetrofitClient.APIClient apiClient = RetrofitClient.getInstance().getNetworkClient();
 
-        VolleySingleton.getInstance(this).getVolleyRequestQueue().add(new CustomJsonObjectRequest(Request.Method.GET, url, this, this, this));
+        if (currentIndex < TOTAL_QUESTIONS / 3)
+            apiClient.getMovieImages(mDataList.get(currentIndex - offset).id).enqueue(this);
+        else if (currentIndex < 2 * TOTAL_QUESTIONS / 3)
+            apiClient.getTVSeriesImages(mDataList.get(currentIndex - offset).id).enqueue(this);
+        else
+            apiClient.getCelebrityImages(mDataList.get(currentIndex - offset).id).enqueue(this);
+
     }
 
     @Override
-    public void onResponse(JSONObject jsonObject) {
-        // Log.d("MMVOLLEY", jsonObject.toString());
+    public void onResponse(Call<TMDBImageResponse> call, Response<TMDBImageResponse> response) {
+        List<TMDBImageResponse.Backdrop> imageList = response.body().backdrops;
 
-        List<TMDBImageBackdropResponse.Backdrop> imageList = null;
+        String baseImageUrl;
 
-        String baseImageUrl = null;
 
-        try {
-            if (currentIndex < 2 * TOTAL_QUESTIONS / 3) {
-                imageList = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBImageBackdropResponse.class).backdrops;
-
-                baseImageUrl = NetworkConstants.IMG_GAME_BACKDROP_URL;
-            } else {
-                imageList = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBImageProfileResponse.class).profiles;
-
-                baseImageUrl = NetworkConstants.IMG_GAME_POSTER_URL;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (currentIndex < 2 * TOTAL_QUESTIONS / 3) {
+            baseImageUrl = NetworkConstants.IMG_GAME_BACKDROP_URL;
+        } else {
+            baseImageUrl = NetworkConstants.IMG_GAME_POSTER_URL;
         }
+
 
         if (imageList != null && imageList.size() > 0) {
             url1 = baseImageUrl + imageList.get(0).file_path;
@@ -171,7 +154,11 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
                 .error(R.drawable.not_found)
                 .listener(this)
                 .into(imageView2);
+    }
 
+    @Override
+    public void onFailure(Call<TMDBImageResponse> call, Throwable t) {
+        Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
     }
 
     private void handleSuccessOrErrorImageLoading() {
@@ -261,7 +248,6 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     @Override
     protected void onStop() {
         super.onStop();
-        VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);
         //mediaPlayer.release();
     }
 
@@ -270,17 +256,10 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         Utils.showGenericMaterilaDialog(this, this, "Do you wish to exit the game?", "All your game progress will be lost!");
     }
 
-
-    @Override
-    public void onErrorResponse(VolleyError volleyError) {
-        Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
-    }
-
-
     @Override
     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
         // Handling connection error
-        if (e != null && (e instanceof NoConnectionError || e.getCause() instanceof NoConnectionError || e.getCause() instanceof TimeoutError)) {
+        if (model != null && model.contains("null")) {
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
             return true;
         }
@@ -288,10 +267,10 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
 
         //  Handling invalid URL error
 
-        if (url1 == null || url1.equals(model))
+        if (url1 == null)
             imageView1.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
 
-        if (url2 == null || url2.equals(model))
+        if (url2 == null)
             imageView2.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
 
         return false;
@@ -302,4 +281,5 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         handleSuccessOrErrorImageLoading();
         return false;
     }
+
 }

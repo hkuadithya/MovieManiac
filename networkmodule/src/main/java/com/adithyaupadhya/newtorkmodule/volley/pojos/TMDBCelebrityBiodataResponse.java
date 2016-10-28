@@ -1,4 +1,4 @@
-package com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses;
+package com.adithyaupadhya.newtorkmodule.volley.pojos;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 

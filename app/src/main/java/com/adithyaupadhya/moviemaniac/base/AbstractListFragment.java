@@ -5,55 +5,39 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnLoadMoreListener;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
+import retrofit2.Callback;
 
 /**
  * Created by adithya.upadhya on 21-01-2016.
  */
-public abstract class AbstractListFragment extends Fragment implements AbstractTabFragment.OnFabSnackBarClickListener,
-        Response.Listener<JSONObject>,
-        Response.ErrorListener,
+public abstract class AbstractListFragment<APIResponseClass> extends Fragment implements
+        AbstractTabFragment.OnFabSnackBarClickListener,
         OnLoadMoreListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, Callback<APIResponseClass> {
 
-    private String mNetworkUrl;
-    private RequestQueue mRequestQueue;
-    private ObjectMapper mObjectMapper;
-
+    protected NetworkAPI mApiType;
+    protected RetrofitClient.APIClient mApiClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRequestQueue = VolleySingleton.getInstance(getContext()).getVolleyRequestQueue();
-        mObjectMapper = APIConstants.getInstance().getJacksonObjectMapper();
-        mNetworkUrl = getArguments().getString(AppIntentConstants.BUNDLE_URL, null);
-
+        mApiType = (NetworkAPI) getArguments().getSerializable(AppIntentConstants.API_REQUEST);
+        mApiClient = RetrofitClient.getInstance().getNetworkClient();
     }
 
-    protected void volleyJsonObjectRequest(int pageNumber, AbstractListFragment fragment) {
+    public enum NetworkAPI {
+        API_UPCOMING_MOVIES,
+        API_POPULAR_MOVIES,
+        API_SEARCH_MOVIE,
 
-        mRequestQueue.add(new CustomJsonObjectRequest(Request.Method.GET, mNetworkUrl + pageNumber, this, fragment, fragment));
-    }
+        API_ON_THE_AIR_TV,
+        API_POPULAR_TV,
+        API_SEARCH_TV,
 
-
-    protected Object jsonPojoDeserialization(JSONObject jsonObject, Class genericClass) throws IOException {
-        return mObjectMapper.readValue(jsonObject.toString(), genericClass);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mRequestQueue.cancelAll(this);
+        API_POPULAR_CELEBRITY,
+        API_SEARCH_CELEBRITY
     }
 }

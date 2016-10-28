@@ -15,9 +15,9 @@ import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractCursorAdapter;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.movies.moviedetails.MovieDetailsActivity;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
 import com.adithyaupadhya.uimodule.applicationfont.RobotoTextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -36,7 +36,7 @@ class FavoriteMoviesAdapter extends AbstractCursorAdapter<FavoriteMoviesAdapter.
     FavoriteMoviesAdapter(Context context, Cursor cursor) {
         super(cursor);
         mContext = context;
-        mObjectMapper = APIConstants.getInstance().getJacksonObjectMapper();
+        mObjectMapper = APIConstants.getInstance().getObjectMapper();
     }
 
     @Override
@@ -118,7 +118,7 @@ class FavoriteMoviesAdapter extends AbstractCursorAdapter<FavoriteMoviesAdapter.
             } else {
 
                 try {
-                    TMDBMoviesResponse.Results response = APIConstants.getInstance().getJacksonObjectMapper().readValue(cursor.getString(cursor.getColumnIndex(DBConstants.MOVIE_DETAILS)), TMDBMoviesResponse.Results.class);
+                    TMDBMoviesResponse.Results response = APIConstants.getInstance().getObjectMapper().readValue(cursor.getString(cursor.getColumnIndex(DBConstants.MOVIE_DETAILS)), TMDBMoviesResponse.Results.class);
                     MovieDetailsActivity.startActivityIntent(mContext, response);
                 } catch (IOException e) {
                     e.printStackTrace();

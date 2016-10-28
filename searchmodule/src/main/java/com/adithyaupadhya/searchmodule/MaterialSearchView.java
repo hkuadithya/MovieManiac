@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -182,24 +183,26 @@ public class MaterialSearchView extends FrameLayout implements
     }
 
     private void onTextChanged(CharSequence newText) {
-        CharSequence text = mSearchSrcTextView.getText();
-        mUserQuery = text;
-        boolean hasText = !TextUtils.isEmpty(text);
-        if (hasText) {
-            mEmptyBtn.setVisibility(VISIBLE);
-            showVoice(false);
-        } else {
+        mUserQuery = newText;
+
+        if (TextUtils.isEmpty(newText)) {
+
             mEmptyBtn.setVisibility(GONE);
             showVoice(true);
+
+        } else {
+
+            mEmptyBtn.setVisibility(VISIBLE);
+            showVoice(false);
+
+            if (mOnQueryChangeListener != null && newText.length() >= 2 && (System.currentTimeMillis() - mOldTimestamp) > 500) {
+                // More than 3 characters and 500 ms should have elapsed
+                mOldTimestamp = System.currentTimeMillis();
+                mOnQueryChangeListener.onQueryTextChange(newText.toString());
+                Log.d("MMVOLLEY-", "Search API called");
+            }
         }
 
-        if (mOnQueryChangeListener != null &&
-                newText.length() > 2 &&
-                (System.currentTimeMillis() - mOldTimestamp) > 500) {
-            // More than 3 characters and 500 ms should have elapsed
-            mOldTimestamp = System.currentTimeMillis();
-            mOnQueryChangeListener.onQueryTextChange(newText.toString());
-        }
     }
 
     private void onSubmitQuery() {
@@ -296,6 +299,7 @@ public class MaterialSearchView extends FrameLayout implements
     public void setNewSuggestions(List<String> suggestions) {
         if (suggestions != null && suggestions.size() > 0) {
             mSearchAdapter.setNewSuggestions(suggestions);
+            mRecyclerView.setVisibility(VISIBLE);
         }
     }
 

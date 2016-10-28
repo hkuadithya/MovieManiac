@@ -6,15 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.adithyaupadhya.moviemaniac.R;
+import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.movies.favoritemovies.FavoriteMoviesFragment;
 import com.adithyaupadhya.moviemaniac.movies.movies.MoviesFragment;
 import com.adithyaupadhya.moviemaniac.movies.moviesearch.MovieSearchActivity;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
-import com.android.volley.Request;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -37,13 +35,13 @@ public class MovieLaunchFragment extends AbstractTabFragment {
         Fragment fragment;
 
         Bundle bundle = new Bundle();
-        bundle.putString(AppIntentConstants.BUNDLE_URL, NetworkConstants.UPCOMING_MOVIES_BASE_URL);
+        bundle.putSerializable(AppIntentConstants.API_REQUEST, AbstractListFragment.NetworkAPI.API_UPCOMING_MOVIES);
         fragment = new MoviesFragment();
         fragment.setArguments(bundle);
         mFragmentList.add(fragment);
 
         bundle = new Bundle();
-        bundle.putString(AppIntentConstants.BUNDLE_URL, NetworkConstants.MOVIES_POPULAR_BASE_URL);
+        bundle.putSerializable(AppIntentConstants.API_REQUEST, AbstractListFragment.NetworkAPI.API_POPULAR_MOVIES);
         fragment = new MoviesFragment();
         fragment.setArguments(bundle);
         mFragmentList.add(fragment);
@@ -78,22 +76,14 @@ public class MovieLaunchFragment extends AbstractTabFragment {
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (!mIsDataLoading) {
-            mIsDataLoading = true;
-            try {
-                VolleySingleton.getInstance(
-                        getContext())
-                        .getVolleyRequestQueue()
-                        .add(new CustomJsonObjectRequest(
-                                Request.Method.GET,
-                                NetworkConstants.MOVIE_SEARCH_BASE_URL.replaceFirst("query_string", URLEncoder.encode(newText, "utf-8")),
-                                this,
-                                this,
-                                this));
 
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+        try {
+            RetrofitClient.getInstance()
+                    .getNetworkClient()
+                    .getMovieSearchSuggestions(URLEncoder.encode(newText, "utf-8"), 1)
+                    .enqueue(this);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return false;
     }

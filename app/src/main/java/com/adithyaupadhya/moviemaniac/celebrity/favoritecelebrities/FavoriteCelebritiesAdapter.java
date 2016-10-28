@@ -16,9 +16,9 @@ import com.adithyaupadhya.moviemaniac.base.AbstractCursorAdapter;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.celebrity.celebritydetails.CelebrityDetailsActivity;
 import com.adithyaupadhya.moviemaniac.celebrity.celebritylist.CelebritiesKnownForAdapter;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityResponse;
 import com.adithyaupadhya.uimodule.applicationfont.RobotoTextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,7 +37,7 @@ class FavoriteCelebritiesAdapter extends AbstractCursorAdapter<FavoriteCelebriti
     FavoriteCelebritiesAdapter(Context context, Cursor cursor) {
         super(cursor);
         mContext = context;
-        mObjectMapper = APIConstants.getInstance().getJacksonObjectMapper();
+        mObjectMapper = APIConstants.getInstance().getObjectMapper();
     }
 
     @Override

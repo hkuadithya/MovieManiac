@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.facebook.FacebookSdk;
 import com.facebook.share.widget.LikeView;
 import com.google.android.gms.plus.PlusOneButton;
@@ -64,7 +64,7 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
             emailIntent.putExtra(Intent.EXTRA_TEXT, personalDetails);
             startActivity(emailIntent);
         } catch (Exception exception) {
-            Toast.makeText(this, "Error: No email client found in your device...", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error: No email application found in your device...", Toast.LENGTH_LONG).show();
         }
 
     }

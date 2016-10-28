@@ -15,9 +15,9 @@ import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractCursorAdapter;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.tvseries.tvseriesdetails.TVSeriesDetailsActivity;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
 import com.adithyaupadhya.uimodule.applicationfont.RobotoTextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -36,7 +36,7 @@ class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSeriesAdap
     FavoriteTVSeriesAdapter(Context context, Cursor cursor) {
         super(cursor);
         mContext = context;
-        mObjectMapper = APIConstants.getInstance().getJacksonObjectMapper();
+        mObjectMapper = APIConstants.getInstance().getObjectMapper();
     }
 
     @Override
@@ -116,7 +116,7 @@ class FavoriteTVSeriesAdapter extends AbstractCursorAdapter<FavoriteTVSeriesAdap
             else {
 
                 try {
-                    TMDBTVSeriesResponse.Results response = APIConstants.getInstance().getJacksonObjectMapper().readValue(cursor.getString(cursor.getColumnIndex(DBConstants.TVSERIES_DETAILS)), TMDBTVSeriesResponse.Results.class);
+                    TMDBTVSeriesResponse.Results response = APIConstants.getInstance().getObjectMapper().readValue(cursor.getString(cursor.getColumnIndex(DBConstants.TVSERIES_DETAILS)), TMDBTVSeriesResponse.Results.class);
                     TVSeriesDetailsActivity.startActivityIntent(mContext, response);
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.adithyaupadhya.newtorkmodule.volley.networkconstants;
+package com.adithyaupadhya.newtorkmodule.volley.constants;
 
 /**
  * Created by adithya.upadhya on 20-06-2016.
@@ -22,6 +22,8 @@ public interface AppIntentConstants {
     String QUERY_STRING = "QUERY_STRING";
 
     String BUNDLE_URL = "BUNDLE_URL";
+
+    String API_REQUEST = "API_REQUEST";
 
     // facebook fields
     String FIELDS = "fields";

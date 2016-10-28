@@ -19,14 +19,14 @@
         android:layout_gravity="center"
         android:background="@drawable/capsule_rectangle_transparent"
         android:drawableLeft="@drawable/vector_image_reload"
-        android:drawablePadding="5dp"
+        android:drawablePadding="8dp"
         android:drawableStart="@drawable/vector_image_reload"
         android:gravity="center"
         android:padding="15dp"
         android:text="@string/image_reload"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
+        android:textColor="@color/textPrimaryColor"
+        android:textSize="25sp"
         android:visibility="gone"
-        app:fontType="medium" />
+        app:fontType="normal" />
 
 </FrameLayout>
