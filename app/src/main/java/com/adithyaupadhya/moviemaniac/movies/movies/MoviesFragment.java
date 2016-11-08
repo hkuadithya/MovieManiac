@@ -81,7 +81,7 @@ public class MoviesFragment extends AbstractListFragment<TMDBMoviesResponse> {
     }
 
     @Override
-    public void onResponse(Call<TMDBMoviesResponse> call, Response<TMDBMoviesResponse> response) {
+    public void onNetworkResponse(Call<TMDBMoviesResponse> call, Response<TMDBMoviesResponse> response) {
         //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
         if (mOldResponse == null || mPageNumber == 1) {
             mOldResponse = response.body();

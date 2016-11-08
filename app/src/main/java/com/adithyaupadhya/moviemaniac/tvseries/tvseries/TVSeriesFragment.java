@@ -69,7 +69,7 @@ public class TVSeriesFragment extends AbstractListFragment<TMDBTVSeriesResponse>
                 break;
 
             case API_POPULAR_TV:
-                mApiClient.getPopularTVSeries(pageNumber).enqueue(this);
+                mApiClient.getTopRatedTVSeries(pageNumber).enqueue(this);
                 break;
 
             case API_SEARCH_TV:
@@ -79,7 +79,7 @@ public class TVSeriesFragment extends AbstractListFragment<TMDBTVSeriesResponse>
     }
 
     @Override
-    public void onResponse(Call<TMDBTVSeriesResponse> call, Response<TMDBTVSeriesResponse> response) {
+    public void onNetworkResponse(Call<TMDBTVSeriesResponse> call, Response<TMDBTVSeriesResponse> response) {
         //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
         if (mOldResponse == null || mPageNumber == 1) {
             mOldResponse = response.body();

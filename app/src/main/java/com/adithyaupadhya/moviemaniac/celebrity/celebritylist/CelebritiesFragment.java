@@ -77,7 +77,7 @@ public class CelebritiesFragment extends AbstractListFragment<TMDBCelebrityRespo
     }
 
     @Override
-    public void onResponse(Call<TMDBCelebrityResponse> call, Response<TMDBCelebrityResponse> response) {
+    public void onNetworkResponse(Call<TMDBCelebrityResponse> call, Response<TMDBCelebrityResponse> response) {
         //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
         if (mOldResponse == null || mPageNumber == 1) {
             mOldResponse = response.body();

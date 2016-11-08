@@ -73,54 +73,54 @@
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         style="@style/movieTVDetailsHeading"
-                        android:text="NAME"
+                        android:text="@string/detail_title_name"
                         app:fontType="bold" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         android:id="@+id/textViewCelebrityName"
                         style="@style/movieTVDetailsHeadingValue"
-                        android:text="Loading..."
+                        android:text="@string/string_loading"
                         app:fontType="medium" />
 
                     <include layout="@layout/app_divider" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         style="@style/movieTVDetailsHeading"
-                        android:text="BIOGRAPHY"
+                        android:text="@string/detail_title_biography"
                         app:fontType="bold" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         android:id="@+id/textViewCelebrityBiography"
                         style="@style/movieTVDetailsHeadingValue"
                         android:layout_gravity="fill"
-                        android:text="Loading..."
+                        android:text="@string/string_loading"
                         app:fontType="medium" />
 
                     <include layout="@layout/app_divider" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         style="@style/movieTVDetailsHeading"
-                        android:text="CREDITS"
+                        android:text="@string/detail_title_credits"
                         app:fontType="bold" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         android:id="@+id/textViewCredits"
                         style="@style/movieTVDetailsHeadingValue"
                         android:layout_gravity="fill"
-                        android:text="Loading..."
+                        android:text="@string/string_loading"
                         app:fontType="medium" />
 
                     <include layout="@layout/app_divider" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         style="@style/movieTVDetailsHeading"
-                        android:text="BIRTHPLACE"
+                        android:text="@string/detail_title_birthplace"
                         app:fontType="bold" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         android:id="@+id/textViewBirthplace"
                         style="@style/movieTVDetailsHeadingValue"
-                        android:text="Loading..."
+                        android:text="@string/string_loading"
                         app:fontType="medium" />
 
                     <LinearLayout
@@ -134,13 +134,13 @@
 
                         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                             style="@style/movieTVDetailsHeading"
-                            android:text="ALSO KNOWN AS"
+                            android:text="@string/detail_title_also_known_as"
                             app:fontType="bold" />
 
                         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                             android:id="@+id/textViewAlias"
                             style="@style/movieTVDetailsHeadingValue"
-                            android:text="Loading..."
+                            android:text="@string/string_loading"
                             app:fontType="medium" />
                     </LinearLayout>
 
@@ -148,13 +148,13 @@
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         style="@style/movieTVDetailsHeading"
-                        android:text="DATE OF BIRTH"
+                        android:text="@string/detail_title_date_of_birth"
                         app:fontType="bold" />
 
                     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                         android:id="@+id/textViewBirthday"
                         style="@style/movieTVDetailsHeadingValue"
-                        android:text="Loading..."
+                        android:text="@string/string_loading"
                         app:fontType="medium" />
 
                     <LinearLayout
@@ -168,7 +168,7 @@
 
                         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
                             style="@style/movieTVDetailsHeading"
-                            android:text="DATE OF DEATH"
+                            android:text="@string/detail_title_date_of_death"
                             app:fontType="bold" />
 
                         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView

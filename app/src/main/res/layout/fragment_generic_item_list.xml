@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="No Search Results"
+            android:text="@string/zerostate_no_search_results"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:fontType="medium" />
@@ -63,7 +63,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="3dp"
             android:gravity="center"
-            android:text="Try entering a different keyword\nfor your search"
+            android:text="@string/zerostate_search_instructions"
             android:textColor="@color/appMaterialGray600"
             android:textSize="18sp" />
 

@@ -9,42 +9,42 @@
             android:id="@+id/nav_movie"
             android:checked="true"
             android:icon="@drawable/vector_drawer_movie"
-            android:title="Movies" />
+            android:title="@string/nav_movies" />
 
         <item
             android:id="@+id/nav_tvseries"
             android:icon="@drawable/vector_drawer_tv"
-            android:title="TV Series" />
+            android:title="@string/nav_tv_series" />
 
         <item
             android:id="@+id/nav_celebrity"
             android:icon="@drawable/vector_drawer_celebrity"
-            android:title="Celebrities" />
+            android:title="@string/nav_celebrities" />
 
         <item
             android:id="@+id/nav_game"
             android:icon="@drawable/vector_drawer_game"
-            android:title="Fun Quiz" />
+            android:title="@string/nav_fun_quiz" />
 
     </group>
 
     <group android:id="@+id/communication">
-        <item android:title="Communicate">
+        <item android:title="@string/nav_communicate">
             <menu>
                 <item
                     android:id="@+id/nav_support"
                     android:icon="@drawable/vector_drawer_thumbs"
-                    android:title="Support developers" />
+                    android:title="@string/nav_support_developers" />
 
                 <item
                     android:id="@+id/nav_share_app"
                     android:icon="@drawable/vector_menu_share"
-                    android:title="Share this App" />
+                    android:title="@string/nav_share_this_app" />
 
                 <item
                     android:id="@+id/nav_rate_app"
                     android:icon="@drawable/vector_drawer_rating"
-                    android:title="Rate this App" />
+                    android:title="@string/nav_rate_this_app" />
 
             </menu>
         </item>
@@ -53,6 +53,6 @@
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/vector_drawer_logout"
-        android:title="Logout" />
+        android:title="@string/nav_logout" />
 
 </menu>

@@ -53,7 +53,7 @@ public class MovieLaunchFragment extends AbstractTabFragment {
 
     @Override
     public String[] getSearchAndToolbarTitle() {
-        return new String[]{"Upcoming Movies", "Popular Movies", "My Favourites", "Search for movies..."};
+        return getResources().getStringArray(R.array.movie_toolbar_hint_array);
     }
 
     @Override

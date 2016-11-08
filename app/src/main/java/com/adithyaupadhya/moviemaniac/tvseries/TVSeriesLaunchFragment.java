@@ -51,7 +51,7 @@ public class TVSeriesLaunchFragment extends AbstractTabFragment {
 
     @Override
     public String[] getSearchAndToolbarTitle() {
-        return new String[]{"Ongoing TV Series", "Popular TV Series", "My Favourites", "Search for TV Series..."};
+        return getResources().getStringArray(R.array.tv_toolbar_hint_array);
     }
 
     @Override

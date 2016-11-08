@@ -45,7 +45,7 @@ public class CelebrityLaunchFragment extends AbstractTabFragment {
 
     @Override
     public String[] getSearchAndToolbarTitle() {
-        return new String[]{"Popular Celebrities", "My Favourites", "Search for celebrities..."};
+        return getResources().getStringArray(R.array.celeb_toolbar_hint_array);
     }
 
     @Override

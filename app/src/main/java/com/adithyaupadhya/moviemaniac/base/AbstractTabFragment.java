@@ -24,6 +24,7 @@ import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnFragmentBackPress;
 import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericSearchResults;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.NetworkFragment;
 import com.adithyaupadhya.searchmodule.MaterialSearchView;
 import com.adithyaupadhya.uimodule.slidingtabs.BaseSlidingTabs;
 
@@ -34,31 +35,30 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * Created by adithya.upadhya on 09-02-2016.
  */
-public abstract class AbstractTabFragment extends Fragment implements View.OnClickListener,
+public abstract class AbstractTabFragment extends NetworkFragment<TMDBGenericSearchResults> implements View.OnClickListener,
         ViewPager.OnPageChangeListener,
         MaterialSearchView.OnQueryTextListener,
         OnFragmentBackPress,
-        MaterialSearchView.SearchViewListener, Callback<TMDBGenericSearchResults> {
+        MaterialSearchView.SearchViewListener {
 
     private List<Fragment> mFragmentList;
     private Toolbar mToolbar;
     private String[] mToolbarTitle;
     private FloatingActionButton mFab;
-    protected MaterialSearchView mSearchView;
+    private MaterialSearchView mSearchView;
     private NavigationActivity mParentActivity;
     private WeakHashMap<Integer, Fragment> mFragmentMap;
 
-    public abstract List<Fragment> getViewPagerFragmentList();
+    protected abstract List<Fragment> getViewPagerFragmentList();
 
-    public abstract String[] getSearchAndToolbarTitle();
+    protected abstract String[] getSearchAndToolbarTitle();
 
-    public abstract int[] getTabDrawableIcon();
+    protected abstract int[] getTabDrawableIcon();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -241,7 +241,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     //------------------------------------------------------------------------------------------------------
 
     @Override
-    public void onResponse(Call<TMDBGenericSearchResults> call, Response<TMDBGenericSearchResults> response) {
+    public void onNetworkResponse(Call<TMDBGenericSearchResults> call, Response<TMDBGenericSearchResults> response) {
         HashSet<String> resultSet = new HashSet<>(7);
         ArrayList<String> resultList = new ArrayList<>(5);
 
@@ -266,11 +266,6 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     @Override
     public void onFailure(Call<TMDBGenericSearchResults> call, Throwable t) {
 
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override

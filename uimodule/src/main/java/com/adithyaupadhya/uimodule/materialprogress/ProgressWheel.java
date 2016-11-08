@@ -417,7 +417,7 @@ public class ProgressWheel extends View {
     /**
      * Puts the view on spin mode
      */
-    public void spin() {
+    private void spin() {
         lastTimeAnimated = SystemClock.uptimeMillis();
         isSpinning = true;
         invalidate();

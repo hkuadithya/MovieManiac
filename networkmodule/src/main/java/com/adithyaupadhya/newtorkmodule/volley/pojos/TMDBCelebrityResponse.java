@@ -66,7 +66,7 @@ public class TMDBCelebrityResponse {
                 this.poster_path = in.readString();
                 this.overview = in.readString();
                 this.release_date = in.readString();
-                this.genre_ids = new ArrayList<Integer>();
+                this.genre_ids = new ArrayList<>();
                 in.readList(this.genre_ids, Integer.class.getClassLoader());
                 this.id = (Integer) in.readValue(Integer.class.getClassLoader());
                 this.media_type = in.readString();

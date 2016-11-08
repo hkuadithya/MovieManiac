@@ -10,7 +10,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,19 +19,18 @@ import android.widget.Toast;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
 import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.NetworkActivity;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 
 /**
  * Created by adithya.upadhya on 07-01-2016.
  */
-public abstract class AbstractDetailsActivity<APIResponseClass> extends AppCompatActivity implements
+public abstract class AbstractDetailsActivity<APIResponseClass> extends NetworkActivity<APIResponseClass> implements
         View.OnClickListener,
-        MaterialDialog.SingleButtonCallback,
-        Callback<APIResponseClass> {
+        MaterialDialog.SingleButtonCallback {
 
     protected FloatingActionButton mActionButton;
     protected boolean isFavoriteItem;
@@ -64,7 +62,7 @@ public abstract class AbstractDetailsActivity<APIResponseClass> extends AppCompa
         Glide.with(this)
                 .load(NetworkConstants.IMG_BASE_BACKDROP_URL + imagePath)
                 .placeholder(R.drawable.backdrop_def_image)
-                .error(R.drawable.not_found)
+                .error(R.drawable.no_img_placeholder)
                 .dontAnimate()
                 .into(networkImageView);
 
@@ -75,11 +73,11 @@ public abstract class AbstractDetailsActivity<APIResponseClass> extends AppCompa
             findViewById(R.id.view_trailer).setOnClickListener(this);
     }
 
-    public abstract String retrieveShareSubject();
+    protected abstract String retrieveShareSubject();
 
-    public abstract String retrieveShareBody();
+    protected abstract String retrieveShareBody();
 
-    public abstract void establishNetworkCall();
+    protected abstract void establishNetworkCall();
 
     @Override
     public void onClick(View v) {
@@ -121,7 +119,7 @@ public abstract class AbstractDetailsActivity<APIResponseClass> extends AppCompa
     }
 
 
-    protected void showNetworkErrorSnackbar() {
+    private void showNetworkErrorSnackbar() {
         View view = findViewById(android.R.id.content);
         if (view != null) {
             Utils.displayNetworkErrorSnackBar(view, this);
@@ -135,10 +133,6 @@ public abstract class AbstractDetailsActivity<APIResponseClass> extends AppCompa
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
     @Override
     public void onFailure(Call<APIResponseClass> call, Throwable t) {

@@ -1,7 +1,7 @@
 package com.adithyaupadhya.moviemaniac.tvseries.tvseriesdetails;
 
 import android.content.Context;
-import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +68,8 @@ public class TVSeriesSimilarAdapter extends RecyclerView.Adapter<TVSeriesSimilar
 
         @Override
         public void onClick(View v) {
-            TVSeriesDetailsActivity.startActivityIntent(context, results, Intent.FLAG_ACTIVITY_NO_HISTORY);
+            TVSeriesDetailsActivity.startActivityIntent(context, results);
+            ((AppCompatActivity) (context)).finish();
         }
     }
 }

@@ -36,9 +36,9 @@ public class GameSummaryActivity extends AppCompatActivity implements View.OnCli
             highScore = String.valueOf(correctAnswers);
         }
 
-        ((TextView) (findViewById(R.id.textViewScore))).setText(correctAnswers + "/9");
+        ((TextView) (findViewById(R.id.textViewScore))).setText(getString(R.string.game_score_value, correctAnswers));
 
-        ((TextView) (findViewById(R.id.textViewHighScore))).setText(highScore + "/9");
+        ((TextView) (findViewById(R.id.textViewHighScore))).setText(getString(R.string.game_score_value, highScore));
 
         findViewById(R.id.returnToApplication).setOnClickListener(this);
 

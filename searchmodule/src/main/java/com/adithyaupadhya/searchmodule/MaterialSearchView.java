@@ -219,12 +219,12 @@ public class MaterialSearchView extends FrameLayout implements
         return isInEditMode() || SpeechRecognizer.isRecognitionAvailable(getContext());
     }
 
-    public void hideKeyboard(View view) {
+    private void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void showKeyboard(View view) {
+    private void showKeyboard(View view) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1 && view.hasFocus()) {
             view.clearFocus();
         }
@@ -289,7 +289,7 @@ public class MaterialSearchView extends FrameLayout implements
 
     //Public Methods
 
-    public void showSuggestions() {
+    private void showSuggestions() {
         if (mRecyclerView != null && mSearchAdapter.getItemCount() > 0 && mRecyclerView.getVisibility() == GONE) {
             mRecyclerView.setVisibility(VISIBLE);
         }
@@ -304,7 +304,7 @@ public class MaterialSearchView extends FrameLayout implements
     }
 
 
-    public void dismissSuggestions() {
+    private void dismissSuggestions() {
         if (mRecyclerView.getVisibility() == VISIBLE) {
             mRecyclerView.setVisibility(GONE);
         }

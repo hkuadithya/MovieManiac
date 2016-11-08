@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +23,7 @@ import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericGameResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBImageResponse;
 import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.NetworkActivity;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -36,10 +36,9 @@ import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GameActivity extends AppCompatActivity implements Callback<TMDBImageResponse>,
+public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
         View.OnClickListener,
         RadioGroup.OnCheckedChangeListener,
         MaterialDialog.SingleButtonCallback,
@@ -109,7 +108,7 @@ public class GameActivity extends AppCompatActivity implements Callback<TMDBImag
         mediaPlayer = MediaPlayer.create(this, R.raw.bell);
     }
 
-    public void establishNetworkCall() {
+    private void establishNetworkCall() {
         RetrofitClient.APIClient apiClient = RetrofitClient.getInstance().getNetworkClient();
 
         if (currentIndex < TOTAL_QUESTIONS / 3)
@@ -122,7 +121,7 @@ public class GameActivity extends AppCompatActivity implements Callback<TMDBImag
     }
 
     @Override
-    public void onResponse(Call<TMDBImageResponse> call, Response<TMDBImageResponse> response) {
+    public void onNetworkResponse(Call<TMDBImageResponse> call, Response<TMDBImageResponse> response) {
         List<TMDBImageResponse.Backdrop> imageList = response.body().backdrops;
 
         String baseImageUrl;
@@ -245,11 +244,6 @@ public class GameActivity extends AppCompatActivity implements Callback<TMDBImag
         establishNetworkCall();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //mediaPlayer.release();
-    }
 
     @Override
     public void onBackPressed() {

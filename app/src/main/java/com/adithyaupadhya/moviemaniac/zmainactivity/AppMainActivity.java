@@ -15,6 +15,7 @@ import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
 import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenreResponse;
 import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.CallbackWrapper;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
@@ -64,7 +65,7 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public void launchNewActivity() {
+    private void launchNewActivity() {
 
         //  FIRST TIME USER: DIRECT HIM/HER TO SIGN IN ACTIVITY
         if (mPrefManager.getPreferenceData(DBConstants.USER_ID) == null) {
@@ -103,10 +104,12 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    private Callback<TMDBGenreResponse> movieGenreResponse = new Callback<TMDBGenreResponse>() {
+    private Callback<TMDBGenreResponse> movieGenreResponse = new CallbackWrapper<TMDBGenreResponse>() {
         @Override
-        public void onResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
-            HashMap<Integer, String> movieMap = new HashMap<>();
+        public void onNetworkResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
+            HashMap<Integer, String> movieMap = new HashMap<>(15);
+
+            //SparseArray<String> movieMap = new SparseArray<>(10);
 
             for (TMDBGenreResponse.Genres genres : response.body().genres)
                 movieMap.put(genres.id, genres.name);
@@ -133,11 +136,12 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
         }
     };
 
-    private Callback<TMDBGenreResponse> tvGenreResponse = new Callback<TMDBGenreResponse>() {
+    private Callback<TMDBGenreResponse> tvGenreResponse = new CallbackWrapper<TMDBGenreResponse>() {
         @Override
-        public void onResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
+        public void onNetworkResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
 
-            HashMap<Integer, String> tvMap = new HashMap<>();
+            HashMap<Integer, String> tvMap = new HashMap<>(15);
+            //SparseArray<String> tvMap = new SparseArray<>(10);
 
             for (TMDBGenreResponse.Genres genres : response.body().genres)
                 tvMap.put(genres.id, genres.name);

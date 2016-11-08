@@ -65,7 +65,9 @@ public class SignInActivity extends AppCompatActivity implements
 
     private void initializeGoogleSignIn() {
         GoogleSignInOptions signInOptions = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .Builder()
+                .requestId()
+                .requestEmail()
                 .requestProfile()
                 .build();
 
@@ -84,7 +86,7 @@ public class SignInActivity extends AppCompatActivity implements
             if (googleSignInButton.getChildAt(i) instanceof TextView) {
                 TextView textView = (TextView) googleSignInButton.getChildAt(i);
                 textView.setTextSize(15);
-                textView.setText("Sign in with Google");
+                textView.setText(R.string.sign_in_with_google);
                 textView.setPadding(0, 0, 20, 0);
                 break;
             }

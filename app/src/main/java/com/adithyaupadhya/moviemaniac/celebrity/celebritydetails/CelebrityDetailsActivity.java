@@ -28,12 +28,9 @@ public class CelebrityDetailsActivity extends AbstractDetailsActivity<TMDBCelebr
     private TMDBCelebrityBiodataResponse biodataResponse;
     private TMDBCelebrityResponse.Results results;
 
-    public static void startActivityIntent(Context context, TMDBCelebrityResponse.Results results, int... intentFlags) {
+    public static void startActivityIntent(Context context, TMDBCelebrityResponse.Results results) {
         Intent intent = new Intent(context, CelebrityDetailsActivity.class);
         intent.putExtra(AppIntentConstants.CELEB_DETAILS, results);
-        for (int flag : intentFlags)
-            intent.addFlags(flag);
-
         context.startActivity(intent);
     }
 
@@ -103,7 +100,7 @@ public class CelebrityDetailsActivity extends AbstractDetailsActivity<TMDBCelebr
     }
 
     @Override
-    public void onResponse(Call<TMDBCelebrityBiodataResponse> call, Response<TMDBCelebrityBiodataResponse> response) {
+    public void onNetworkResponse(Call<TMDBCelebrityBiodataResponse> call, Response<TMDBCelebrityBiodataResponse> response) {
         bindCelebrityData(findViewById(R.id.rootLinearLayout), response.body());
     }
 

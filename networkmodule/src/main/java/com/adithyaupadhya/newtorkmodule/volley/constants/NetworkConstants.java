@@ -5,24 +5,9 @@ package com.adithyaupadhya.newtorkmodule.volley.constants;
  */
 public interface NetworkConstants {
     // Please obtain your own private TMDb api key through registration.
-    String API_KEY = "api_key=3db61f99f5b86b7f997e3141af909031";
+    String API_KEY = "3db61f99f5b86b7f997e3141af909031";
 
     String NETWORK_BASE_URL = "http://api.themoviedb.org/3/";
-
-    String MOVIES_POPULAR_BASE_URL = "http://api.themoviedb.org/3/movie/popular?" + API_KEY + "&page=";
-    String MOVIE_IMAGES = "http://api.themoviedb.org/3/movie/movie_id/images?" + API_KEY;
-
-
-    //  URL'S PERTAINING TO TV SERIES
-
-    String TV_SERIES_POPULAR_BASE_URL = "http://api.themoviedb.org/3/tv/popular?" + API_KEY + "&page=";
-    String TV_SERIES_IMAGES = "http://api.themoviedb.org/3/tv/tv_id/images?" + API_KEY;
-
-
-    //  URL'S PERTAINING TO CELEBRITIES
-    String CELEBRITY_POPULAR_BASE_URL = "http://api.themoviedb.org/3/person/popular?" + API_KEY + "&page=";
-    String CELEBRITY_IMAGES = "http://api.themoviedb.org/3/person/person_id/images?" + API_KEY;
-
 
     //  URL'S PERTAINING TO IMAGES
     String IMG_SIMILAR_ITEMS_POSTER_URL = "http://image.tmdb.org/t/p/w92";

@@ -20,7 +20,7 @@ import java.util.List;
  * Created by adithya.upadhya on 19-01-2016.
  */
 public class APIConstants {
-    private static APIConstants mInstance = null;
+    private static APIConstants mInstance = new APIConstants();
     private HashMap<Integer, String> mMovieGenre, mTVGenre;
     private HashMap<String, Integer> mCountryLanguageMap;
     private final ObjectMapper mObjectMapper;
@@ -62,7 +62,7 @@ public class APIConstants {
     }
 
     public static APIConstants getInstance() {
-        return (mInstance != null) ? mInstance : (mInstance = new APIConstants());
+        return mInstance;
     }
 
     public static String getFormattedDecimal(Float number) {
@@ -108,10 +108,6 @@ public class APIConstants {
         mCountryLanguageMap.put("in", R.drawable.india);
         mCountryLanguageMap.put("cn", R.drawable.china);
         mCountryLanguageMap.put("my", R.drawable.malaysia);
-    }
-
-    public boolean areGenreMapsEmpty() {
-        return mMovieGenre == null || mMovieGenre.size() == 0 || mTVGenre == null || mTVGenre.size() == 0;
     }
 
     public ObjectMapper getObjectMapper() {

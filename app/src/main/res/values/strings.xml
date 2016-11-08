@@ -53,12 +53,80 @@
     <string name="support_developers_string">Support Developers</string>
     <string name="image_reload">RELOAD</string>
     <string name="celeb_view_more">VIEW MORE</string>
+
     <string name="string_loading">loading…</string>
     <string name="string_genre">Genre:</string>
     <string name="string_vote_count">Vote Count:</string>
     <string name="string_release">Release:</string>
     <string name="string_average_vote">Average Vote:</string>
+
+
     <string name="game_identify_movie">Identify this Movie</string>
     <string name="game_identify_tv_series">Identify this TV Series</string>
     <string name="game_identify_celebrity">Identify this Celebrity</string>
+    <string name="game_thank_you">Thank you for playing!</string>
+    <string name="game_your_score">YOUR SCORE</string>
+    <string name="game_high_score">HIGH SCORE</string>
+    <string name="game_return">RETURN TO THE APP</string>
+    <string name="game_please_wait">LOADING GAME. PLEASE WAIT…</string>
+    <string name="game_begin">LET\'S HAVE FUN!</string>
+    <string name="game_score_value">%1$s/9</string>
+
+    <string name="nav_movies">Movies</string>
+    <string name="nav_tv_series">TV Series</string>
+    <string name="nav_celebrities">Celebrities</string>
+    <string name="nav_fun_quiz">Fun Quiz</string>
+    <string name="nav_communicate">Communicate</string>
+    <string name="nav_support_developers">Support developers</string>
+    <string name="nav_share_this_app">Share this App</string>
+    <string name="nav_rate_this_app">Rate this App</string>
+    <string name="nav_logout">Logout</string>
+
+
+    <string name="detail_title_description">DESCRIPTION</string>
+    <string name="detail_title_cast">CAST</string>
+    <string name="detail_title_genre">GENRE</string>
+    <string name="detail_title_language">LANGUAGE</string>
+    <string name="detail_title_release_date">RELEASE DATE</string>
+    <string name="detail_title_average_vote">TMDB AVERAGE VOTE</string>
+    <string name="detail_title">TITLE</string>
+    <string name="detail_title_vote_count">TMDB VOTE COUNT</string>
+    <string name="detail_title_recommendations">RECOMMENDATIONS</string>
+    <string name="detail_title_name">NAME</string>
+    <string name="detail_title_biography">BIOGRAPHY</string>
+    <string name="detail_title_credits">CREDITS</string>
+    <string name="detail_title_birthplace">BIRTHPLACE</string>
+    <string name="detail_title_also_known_as">ALSO KNOWN AS</string>
+    <string name="detail_title_date_of_birth">DATE OF BIRTH</string>
+    <string name="detail_title_date_of_death">DATE OF DEATH</string>
+
+
+    <string name="zerostate_no_favourites">No Favourites yet</string>
+    <string name="zerostate_instructions">Long press on cards\nto add or remove favourites</string>
+    <string name="zerostate_no_search_results">No Search Results</string>
+    <string name="zerostate_search_instructions">Try entering a different keyword\nfor your search</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="double_back_exit_app">Press back once again to exit Movie Maniac</string>
+
+    <string-array name="movie_toolbar_hint_array">
+        <item>Upcoming Movies</item>
+        <item>Popular Movies</item>
+        <item>My Favourites</item>
+        <item>Search for movies…</item>
+    </string-array>
+
+    <string-array name="tv_toolbar_hint_array">
+        <item>Ongoing TV Series</item>
+        <item>Top Rated TV Series</item>
+        <item>My Favourites</item>
+        <item>Search for TV Series…</item>
+    </string-array>
+
+    <string-array name="celeb_toolbar_hint_array">
+        <item>Popular Celebrities</item>
+        <item>My Favourites</item>
+        <item>Search for celebrities…</item>
+    </string-array>
+
+
 </resources>

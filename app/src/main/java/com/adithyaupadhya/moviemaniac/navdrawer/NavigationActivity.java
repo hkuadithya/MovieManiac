@@ -180,7 +180,7 @@ public class NavigationActivity extends AppCompatActivity implements
         else {
             if (mBackPressedTime == 0 || System.currentTimeMillis() - mBackPressedTime >= 2500) {
                 mBackPressedTime = System.currentTimeMillis();
-                Toast.makeText(this, "Press back once again to exit Movie Maniac", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.double_back_exit_app, Toast.LENGTH_SHORT).show();
             } else {
                 super.onBackPressed();
             }

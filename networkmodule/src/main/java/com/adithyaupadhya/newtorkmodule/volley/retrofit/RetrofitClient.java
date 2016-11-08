@@ -8,10 +8,10 @@ import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericGameResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericSearchResults;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenreResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBImageResponse;
-import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieSimilarCreditsVideosResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieRecosCreditsVideosResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVRecosCreditsVideosResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSimilarCreditsVideosResponse;
 
 import java.io.IOException;
 
@@ -62,12 +62,11 @@ public class RetrofitClient implements Interceptor {
 
         HttpUrl url = request.url()
                 .newBuilder()
-                .addQueryParameter("api_key", "3db61f99f5b86b7f997e3141af909031")
+                .addQueryParameter("api_key", NetworkConstants.API_KEY)
                 .build();
 
         request = request.newBuilder()
                 .url(url)
-                .header("Cache-Control", "public, max-age=3600")
                 .build();
 
         return chain.proceed(request);
@@ -76,9 +75,6 @@ public class RetrofitClient implements Interceptor {
 
 
     public static RetrofitClient getInstance() {
-        if (mRetrofitClientInstance == null) {
-            mRetrofitClientInstance = new RetrofitClient();
-        }
         return mRetrofitClientInstance;
     }
 
@@ -98,8 +94,8 @@ public class RetrofitClient implements Interceptor {
         @GET("movie/popular")
         Call<TMDBMoviesResponse> getPopularMovies(@Query("page") int page);
 
-        @GET("movie/{movie_id}?append_to_response=similar,credits,videos")
-        Call<TMDBMovieSimilarCreditsVideosResponse> getMovieDetails(@Path("movie_id") int movieId);
+        @GET("movie/{movie_id}?append_to_response=recommendations,credits,videos")
+        Call<TMDBMovieRecosCreditsVideosResponse> getMovieDetails(@Path("movie_id") int movieId);
 
         @GET("genre/movie/list")
         Call<TMDBGenreResponse> getMovieGenreList();
@@ -119,11 +115,11 @@ public class RetrofitClient implements Interceptor {
         @GET("tv/on_the_air")
         Call<TMDBTVSeriesResponse> getOnTheAirTVSeries(@Query("page") int page);
 
-        @GET("tv/popular")
-        Call<TMDBTVSeriesResponse> getPopularTVSeries(@Query("page") int page);
+        @GET("tv/top_rated")
+        Call<TMDBTVSeriesResponse> getTopRatedTVSeries(@Query("page") int page);
 
-        @GET("tv/{tv_id}?append_to_response=similar,credits,videos")
-        Call<TMDBTVSimilarCreditsVideosResponse> getTVSeriesDetails(@Path("tv_id") int tvId);
+        @GET("tv/{tv_id}?append_to_response=recommendations,credits,videos")
+        Call<TMDBTVRecosCreditsVideosResponse> getTVSeriesDetails(@Path("tv_id") int tvId);
 
         @GET("genre/tv/list")
         Call<TMDBGenreResponse> getTVGenreList();

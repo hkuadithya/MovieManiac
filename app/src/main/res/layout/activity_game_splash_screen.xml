@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
-                android:text="LOADING GAME. PLEASE WAIT..."
+                android:text="@string/game_please_wait"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 app:fontType="bold" />
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
                 android:background="@color/app_material_blue"
-                android:text="LET'S HAVE FUN!"
+                android:text="@string/game_begin"
                 android:textAllCaps="false"
                 android:textSize="18sp"
                 android:visibility="invisible" />

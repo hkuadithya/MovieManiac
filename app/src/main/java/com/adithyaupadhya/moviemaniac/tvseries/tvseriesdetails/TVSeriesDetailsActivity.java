@@ -17,8 +17,8 @@ import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
 import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieTVCastResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVRecosCreditsVideosResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSimilarCreditsVideosResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTrailerResponse;
 import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 import com.adithyaupadhya.uimodule.applicationfont.RobotoTextView;
@@ -29,20 +29,16 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class TVSeriesDetailsActivity extends AbstractDetailsActivity<TMDBTVSimilarCreditsVideosResponse> {
+public class TVSeriesDetailsActivity extends AbstractDetailsActivity<TMDBTVRecosCreditsVideosResponse> {
     private static final String SHARE_SUBJECT = "TV SERIES DETAILS";
     private TMDBTVSeriesResponse.Results results;
     private RecyclerView recyclerView;
     private RobotoTextView textViewBanner;
 
 
-    public static void startActivityIntent(Context context, TMDBTVSeriesResponse.Results results, int... intentFlags) {
+    public static void startActivityIntent(Context context, TMDBTVSeriesResponse.Results results) {
         Intent intent = new Intent(context, TVSeriesDetailsActivity.class);
         intent.putExtra(AppIntentConstants.TV_DETAILS, results);
-
-        for (int flag : intentFlags)
-            intent.addFlags(flag);
-
         context.startActivity(intent);
     }
 
@@ -135,7 +131,7 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity<TMDBTVSimil
     }
 
     @Override
-    public void onResponse(Call<TMDBTVSimilarCreditsVideosResponse> call, retrofit2.Response<TMDBTVSimilarCreditsVideosResponse> response) {
+    public void onNetworkResponse(Call<TMDBTVRecosCreditsVideosResponse> call, retrofit2.Response<TMDBTVRecosCreditsVideosResponse> response) {
 
         TextView textViewMovieCast = (TextView) findViewById(R.id.textViewMovieCast);
         View shareButton = findViewById(R.id.share_button);
@@ -158,11 +154,10 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity<TMDBTVSimil
 
 
         //  HANDLE SIMILAR TV SERIES RESPONSE:
-        List<TMDBTVSeriesResponse.Results> similarResults = response.body().similar.results;
+        List<TMDBTVSeriesResponse.Results> similarResults = response.body().recommendations.results;
         if (similarResults == null || similarResults.size() == 0) {
             hideRecyclerView();
         } else {
-            textViewBanner.setText("SIMILAR CONTENT (" + similarResults.size() + ")");
             addRecyclerViewAdapter(similarResults);
         }
 

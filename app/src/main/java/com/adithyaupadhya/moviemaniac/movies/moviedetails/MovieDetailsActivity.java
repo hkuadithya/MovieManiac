@@ -16,7 +16,7 @@ import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
 import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
-import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieSimilarCreditsVideosResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieRecosCreditsVideosResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieTVCastResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTrailerResponse;
@@ -29,18 +29,16 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class MovieDetailsActivity extends AbstractDetailsActivity<TMDBMovieSimilarCreditsVideosResponse> {
+public class MovieDetailsActivity extends AbstractDetailsActivity<TMDBMovieRecosCreditsVideosResponse> {
     private static final String SHARE_SUBJECT = "MOVIE DETAILS";
     private TMDBMoviesResponse.Results results;
     private RecyclerView recyclerView;
     private RobotoTextView textViewBanner;
 
 
-    public static void startActivityIntent(Context context, TMDBMoviesResponse.Results results, int... intentFlags) {
+    public static void startActivityIntent(Context context, TMDBMoviesResponse.Results results) {
         Intent intent = new Intent(context, MovieDetailsActivity.class);
         intent.putExtra(AppIntentConstants.MOVIE_DETAILS, results);
-        for (int flag : intentFlags)
-            intent.addFlags(flag);
         context.startActivity(intent);
     }
 
@@ -133,7 +131,7 @@ public class MovieDetailsActivity extends AbstractDetailsActivity<TMDBMovieSimil
 
     //  HANDLING NETWORK CALLS
     @Override
-    public void onResponse(Call<TMDBMovieSimilarCreditsVideosResponse> call, retrofit2.Response<TMDBMovieSimilarCreditsVideosResponse> response) {
+    public void onNetworkResponse(Call<TMDBMovieRecosCreditsVideosResponse> call, retrofit2.Response<TMDBMovieRecosCreditsVideosResponse> response) {
         TextView textViewMovieCast = (TextView) findViewById(R.id.textViewMovieCast);
         View shareButton = findViewById(R.id.share_button);
         Button viewTrailer = (Button) findViewById(R.id.view_trailer);
@@ -153,12 +151,11 @@ public class MovieDetailsActivity extends AbstractDetailsActivity<TMDBMovieSimil
             textViewMovieCast.setText(Utils.toString(sb));
 
         //  HANDLING SIMILAR MOVIES.
-        List<TMDBMoviesResponse.Results> similarResults = response.body().similar.results;
+        List<TMDBMoviesResponse.Results> similarResults = response.body().recommendations.results;
 
         if (similarResults == null || similarResults.size() == 0) {
             hideRecyclerView();
         } else {
-            textViewBanner.setText("SIMILAR CONTENT (" + similarResults.size() + ")");
             addRecyclerViewAdapter(similarResults);
         }
 

@@ -11,6 +11,7 @@ import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericGameResponse;
 import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.CallbackWrapper;
 import com.adithyaupadhya.uimodule.roundcornerprogressbar.RoundCornerProgressBar;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -116,7 +117,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
         }
     }
 
-    public void handleSuccessOrNetworkFailure() {
+    private void handleSuccessOrNetworkFailure() {
         if (mPendingList.size() > 0) {
             //  PENDING ITEMS FOUND
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
@@ -180,9 +181,9 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
 
     //-----------------------------------------------------------------------------------------------------------
 
-    private Callback<TMDBGenericGameResponse> movieHandlerOne = new Callback<TMDBGenericGameResponse>() {
+    private Callback<TMDBGenericGameResponse> movieHandlerOne = new CallbackWrapper<TMDBGenericGameResponse>() {
         @Override
-        public void onResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
+        public void onNetworkResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
             mMoviesList.addAll(response.body().results);
 
             if (++mResponseCount >= TOTAL_REQUESTS)
@@ -201,10 +202,10 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
     };
 
 
-    private Callback<TMDBGenericGameResponse> movieHandlerTwo = new Callback<TMDBGenericGameResponse>() {
+    private Callback<TMDBGenericGameResponse> movieHandlerTwo = new CallbackWrapper<TMDBGenericGameResponse>() {
 
         @Override
-        public void onResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
+        public void onNetworkResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
 
             mMoviesList.addAll(response.body().results);
 
@@ -224,10 +225,10 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
     };
 
 
-    private Callback<TMDBGenericGameResponse> tvHandlerThree = new Callback<TMDBGenericGameResponse>() {
+    private Callback<TMDBGenericGameResponse> tvHandlerThree = new CallbackWrapper<TMDBGenericGameResponse>() {
 
         @Override
-        public void onResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
+        public void onNetworkResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
             mTVList.addAll(response.body().results);
 
 
@@ -248,10 +249,10 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
     };
 
 
-    private Callback<TMDBGenericGameResponse> tvHandlerFour = new Callback<TMDBGenericGameResponse>() {
+    private Callback<TMDBGenericGameResponse> tvHandlerFour = new CallbackWrapper<TMDBGenericGameResponse>() {
 
         @Override
-        public void onResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
+        public void onNetworkResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
 
             mTVList.addAll(response.body().results);
 
@@ -272,10 +273,10 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
     };
 
 
-    private Callback<TMDBGenericGameResponse> celebrityHandlerFive = new Callback<TMDBGenericGameResponse>() {
+    private Callback<TMDBGenericGameResponse> celebrityHandlerFive = new CallbackWrapper<TMDBGenericGameResponse>() {
 
         @Override
-        public void onResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
+        public void onNetworkResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
             mCelebritiesList.addAll(response.body().results);
 
 
@@ -297,10 +298,10 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
     };
 
 
-    private Callback<TMDBGenericGameResponse> celebrityHandlerSix = new Callback<TMDBGenericGameResponse>() {
+    private Callback<TMDBGenericGameResponse> celebrityHandlerSix = new CallbackWrapper<TMDBGenericGameResponse>() {
 
         @Override
-        public void onResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
+        public void onNetworkResponse(Call<TMDBGenericGameResponse> call, Response<TMDBGenericGameResponse> response) {
 
             mCelebritiesList.addAll(response.body().results);
 

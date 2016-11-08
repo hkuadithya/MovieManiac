@@ -1,22 +1,20 @@
 package com.adithyaupadhya.moviemaniac.base;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnLoadMoreListener;
 import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
-
-import retrofit2.Callback;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.NetworkFragment;
 
 /**
  * Created by adithya.upadhya on 21-01-2016.
  */
-public abstract class AbstractListFragment<APIResponseClass> extends Fragment implements
+public abstract class AbstractListFragment<APIResponseClass> extends NetworkFragment<APIResponseClass> implements
         AbstractTabFragment.OnFabSnackBarClickListener,
         OnLoadMoreListener,
-        SwipeRefreshLayout.OnRefreshListener, Callback<APIResponseClass> {
+        SwipeRefreshLayout.OnRefreshListener {
 
     protected NetworkAPI mApiType;
     protected RetrofitClient.APIClient mApiClient;

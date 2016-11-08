@@ -13,7 +13,7 @@
     <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Thank you for playing!"
+        android:text="@string/game_thank_you"
         android:textColor="@android:color/white"
         android:textSize="25sp"
         app:fontType="bold" />
@@ -32,7 +32,7 @@
         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="YOUR SCORE"
+            android:text="@string/game_your_score"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:fontType="medium" />
@@ -42,10 +42,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="9/9"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            app:fontType="medium" />
+            app:fontType="medium"
+            tools:text="9/9" />
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -62,7 +62,7 @@
         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ACCOUNT HIGH SCORE"
+            android:text="@string/game_high_score"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:fontType="medium" />
@@ -72,10 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="9/9"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            app:fontType="medium" />
+            app:fontType="medium"
+            tools:text="9/9" />
     </android.support.v7.widget.CardView>
 
     <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:background="@color/app_material_blue"
-        android:text="Return to the application"
+        android:text="@string/game_return"
         android:textAllCaps="false"
         android:textSize="18sp"
         android:visibility="visible" />

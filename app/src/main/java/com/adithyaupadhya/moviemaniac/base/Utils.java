@@ -38,7 +38,7 @@ public class Utils {
         if (!isFavoriteItem) {
             content = "Do you wish to add this item to your list of favourites?";
             title = "Add to favourites";
-            icon = ContextCompat.getDrawable(context, R.drawable.vector_favorite);
+            icon = ContextCompat.getDrawable(context, R.drawable.vector_dialog_favorite);
         } else {
             content = "Do you wish to remove this item from your list of favourites?";
             title = "Remove from favourites";
@@ -85,43 +85,6 @@ public class Utils {
                 .show();
     }
 
-    public static void insertOrDeleteFromDB(Context context, Uri uri, int itemId, Object detailsObject, boolean isFavoriteItem) {
-
-        String idColumn, detailsColumn, type, userId;
-        userId = AppPreferenceManager.getAppPreferenceInstance(context).getPreferenceData(DBConstants.USER_ID);
-
-        if (uri == DBConstants.MOVIE_TABLE_URI) {
-            idColumn = DBConstants.MOVIE_ID;
-            detailsColumn = DBConstants.MOVIE_DETAILS;
-            type = "movie";
-        } else if (uri == DBConstants.TVSERIES_TABLE_URI) {
-            idColumn = DBConstants.TVSERIES_ID;
-            detailsColumn = DBConstants.TVSERIES_DETAILS;
-            type = "tv series";
-        } else {
-            idColumn = DBConstants.CELEBRITY_ID;
-            detailsColumn = DBConstants.CELEBRITY_DETAILS;
-            type = "celebrity";
-        }
-
-
-        if (!isFavoriteItem) {
-            ContentValues values = new ContentValues();
-            values.put(DBConstants.USER_ID, userId);
-            values.put(idColumn, itemId);
-            try {
-                values.put(detailsColumn, APIConstants.getInstance().getObjectMapper().writeValueAsString(detailsObject));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            context.getContentResolver().insert(uri, values);
-            Toast.makeText(context, "This " + type + " has been added to your favourites", Toast.LENGTH_SHORT).show();
-        } else {
-            context.getContentResolver().delete(uri, DBConstants.USER_ID + "=? AND " + idColumn + "=?", new String[]{userId, String.valueOf(itemId)});
-            Toast.makeText(context, "This " + type + " has been removed from your favourites", Toast.LENGTH_SHORT).show();
-        }
-    }
-
 
     public static void insertDeleteFromMovieTable(Context context, TMDBMoviesResponse.Results results, boolean isFavoriteItem) {
 
@@ -131,7 +94,7 @@ public class Utils {
             ContentValues values = new ContentValues();
             values.put(DBConstants.USER_ID, userId);
             values.put(DBConstants.MOVIE_ID, results.id);
-            values.put(DBConstants.RELEASE_DATE, results.release_date);
+
             try {
                 values.put(DBConstants.MOVIE_DETAILS, APIConstants.getInstance().getObjectMapper().writeValueAsString(results));
             } catch (JsonProcessingException e) {
@@ -146,6 +109,7 @@ public class Utils {
             Toast.makeText(context, "This movie has been removed from your favourites", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public static void insertDeleteFromTVSeriesTable(Context context, TMDBTVSeriesResponse.Results results, boolean isFavoriteItem) {
 
@@ -169,6 +133,7 @@ public class Utils {
             Toast.makeText(context, "This TVSeries has been removed from your favourites", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public static void insertDeleteFromCelebritiesTable(Context context, TMDBCelebrityResponse.Results results, boolean isFavoriteItem) {
 
