@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -167,9 +165,20 @@ public class Utils {
                     .show();
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        NetworkInfo networkInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    public static boolean isConnectedToInternet() {
+//        NetworkInfo networkInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+//        return networkInfo != null && networkInfo.isConnected();
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process process = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            // Check if exit value == 0, exit status = 0 => success status...
+            return process.waitFor() == 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public static boolean isRecordFavoriteItem(Context context, Uri tableUri, String itemAttribute, int itemId) {

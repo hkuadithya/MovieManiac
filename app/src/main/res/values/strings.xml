@@ -71,6 +71,9 @@
     <string name="game_please_wait">LOADING GAME. PLEASE WAIT…</string>
     <string name="game_begin">LET\'S HAVE FUN!</string>
     <string name="game_score_value">%1$s/9</string>
+    <string name="game_loading_images">Loading Images. Please wait</string>
+    <string name="game_question_number">Question %1$d/9</string>
+
 
     <string name="nav_movies">Movies</string>
     <string name="nav_tv_series">TV Series</string>
@@ -107,6 +110,8 @@
     <string name="zerostate_search_instructions">Try entering a different keyword\nfor your search</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="double_back_exit_app">Press back once again to exit Movie Maniac</string>
+    <string name="toast_net_error_check_conn">Network Error! Please check your internet connection…</string>
+    <string name="toast_google_auth_failure">Google Authentication Failed! Please try again</string>
 
     <string-array name="movie_toolbar_hint_array">
         <item>Upcoming Movies</item>

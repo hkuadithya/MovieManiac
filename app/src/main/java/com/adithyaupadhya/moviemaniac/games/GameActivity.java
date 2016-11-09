@@ -55,11 +55,13 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
     private List<TMDBGenericGameResponse.Results> mDataList;
     private MediaPlayer mediaPlayer;
 
+    private boolean mPreviousNetworkStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        Toast.makeText(GameActivity.this, "Loading Images. Please wait", Toast.LENGTH_SHORT).show();
+        Toast.makeText(GameActivity.this, R.string.game_loading_images, Toast.LENGTH_SHORT).show();
 
         currentIndex = getIntent().getIntExtra(AppIntentConstants.CURRENT_INDEX, 0);
 
@@ -67,7 +69,7 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ((TextView) (toolbar.findViewById(R.id.textViewHeading))).setText("Question " + (currentIndex + 1) + "/9");
+        ((TextView) (toolbar.findViewById(R.id.textViewHeading))).setText(getString(R.string.game_question_number, (currentIndex + 1)));
 
         imageView1 = (ImageView) findViewById(R.id.imageView1);
         imageView2 = (ImageView) findViewById(R.id.imageView2);
@@ -140,6 +142,8 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
             if (imageList.size() > 1)
                 url2 = baseImageUrl + imageList.get(1).file_path;
         }
+
+        mPreviousNetworkStatus = Utils.isConnectedToInternet();
 
         Glide.with(this)
                 .load(url1)
@@ -252,19 +256,22 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
 
     @Override
     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+
         // Handling connection error
-        if (model != null && model.contains("null")) {
+
+        if (!mPreviousNetworkStatus || !Utils.isConnectedToInternet()) {
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
             return true;
         }
+
         handleSuccessOrErrorImageLoading();
 
         //  Handling invalid URL error
 
-        if (url1 == null)
+        if (url1 == null || url1.equals(model))
             imageView1.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
 
-        if (url2 == null)
+        if (url2 == null || url2.equals(model))
             imageView2.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
 
         return false;

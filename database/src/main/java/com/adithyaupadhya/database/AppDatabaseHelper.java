@@ -3,6 +3,7 @@ package com.adithyaupadhya.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by adithya.upadhya on 20-02-2016.
@@ -26,6 +27,7 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 1:
+                Log.d("okhttp", "DB changes and modifications triggered");
                 db.execSQL(DBConstants.CREATE_MOVIE_TABLE.replaceFirst(DBConstants.MOVIE_TABLE, DBConstants.MOVIE_BACKUP));
                 db.execSQL(DBConstants.COPY_MOVIE_RECORDS);
                 db.execSQL("DROP TABLE IF EXISTS " + DBConstants.MOVIE_TABLE);

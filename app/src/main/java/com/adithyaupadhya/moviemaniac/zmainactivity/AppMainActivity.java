@@ -20,6 +20,7 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.HashMap;
 
@@ -37,6 +38,8 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_app_main);
+
+        LeakCanary.install(this.getApplication());
 
         Fabric.with(this, new Crashlytics.Builder()
                 .core(new CrashlyticsCore

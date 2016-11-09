@@ -30,6 +30,7 @@ public class ImageDialogFragment extends DialogFragment implements RequestListen
     private TextView mTextViewRetry;
     private String mImageUrl;
     private ImageView mImageViewPic;
+    private boolean mPreviousNetworkStatus;
 
     public ImageDialogFragment() {
         // Required empty public constructor
@@ -67,6 +68,9 @@ public class ImageDialogFragment extends DialogFragment implements RequestListen
     }
 
     private void loadNetworkImage() {
+
+        mPreviousNetworkStatus = Utils.isConnectedToInternet();
+
         Glide.with(this)
                 .load(NetworkConstants.IMG_BASE_DIALOG_POSTER_URL + mImageUrl)
                 .placeholder(R.drawable.default_img)
@@ -74,11 +78,14 @@ public class ImageDialogFragment extends DialogFragment implements RequestListen
                 .dontAnimate()
                 .listener(this)
                 .into(mImageViewPic);
+
     }
 
     @Override
     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-        if (model != null && model.contains("null")) {
+
+        // If network not available !!!
+        if (!mPreviousNetworkStatus || !Utils.isConnectedToInternet()) {
             mTextViewRetry.setVisibility(View.VISIBLE);
             return true;
         }

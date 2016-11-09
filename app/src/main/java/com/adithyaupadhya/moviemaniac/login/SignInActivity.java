@@ -196,10 +196,10 @@ public class SignInActivity extends AppCompatActivity implements
             } else {
                 mProgressLayout.setVisibility(View.GONE);
 
-                if (Utils.isNetworkAvailable(this))
-                    Toast.makeText(this, "Google Authentication Failed! Please try again", Toast.LENGTH_SHORT).show();
+                if (Utils.isConnectedToInternet())
+                    Toast.makeText(this, R.string.toast_google_auth_failure, Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(this, "Network Error! Please connect to your wifi.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.toast_net_error_check_conn, Toast.LENGTH_LONG).show();
             }
         } else {
             mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
