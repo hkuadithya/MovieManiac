@@ -82,7 +82,6 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void launchNewActivity() {
-
         //  FIRST TIME USER: DIRECT HIM/HER TO SIGN IN ACTIVITY
         if (mPrefManager.getPreferenceData(DBConstants.USER_ID) == null) {
             startActivity(new Intent(AppMainActivity.this, SignInActivity.class));

@@ -65,3 +65,8 @@
 -dontwarn com.squareup.okhttp.**
 -dontwarn okio.**
 -dontwarn java.nio.file.**
+
+
+# Proguard rules for Crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
