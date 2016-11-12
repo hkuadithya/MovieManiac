@@ -1,21 +1,25 @@
 package com.adithyaupadhya.moviemaniac.support;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.facebook.FacebookSdk;
 import com.facebook.share.widget.LikeView;
 import com.google.android.gms.plus.PlusOneButton;
 
 public class SupportDeveloperActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int PLUS_ONE_REQUEST_CODE = 0;
-
+    private PlusOneButton mPlusOneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white));
         setTitle(R.string.support_developers_string);
 
         LikeView likeView = (LikeView) findViewById(R.id.facebookLikeView);
@@ -35,25 +40,36 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
             likeView.setLikeViewStyle(LikeView.Style.BOX_COUNT);
         }
 
-        findViewById(R.id.buttonShareApp).setOnClickListener(this);
+        findViewById(R.id.buttonReportBugs).setOnClickListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        PlusOneButton plusOneButton = (PlusOneButton) findViewById(R.id.googlePlusOneButton);
+        mPlusOneButton = (PlusOneButton) findViewById(R.id.googlePlusOneButton);
 
-        if (plusOneButton != null)
-            plusOneButton.initialize(NetworkConstants.GOOGLE_PLUS_URL, PLUS_ONE_REQUEST_CODE);
+        if (mPlusOneButton != null)
+            mPlusOneButton.initialize(NetworkConstants.GOOGLE_PLUS_URL, PLUS_ONE_REQUEST_CODE);
     }
 
     @Override
     public void onClick(View v) {
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "MovieManiac Android Application");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.share_app_string));
-        startActivity(Intent.createChooser(sharingIntent, "Share this app via"));
+
+        String personalDetails = getString(R.string.report_bugs_email_body, Build.MANUFACTURER, Build.MODEL,
+                Build.VERSION.RELEASE, String.valueOf(Build.VERSION.SDK_INT));
+
+        try {
+            Intent emailIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "developer.moviemaniac@gmail.com"));
+
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.report_bugs_email_subject));
+
+            emailIntent.putExtra(Intent.EXTRA_TEXT, personalDetails);
+
+            startActivity(emailIntent);
+        } catch (Exception exception) {
+            Toast.makeText(this, R.string.toast_no_email_app_found, Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -64,5 +80,12 @@ public class SupportDeveloperActivity extends AppCompatActivity implements View.
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPlusOneButton.setOnPlusOneClickListener(null);
+        mPlusOneButton = null;
     }
 }

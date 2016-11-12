@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
 import com.adithyaupadhya.moviemaniac.movies.movies.MoviesFragment;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
 
 public class MovieSearchActivity extends AbstractSearchActivity {
 
@@ -17,9 +17,10 @@ public class MovieSearchActivity extends AbstractSearchActivity {
         return intent;
     }
 
+
     @Override
-    protected String getNetworkBaseUrl() {
-        return NetworkConstants.MOVIE_SEARCH_BASE_URL;
+    protected AbstractListFragment.NetworkAPI getNetworkApiType() {
+        return AbstractListFragment.NetworkAPI.API_SEARCH_MOVIE;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.adithyaupadhya.moviemaniac.movies.moviedetails;
 
 import android.content.Context;
-import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -57,12 +57,12 @@ public class MoviesSimilarAdapter extends RecyclerView.Adapter<MoviesSimilarAdap
     }
 
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView networkImageView;
         private Context context;
         private TMDBMoviesResponse.Results results;
 
-        public RecyclerViewHolder(View itemView) {
+        RecyclerViewHolder(View itemView) {
             super(itemView);
             networkImageView = (ImageView) itemView.findViewById(R.id.networkImageView);
             itemView.setOnClickListener(this);
@@ -70,7 +70,8 @@ public class MoviesSimilarAdapter extends RecyclerView.Adapter<MoviesSimilarAdap
 
         @Override
         public void onClick(View v) {
-            MovieDetailsActivity.startActivityIntent(context, results, Intent.FLAG_ACTIVITY_NO_HISTORY);
+            MovieDetailsActivity.startActivityIntent(context, results);
+            ((AppCompatActivity) context).finish();
         }
     }
 }

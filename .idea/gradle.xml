@@ -15,16 +15,7 @@
             <option value="$PROJECT_DIR$/uimodule" />
           </set>
         </option>
-        <option name="myModules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/database" />
-            <option value="$PROJECT_DIR$/networkmodule" />
-            <option value="$PROJECT_DIR$/searchmodule" />
-            <option value="$PROJECT_DIR$/uimodule" />
-          </set>
-        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

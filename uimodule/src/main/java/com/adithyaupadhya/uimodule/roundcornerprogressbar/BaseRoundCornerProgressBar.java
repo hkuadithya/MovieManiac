@@ -37,11 +37,11 @@ import com.adithyaupadhya.uimodule.R;
  * Created by Akexorcist on 9/14/15 AD.
  */
 public abstract class BaseRoundCornerProgressBar extends LinearLayout {
-    protected final static int DEFAULT_MAX_PROGRESS = 100;
-    protected final static int DEFAULT_PROGRESS = 0;
-    protected final static int DEFAULT_SECONDARY_PROGRESS = 0;
-    protected final static int DEFAULT_PROGRESS_RADIUS = 30;
-    protected final static int DEFAULT_BACKGROUND_PADDING = 0;
+    private final static int DEFAULT_MAX_PROGRESS = 100;
+    private final static int DEFAULT_PROGRESS = 0;
+    private final static int DEFAULT_SECONDARY_PROGRESS = 0;
+    private final static int DEFAULT_PROGRESS_RADIUS = 30;
+    private final static int DEFAULT_BACKGROUND_PADDING = 0;
 
     private LinearLayout layoutBackground;
     private LinearLayout layoutProgress;
@@ -110,7 +110,7 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
     // Draw all view on sub class
     protected abstract void onViewDraw();
 
-    public void setup(Context context, AttributeSet attrs) {
+    private void setup(Context context, AttributeSet attrs) {
         setupStyleable(context, attrs);
 
         removeAllViews();
@@ -125,7 +125,7 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
     }
 
     // Retrieve initial parameter from view attribute
-    public void setupStyleable(Context context, AttributeSet attrs) {
+    private void setupStyleable(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RoundCornerProgress);
 
         radius = (int) typedArray.getDimension(R.styleable.RoundCornerProgress_rcRadius, dp2px(DEFAULT_PROGRESS_RADIUS));
@@ -166,7 +166,7 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
     }
 
     // Redraw all view
-    protected void drawAll() {
+    private void drawAll() {
         drawBackgroundProgress();
         drawPadding();
         drawProgressReverse();
@@ -189,7 +189,7 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
     }
 
     // Create an empty color rectangle gradient drawable
-    protected GradientDrawable createGradientDrawable(int color) {
+    GradientDrawable createGradientDrawable(int color) {
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setShape(GradientDrawable.RECTANGLE);
         gradientDrawable.setColor(color);
@@ -245,7 +245,7 @@ public abstract class BaseRoundCornerProgressBar extends LinearLayout {
     }
 
     @SuppressLint("NewApi")
-    protected float dp2px(float dp) {
+    private float dp2px(float dp) {
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         return Math.round(dp * (displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }

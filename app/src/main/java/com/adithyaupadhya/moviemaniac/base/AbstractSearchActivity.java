@@ -8,16 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
 
 /**
  * Created by adithya.upadhya on 12-02-2016.
  */
-public abstract class AbstractSearchActivity extends AppCompatActivity implements OnImageClickListener, View.OnClickListener {
+public abstract class AbstractSearchActivity extends AppCompatActivity implements View.OnClickListener {
     private AbstractTabFragment.OnFabSnackBarClickListener listener;
 
     @Override
@@ -32,38 +28,25 @@ public abstract class AbstractSearchActivity extends AppCompatActivity implement
 
         findViewById(R.id.fab).setOnClickListener(this);
 
-        String searchQuery = getIntent().getStringExtra(AppIntentConstants.QUERY_STRING);
-
         if (savedInstanceState == null) {
+
             Fragment fragment = getLaunchFragment();
-            Bundle bundle = new Bundle();
-            try {
-                String url = getNetworkBaseUrl().replaceFirst("query_string", URLEncoder.encode(searchQuery, "utf-8"));
-                // Log.d("MMVOLLEY", url);
-                bundle.putString(AppIntentConstants.BUNDLE_URL, url);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+
+            Bundle bundle = getIntent().getExtras();
+
+            bundle.putSerializable(AppIntentConstants.API_REQUEST, getNetworkApiType());
+
             fragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
     }
 
-    protected abstract String getNetworkBaseUrl();
+    protected abstract AbstractListFragment.NetworkAPI getNetworkApiType();
 
     protected abstract Fragment getLaunchFragment();
 
     protected abstract String getToolbarTitle();
-
-    @Override
-    public void onImageClick(String url) {
-        ImageDialogFragment dialogFragment = new ImageDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppIntentConstants.BUNDLE_URL, url);
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(getSupportFragmentManager(), "ImageDialog");
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -82,5 +65,11 @@ public abstract class AbstractSearchActivity extends AppCompatActivity implement
     @Override
     public void onClick(View v) {
         listener.onFabSnackBarClick(v.getId() == R.id.fab);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        listener = null;
     }
 }

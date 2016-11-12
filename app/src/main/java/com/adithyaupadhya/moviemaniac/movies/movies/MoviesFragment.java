@@ -16,20 +16,18 @@ import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
 import com.adithyaupadhya.uimodule.materialprogress.ProgressWheel;
-import com.android.volley.VolleyError;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
+import retrofit2.Call;
+import retrofit2.Response;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MoviesFragment extends AbstractListFragment {
+public class MoviesFragment extends AbstractListFragment<TMDBMoviesResponse> {
     private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;
     private ProgressWheel mProgressWheel;
@@ -55,9 +53,8 @@ public class MoviesFragment extends AbstractListFragment {
 
         mRecyclerView = (RecyclerView) mSwipeRefreshLayout.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new MoviesAdapter(getContext(), mRecyclerView, this, (OnImageClickListener) getActivity());
+        mAdapter = new MoviesAdapter(getContext(), mRecyclerView, this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -67,58 +64,61 @@ public class MoviesFragment extends AbstractListFragment {
 
     private void establishNetworkCall(int pageNumber) {
         mProgressWheel.setVisibility(View.VISIBLE);
-        super.volleyJsonObjectRequest(pageNumber, this);
+
+        switch (mApiType) {
+            case API_UPCOMING_MOVIES:
+                mApiClient.getUpcomingMovies(pageNumber).enqueue(this);
+                break;
+
+            case API_POPULAR_MOVIES:
+                mApiClient.getPopularMovies(pageNumber).enqueue(this);
+                break;
+
+            case API_SEARCH_MOVIE:
+                mApiClient.getMovieSearchResults(getArguments().getString(AppIntentConstants.QUERY_STRING), pageNumber).enqueue(this);
+                break;
+        }
     }
 
     @Override
-    public void onErrorResponse(VolleyError volleyError) {
+    public void onNetworkResponse(Call<TMDBMoviesResponse> call, Response<TMDBMoviesResponse> response) {
+        //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
+        if (mOldResponse == null || mPageNumber == 1) {
+            mOldResponse = response.body();
+            mAdapter.setNewAPIResponse(mOldResponse);
+            mAdapter.notifyDataSetChanged();
+
+            if (getActivity() instanceof AbstractSearchActivity) {
+                if (mOldResponse.results.size() == 0)
+                    mZeroStateLayout.setVisibility(View.VISIBLE);
+                else
+                    mZeroStateLayout.setVisibility(View.GONE);
+            }
+        }
+        //  HANDLES PAGINATION REQUESTS
+        else {
+            Toast.makeText(getActivity(), "PAGE " + mPageNumber, Toast.LENGTH_SHORT).show();
+            int startIndex = mOldResponse.results.size(), totalItems = response.body().results.size();
+            mOldResponse.page = response.body().page;
+            mOldResponse.total_results = response.body().total_results;
+            mOldResponse.results.addAll(response.body().results);
+            mAdapter.setNewAPIResponse(mOldResponse);
+            mAdapter.notifyItemRangeInserted(startIndex, totalItems);
+        }
+
+        mProgressWheel.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
+        mAdapter.setLoaded();
+    }
+
+    @Override
+    public void onNetworkFailure(Call<TMDBMoviesResponse> call, Throwable t) {
         mProgressWheel.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         if (getParentFragment() != null)
             ((AbstractTabFragment) getParentFragment()).showNetworkErrorSnackBar();
         else if (getActivity() instanceof AbstractSearchActivity)
             Utils.displayNetworkErrorSnackBar(getActivity().findViewById(R.id.coordinatorLayout), (AbstractSearchActivity) getActivity());
-
-        // Log.d("MMVOLLEY parent frag ", volleyError.toString() + " " + getParentFragment());
-    }
-
-
-    @Override
-    public void onResponse(JSONObject jsonObject) {
-        try {
-            TMDBMoviesResponse mNewResponse = (TMDBMoviesResponse) super.jsonPojoDeserialization(jsonObject, TMDBMoviesResponse.class);
-            // Log.d("MMVOLLEY", "total_pages: " + mNewResponse.total_pages + " total_results: " + mNewResponse.total_results);
-
-            //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
-            if (mOldResponse == null || mPageNumber == 1) {
-                mOldResponse = mNewResponse;
-                mAdapter.setNewAPIResponse(mOldResponse);
-                mAdapter.notifyDataSetChanged();
-
-                if (getActivity() instanceof AbstractSearchActivity) {
-                    if (mOldResponse.results.size() == 0)
-                        mZeroStateLayout.setVisibility(View.VISIBLE);
-                    else
-                        mZeroStateLayout.setVisibility(View.GONE);
-                }
-            }
-            //  HANDLES PAGINATION REQUESTS
-            else {
-                Toast.makeText(getActivity(), "PAGE " + mPageNumber, Toast.LENGTH_SHORT).show();
-                int startIndex = mOldResponse.results.size(), totalItems = mNewResponse.results.size();
-                mOldResponse.page = mNewResponse.page;
-                mOldResponse.total_results = mNewResponse.total_results;
-                mOldResponse.results.addAll(mNewResponse.results);
-                mAdapter.setNewAPIResponse(mOldResponse);
-                mAdapter.notifyItemRangeInserted(startIndex, totalItems);
-            }
-
-            mProgressWheel.setVisibility(View.GONE);
-            mSwipeRefreshLayout.setRefreshing(false);
-            mAdapter.setLoaded();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

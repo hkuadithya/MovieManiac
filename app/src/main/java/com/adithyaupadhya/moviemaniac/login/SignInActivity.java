@@ -12,8 +12,8 @@ import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -36,6 +36,8 @@ import com.google.android.gms.common.api.Scope;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.fabric.sdk.android.Fabric;
 
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -63,7 +65,9 @@ public class SignInActivity extends AppCompatActivity implements
 
     private void initializeGoogleSignIn() {
         GoogleSignInOptions signInOptions = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .Builder()
+                .requestId()
+                .requestEmail()
                 .requestProfile()
                 .build();
 
@@ -82,7 +86,7 @@ public class SignInActivity extends AppCompatActivity implements
             if (googleSignInButton.getChildAt(i) instanceof TextView) {
                 TextView textView = (TextView) googleSignInButton.getChildAt(i);
                 textView.setTextSize(15);
-                textView.setText("Sign in with Google");
+                textView.setText(R.string.sign_in_with_google);
                 textView.setPadding(0, 0, 20, 0);
                 break;
             }
@@ -192,10 +196,10 @@ public class SignInActivity extends AppCompatActivity implements
             } else {
                 mProgressLayout.setVisibility(View.GONE);
 
-                if (Utils.isNetworkAvailable(this))
-                    Toast.makeText(this, "Google Authentication Failed! Please try again", Toast.LENGTH_SHORT).show();
+                if (Utils.isConnectedToInternet())
+                    Toast.makeText(this, R.string.toast_google_auth_failure, Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(this, "Network Error! Please connect to your wifi.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.toast_net_error_check_conn, Toast.LENGTH_LONG).show();
             }
         } else {
             mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
@@ -211,7 +215,7 @@ public class SignInActivity extends AppCompatActivity implements
         preference.setPreferenceData(DBConstants.USER_NAME, name);
 
         //Crashlytics user logging
-        if(Crashlytics.getInstance() != null) {
+        if (Fabric.isInitialized()) {
             Crashlytics.setUserName(name);
             Crashlytics.setUserEmail(email);
         }

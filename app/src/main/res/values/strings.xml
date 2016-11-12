@@ -28,28 +28,146 @@
     <string name="application_credits">
        Thank you for downloading this App!\nPlease like us on Facebook and Google+ (click on the like buttons below :D ).
         \n\nTHIS PRODUCT USES THE TMDb API BUT IS NOT ENDORSED OR CERTIFIED BY TMDb.
-        \n\nThe developer would like to thank his family and :-
-        \n* Mayur Devatwal(UI/UX Engineer) for developing the app icons
-        \n  Mayur\'s Portfolio : https://www.behance.net/mayurdevatwal
-        \n\n* The Movie Database(TMDb) APIs
-        \n\n* Github and the Android open source community
-        \n\n* Freepik and Flaticons
+        \n\nThe developer would like to thank his family and \u279f
+        \n\u2022 Mayur Devatwal(UI/UX Engineer) for developing the app icons. Mayur\'s Portfolio : https://www.behance.net/mayurdevatwal
+        \n\u2022 The Movie Database(TMDb) APIs
+        \n\u2022 Github and the Android open source community
+        \n\u2022 Freepik and Flaticons
 
-        \n\nYou can report bugs or request new features by sending me an email developer.moviemaniac@gmail.com
+        \n\nYou can report bugs or request new features by clicking on report bugs button below.
         \n\nDon\'t forget to share this app with your friends and family.(click on the share button below)
         \n\nThis open source project is available at https://github.com/hkuadithya/MovieManiac under GNU GPL license.
         \n\nYours Truly,
         \nAdithya H K Upadhya
     </string>
 
-    <string name="share_this_app">SHARE THIS APP</string>
+    <string name="report_bugs_email_subject">MovieManiac: Raise a bug / Request new features</string>
+
+    <string name="report_bugs_email_body">
+        Manufacturer : %1$s
+        \nDevice Model : %2$s
+        \nAndroid OS version : %3$s
+        \nSDK version : %4$s
+        \n\nPLEASE NOTE: Device data is used only for Debugging purposes. Your identity is completely safe. \n\n\n
+    </string>
+
+    <string name="report_bugs">REPORT BUGS</string>
 
     <string name="share_app_string">Hey There…
         \nCheckout this new app called \'MovieManiac\'
-        \nIt\'s got some great features(Movies, TVSeries, Celebrities &amp; Game)!
+        \nIt\'s got some great features(Movies, TVSeries, Celebrities &amp; Quiz)!
         \n\nDownload from Play Store Now
         \nhttp://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac
     </string>
 
     <string name="support_developers_string">Support Developers</string>
+    <string name="image_reload">RELOAD</string>
+    <string name="celeb_view_more">VIEW MORE</string>
+
+    <string name="string_loading">loading…</string>
+    <string name="string_genre">Genre:</string>
+    <string name="string_vote_count">Vote Count:</string>
+    <string name="string_release">Release:</string>
+    <string name="string_average_vote">Average Vote:</string>
+
+
+    <string name="game_identify_movie">Identify this Movie</string>
+    <string name="game_identify_tv_series">Identify this TV Series</string>
+    <string name="game_identify_celebrity">Identify this Celebrity</string>
+    <string name="game_thank_you">Thank you for playing</string>
+    <string name="game_your_score">YOUR SCORE</string>
+    <string name="game_high_score">YOUR HIGH SCORE</string>
+    <string name="game_return">RETURN TO THE APP</string>
+    <string name="game_please_wait">LOADING GAME. PLEASE WAIT…</string>
+    <string name="game_begin">LET\'S HAVE FUN!</string>
+    <string name="game_score_value">%1$s/9</string>
+    <string name="game_loading_images">Loading Images. Please wait</string>
+    <string name="game_question_number">Question %1$d/9</string>
+    <string name="game_like_google_fb">Support us by liking us on Google &amp; Facebook</string>
+    <string name="game_toolbar_title_summary">Game Summary</string>
+    <string name="game_exit_alert_popup">Do you wish to exit the game?</string>
+    <string name="game_progress_lost_alert">All your game progress will be lost!</string>
+
+
+    <string name="nav_movies">Movies</string>
+    <string name="nav_tv_series">TV Series</string>
+    <string name="nav_celebrities">Celebrities</string>
+    <string name="nav_fun_quiz">Fun Quiz</string>
+    <string name="nav_communicate">Communicate</string>
+    <string name="nav_support_developers">Support developers</string>
+    <string name="nav_share_this_app">Share this App</string>
+    <string name="nav_rate_this_app">Rate this App</string>
+    <string name="nav_logout">Logout</string>
+
+
+    <string name="detail_title_description">DESCRIPTION</string>
+    <string name="detail_title_cast">CAST</string>
+    <string name="detail_title_genre">GENRE</string>
+    <string name="detail_title_language">LANGUAGE</string>
+    <string name="detail_title_release_date">RELEASE DATE</string>
+    <string name="detail_title_average_vote">TMDB AVERAGE VOTE</string>
+    <string name="detail_title">TITLE</string>
+    <string name="detail_title_vote_count">TMDB VOTE COUNT</string>
+    <string name="detail_title_recommendations">RECOMMENDATIONS</string>
+    <string name="detail_title_name">NAME</string>
+    <string name="detail_title_biography">BIOGRAPHY</string>
+    <string name="detail_title_credits">CREDITS</string>
+    <string name="detail_title_birthplace">BIRTHPLACE</string>
+    <string name="detail_title_also_known_as">ALSO KNOWN AS</string>
+    <string name="detail_title_date_of_birth">DATE OF BIRTH</string>
+    <string name="detail_title_date_of_death">DATE OF DEATH</string>
+
+
+    <string name="zerostate_no_favourites">No Favourites yet</string>
+    <string name="zerostate_instructions">Long press on cards\nto add or remove favourites</string>
+    <string name="zerostate_no_search_results">No Search Results</string>
+    <string name="zerostate_search_instructions">Try entering a different keyword\nfor your search</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="double_back_exit_app">Press back once again to exit Movie Maniac</string>
+
+    <string name="toast_net_error_check_conn">Network Error! Please check your internet connection…</string>
+    <string name="toast_google_auth_failure">Google Authentication Failed! Please try again</string>
+    <string name="toast_no_email_app_found">Error: No email application found in your device…</string>
+
+
+    <string name="dialog_accept">Accept</string>
+    <string name="dialog_cancel">@android:string/cancel</string>
+    <string name="dialog_logout_title">Logout confirmation</string>
+    <string name="dialog_logout_content">Do you wish to Logout from this application?</string>
+    <string name="dialog_game_exit_title">Game Exit confirmation!</string>
+    <string name="dialog_game_exit_content">Do you wish to exit this game?</string>
+    <string name="dialog_add_favorite_title">Add to favourites</string>
+    <string name="dialog_add_favorite_content">Do you wish to add this item to your list of favourites?</string>
+    <string name="dialog_remove_favorite_title">Remove from favourites</string>
+    <string name="dialog_remove_favorite_content">Do you wish to remove this item from your list of favourites?</string>
+    <string name="dialog_app_update_title">Update v1.1</string>
+
+    <string-array name="dialog_app_update_content_array">
+        <item>\u2713 Improved Network performance</item>
+        <item>\u2713 Search suggestions enabled</item>
+        <item>\u2713 Click on any card image to open a high resolution image</item>
+        <item>\u2713 Minor GUI improvements</item>
+    </string-array>
+
+    <string-array name="movie_toolbar_hint_array">
+        <item>Upcoming Movies</item>
+        <item>Popular Movies</item>
+        <item>My Favourites</item>
+        <item>Search for Movies…</item>
+    </string-array>
+
+    <string-array name="tv_toolbar_hint_array">
+        <item>Ongoing TV Series</item>
+        <item>Top Rated TV Series</item>
+        <item>My Favourites</item>
+        <item>Search for TV Series…</item>
+    </string-array>
+
+    <string-array name="celeb_toolbar_hint_array">
+        <item>Popular Celebrities</item>
+        <item>My Favourites</item>
+        <item>Search for Celebrities…</item>
+    </string-array>
+
+
 </resources>

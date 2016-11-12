@@ -16,19 +16,17 @@ import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityResponse;
 import com.adithyaupadhya.uimodule.materialprogress.ProgressWheel;
-import com.android.volley.VolleyError;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CelebritiesFragment extends AbstractListFragment {
+public class CelebritiesFragment extends AbstractListFragment<TMDBCelebrityResponse> {
     private RecyclerView mRecyclerView;
     private CelebritiesAdapter mAdapter;
     private ProgressWheel mProgressWheel;
@@ -55,7 +53,7 @@ public class CelebritiesFragment extends AbstractListFragment {
         mRecyclerView = (RecyclerView) mSwipeRefreshLayout.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new CelebritiesAdapter(getContext(), mRecyclerView, this, (OnImageClickListener) getActivity());
+        mAdapter = new CelebritiesAdapter(getContext(), mRecyclerView, this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -65,59 +63,59 @@ public class CelebritiesFragment extends AbstractListFragment {
 
     private void establishNetworkCall(int pageNumber) {
         mProgressWheel.setVisibility(View.VISIBLE);
-        super.volleyJsonObjectRequest(pageNumber, this);
+
+        switch (mApiType) {
+            case API_POPULAR_CELEBRITY:
+                mApiClient.getPopularCelebrities(pageNumber).enqueue(this);
+                break;
+
+            case API_SEARCH_CELEBRITY:
+                mApiClient.getCelebritySearchResults(getArguments().getString(AppIntentConstants.QUERY_STRING), pageNumber).enqueue(this);
+                break;
+
+        }
     }
 
     @Override
-    public void onErrorResponse(VolleyError volleyError) {
+    public void onNetworkResponse(Call<TMDBCelebrityResponse> call, Response<TMDBCelebrityResponse> response) {
+        //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
+        if (mOldResponse == null || mPageNumber == 1) {
+            mOldResponse = response.body();
+            mAdapter.setNewAPIResponse(mOldResponse);
+            mAdapter.notifyDataSetChanged();
+
+            if (getActivity() instanceof AbstractSearchActivity) {
+                if (mOldResponse.results.size() == 0)
+                    mZeroStateLayout.setVisibility(View.VISIBLE);
+                else
+                    mZeroStateLayout.setVisibility(View.GONE);
+            }
+        }
+        //  HANDLES PAGINATION REQUESTS
+        else {
+            Toast.makeText(getActivity(), "PAGE " + mPageNumber, Toast.LENGTH_SHORT).show();
+            int startIndex = mOldResponse.results.size(), totalItems = response.body().results.size();
+            mOldResponse.page = response.body().page;
+            mOldResponse.total_results = response.body().total_results;
+            mOldResponse.results.addAll(response.body().results);
+            mAdapter.setNewAPIResponse(mOldResponse);
+            mAdapter.notifyItemRangeInserted(startIndex, totalItems);
+        }
+
+        mProgressWheel.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
+        mAdapter.setLoaded();
+    }
+
+    @Override
+    public void onNetworkFailure(Call<TMDBCelebrityResponse> call, Throwable t) {
         mProgressWheel.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         if (getParentFragment() != null)
             ((AbstractTabFragment) getParentFragment()).showNetworkErrorSnackBar();
         else if (getActivity() instanceof AbstractSearchActivity)
             Utils.displayNetworkErrorSnackBar(getActivity().findViewById(R.id.coordinatorLayout), (AbstractSearchActivity) getActivity());
-
-        // Log.d("MMVOLLEY", volleyError.toString());
     }
-
-    @Override
-    public void onResponse(JSONObject jsonObject) {
-        try {
-            TMDBCelebrityResponse mNewResponse = (TMDBCelebrityResponse) super.jsonPojoDeserialization(jsonObject, TMDBCelebrityResponse.class);
-            // Log.d("MMVOLLEY", "total_pages: " + mNewResponse.total_pages + " total_results: " + mNewResponse.total_results);
-
-            //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
-            if (mOldResponse == null || mPageNumber == 1) {
-                mOldResponse = mNewResponse;
-                mAdapter.setNewAPIResponse(mOldResponse);
-                mAdapter.notifyDataSetChanged();
-
-                if (getActivity() instanceof AbstractSearchActivity) {
-                    if (mOldResponse.results.size() == 0)
-                        mZeroStateLayout.setVisibility(View.VISIBLE);
-                    else
-                        mZeroStateLayout.setVisibility(View.GONE);
-                }
-            }
-            //  HANDLES PAGINATION REQUESTS
-            else {
-                Toast.makeText(getActivity(), "PAGE " + mPageNumber, Toast.LENGTH_SHORT).show();
-                int startIndex = mOldResponse.results.size(), totalItems = mNewResponse.results.size();
-                mOldResponse.page = mNewResponse.page;
-                mOldResponse.total_results = mNewResponse.total_results;
-                mOldResponse.results.addAll(mNewResponse.results);
-                mAdapter.setNewAPIResponse(mOldResponse);
-                mAdapter.notifyItemRangeInserted(startIndex, totalItems);
-            }
-
-            mProgressWheel.setVisibility(View.GONE);
-            mSwipeRefreshLayout.setRefreshing(false);
-            mAdapter.setLoaded();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public void onLoadMore() {
@@ -144,7 +142,7 @@ public class CelebritiesFragment extends AbstractListFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mAdapter.setOnImageClickListener(null);
         mAdapter.setOnLoadMoreListener(null);
     }
+
 }

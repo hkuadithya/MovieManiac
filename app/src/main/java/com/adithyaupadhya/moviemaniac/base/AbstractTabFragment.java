@@ -23,18 +23,24 @@ import android.widget.Toast;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnFragmentBackPress;
 import com.adithyaupadhya.moviemaniac.navdrawer.NavigationActivity;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericSearchResults;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.NetworkFragment;
 import com.adithyaupadhya.searchmodule.MaterialSearchView;
 import com.adithyaupadhya.uimodule.slidingtabs.BaseSlidingTabs;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import retrofit2.Call;
+import retrofit2.Response;
+
 /**
  * Created by adithya.upadhya on 09-02-2016.
  */
-public abstract class AbstractTabFragment extends Fragment implements View.OnClickListener,
+public abstract class AbstractTabFragment extends NetworkFragment<TMDBGenericSearchResults> implements View.OnClickListener,
         ViewPager.OnPageChangeListener,
         MaterialSearchView.OnQueryTextListener,
         OnFragmentBackPress,
@@ -48,13 +54,11 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     private NavigationActivity mParentActivity;
     private WeakHashMap<Integer, Fragment> mFragmentMap;
 
-    public abstract List<Fragment> getViewPagerFragmentList();
+    protected abstract List<Fragment> getViewPagerFragmentList();
 
-    public abstract String[] getSearchAndToolbarTitle();
+    protected abstract String[] getSearchAndToolbarTitle();
 
-    public abstract int[] getTabDrawableIcon();
-
-    public abstract void searchQuerySubmission(String searchQuery);
+    protected abstract int[] getTabDrawableIcon();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +93,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
         slidingTabs.setViewPager(viewPager);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setOnSearchViewListener(this);
+
         return view;
     }
 
@@ -166,21 +171,6 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
 
 
     //-----------------------------------------------------------------------------------------------------
-    //          SEARCH VIEW QUERY HANDLER
-    //-----------------------------------------------------------------------------------------------------
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        searchQuerySubmission(query);
-        return true;
-    }
-
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
-    //-----------------------------------------------------------------------------------------------------
     //          SEARCH VIEW OPEN AND CLOSE HANDLER
     //-----------------------------------------------------------------------------------------------------
     @Override
@@ -211,7 +201,7 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
     private class ViewPagerAdapter extends FragmentStatePagerAdapter implements BaseSlidingTabs.IconTabProvider {
         private int[] mDrawableList;
 
-        public ViewPagerAdapter(FragmentManager fm) {
+        ViewPagerAdapter(FragmentManager fm) {
             super(fm);
             mDrawableList = getTabDrawableIcon();
         }
@@ -246,4 +236,44 @@ public abstract class AbstractTabFragment extends Fragment implements View.OnCli
         }
     }
 
+    //------------------------------------------------------------------------------------------------------
+    //          SEARCH SUGGESTIONS
+    //------------------------------------------------------------------------------------------------------
+
+    @Override
+    public void onNetworkResponse(Call<TMDBGenericSearchResults> call, Response<TMDBGenericSearchResults> response) {
+        HashSet<String> resultSet = new HashSet<>(7);
+        ArrayList<String> resultList = new ArrayList<>(5);
+
+        if (response.body().results != null) {
+            for (TMDBGenericSearchResults.Results result : response.body().results) {
+                if (!resultSet.contains(result.name)) {
+
+                    resultList.add(result.name);
+
+                    if (resultList.size() > 4) {
+                        break;
+                    }
+
+                    resultSet.add(result.name);
+                }
+            }
+
+            mSearchView.setNewSuggestions(resultList);
+        }
+    }
+
+    @Override
+    public void onNetworkFailure(Call<TMDBGenericSearchResults> call, Throwable t) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mSearchView.setOnQueryTextListener(null);
+        mSearchView.setOnSearchViewListener(null);
+        mParentActivity = null;
+    }
 }

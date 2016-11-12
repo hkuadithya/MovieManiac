@@ -16,19 +16,17 @@ import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
 import com.adithyaupadhya.uimodule.materialprogress.ProgressWheel;
-import com.android.volley.VolleyError;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TVSeriesFragment extends AbstractListFragment {
+public class TVSeriesFragment extends AbstractListFragment<TMDBTVSeriesResponse> {
     private RecyclerView mRecyclerView;
     private TVSeriesAdapter mAdapter;
     private ProgressWheel mProgressWheel;
@@ -57,7 +55,7 @@ public class TVSeriesFragment extends AbstractListFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new TVSeriesAdapter(getContext(), mRecyclerView, this, (OnImageClickListener) getActivity());
+        mAdapter = new TVSeriesAdapter(getContext(), mRecyclerView, this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -67,59 +65,61 @@ public class TVSeriesFragment extends AbstractListFragment {
 
     private void establishNetworkCall(int pageNumber) {
         mProgressWheel.setVisibility(View.VISIBLE);
-        super.volleyJsonObjectRequest(pageNumber, this);
+        switch (mApiType) {
+            case API_ON_THE_AIR_TV:
+                mApiClient.getOnTheAirTVSeries(pageNumber).enqueue(this);
+                break;
+
+            case API_POPULAR_TV:
+                mApiClient.getTopRatedTVSeries(pageNumber).enqueue(this);
+                break;
+
+            case API_SEARCH_TV:
+                mApiClient.getTVSearchResults(getArguments().getString(AppIntentConstants.QUERY_STRING), pageNumber).enqueue(this);
+                break;
+        }
     }
 
     @Override
-    public void onErrorResponse(VolleyError volleyError) {
+    public void onNetworkResponse(Call<TMDBTVSeriesResponse> call, Response<TMDBTVSeriesResponse> response) {
+        //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
+        if (mOldResponse == null || mPageNumber == 1) {
+            mOldResponse = response.body();
+            mAdapter.setNewAPIResponse(mOldResponse);
+            mAdapter.notifyDataSetChanged();
+
+            if (getActivity() instanceof AbstractSearchActivity) {
+                if (mOldResponse.results.size() == 0)
+                    mZeroStateLayout.setVisibility(View.VISIBLE);
+                else
+                    mZeroStateLayout.setVisibility(View.GONE);
+            }
+        }
+        //  HANDLES PAGINATION REQUESTS
+        else {
+            Toast.makeText(getActivity(), "PAGE " + mPageNumber, Toast.LENGTH_SHORT).show();
+            int startIndex = mOldResponse.results.size(), totalItems = response.body().results.size();
+            mOldResponse.page = response.body().page;
+            mOldResponse.total_results = response.body().total_results;
+            mOldResponse.results.addAll(response.body().results);
+            mAdapter.setNewAPIResponse(mOldResponse);
+            mAdapter.notifyItemRangeInserted(startIndex, totalItems);
+        }
+
+        mProgressWheel.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
+        mAdapter.setLoaded();
+    }
+
+    @Override
+    public void onNetworkFailure(Call<TMDBTVSeriesResponse> call, Throwable t) {
         mProgressWheel.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         if (getParentFragment() != null)
             ((AbstractTabFragment) getParentFragment()).showNetworkErrorSnackBar();
         else if (getActivity() instanceof AbstractSearchActivity)
             Utils.displayNetworkErrorSnackBar(getActivity().findViewById(R.id.coordinatorLayout), (AbstractSearchActivity) getActivity());
-
-        // Log.d("MMVOLLEY", volleyError.toString());
     }
-
-    @Override
-    public void onResponse(JSONObject jsonObject) {
-        try {
-            TMDBTVSeriesResponse mNewResponse = (TMDBTVSeriesResponse) super.jsonPojoDeserialization(jsonObject, TMDBTVSeriesResponse.class);
-            // Log.d("MMVOLLEY", "total_pages: " + mNewResponse.total_pages + " total_results: " + mNewResponse.total_results);
-
-            //  CALLED ON SWIPE TO REFRESH OR FIRST TIME LAUNCH
-            if (mOldResponse == null || mPageNumber == 1) {
-                mOldResponse = mNewResponse;
-                mAdapter.setNewAPIResponse(mOldResponse);
-                mAdapter.notifyDataSetChanged();
-
-                if (getActivity() instanceof AbstractSearchActivity) {
-                    if (mOldResponse.results.size() == 0)
-                        mZeroStateLayout.setVisibility(View.VISIBLE);
-                    else
-                        mZeroStateLayout.setVisibility(View.GONE);
-                }
-            }
-            //  HANDLES PAGINATION REQUESTS
-            else {
-                Toast.makeText(getActivity(), "PAGE " + mPageNumber, Toast.LENGTH_SHORT).show();
-                int startIndex = mOldResponse.results.size(), totalItems = mNewResponse.results.size();
-                mOldResponse.page = mNewResponse.page;
-                mOldResponse.total_results = mNewResponse.total_results;
-                mOldResponse.results.addAll(mNewResponse.results);
-                mAdapter.setNewAPIResponse(mOldResponse);
-                mAdapter.notifyItemRangeInserted(startIndex, totalItems);
-            }
-
-            mProgressWheel.setVisibility(View.GONE);
-            mSwipeRefreshLayout.setRefreshing(false);
-            mAdapter.setLoaded();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public void onLoadMore() {
@@ -142,4 +142,5 @@ public class TVSeriesFragment extends AbstractListFragment {
             establishNetworkCall(mPageNumber != 0 ? mPageNumber : ++mPageNumber);
         }
     }
+
 }

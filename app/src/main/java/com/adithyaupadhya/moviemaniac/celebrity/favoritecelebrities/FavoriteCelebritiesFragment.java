@@ -17,7 +17,6 @@ import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.base.interfaces.ZeroStateImageListener;
 
 /**
@@ -51,7 +50,6 @@ public class FavoriteCelebritiesFragment extends Fragment implements LoaderManag
         super.onActivityCreated(savedInstanceState);
         mCursorAdapter = new FavoriteCelebritiesAdapter(getContext(), null);
         mCursorAdapter.setZeroStateImageListener(this);
-        mCursorAdapter.setOnImageClickListener((OnImageClickListener) getActivity());
         mRecyclerView.setAdapter(mCursorAdapter);
     }
 
@@ -107,7 +105,6 @@ public class FavoriteCelebritiesFragment extends Fragment implements LoaderManag
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCursorAdapter.setOnImageClickListener(null);
         mCursorAdapter.setZeroStateImageListener(null);
     }
 }

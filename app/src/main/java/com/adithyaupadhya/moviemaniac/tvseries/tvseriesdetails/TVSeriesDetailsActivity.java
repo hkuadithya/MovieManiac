@@ -13,41 +13,32 @@ import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractDetailsActivity;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMovieTVCastResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSimilarCreditsVideosResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTrailerResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMovieTVCastResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVRecosCreditsVideosResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTrailerResponse;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 import com.adithyaupadhya.uimodule.applicationfont.RobotoTextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.List;
 
-public class TVSeriesDetailsActivity extends AbstractDetailsActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+import retrofit2.Call;
+
+public class TVSeriesDetailsActivity extends AbstractDetailsActivity<TMDBTVRecosCreditsVideosResponse> {
     private static final String SHARE_SUBJECT = "TV SERIES DETAILS";
     private TMDBTVSeriesResponse.Results results;
     private RecyclerView recyclerView;
     private RobotoTextView textViewBanner;
 
 
-    public static void startActivityIntent(Context context, TMDBTVSeriesResponse.Results results, int... intentFlags) {
+    public static void startActivityIntent(Context context, TMDBTVSeriesResponse.Results results) {
         Intent intent = new Intent(context, TVSeriesDetailsActivity.class);
         intent.putExtra(AppIntentConstants.TV_DETAILS, results);
-
-        for (int flag : intentFlags)
-            intent.addFlags(flag);
-
         context.startActivity(intent);
     }
 
@@ -71,12 +62,12 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity implements 
 
         mActionButton.setOnClickListener(this);
 
-        bindMovieData(findViewById(R.id.rooLinearLayout));
+        bindTVSeriesData(findViewById(R.id.rooLinearLayout));
 
     }
 
 
-    private void bindMovieData(View view) {
+    private void bindTVSeriesData(View view) {
         ((TextView) view.findViewById(R.id.textViewMovieTitle)).setText(results.name);
         ((TextView) view.findViewById(R.id.textViewDescription)).setText(results.overview);
         ((TextView) view.findViewById(R.id.textViewMovieGenre)).setText(APIConstants.getInstance().getTVGenreList(results.genre_ids, this));
@@ -97,14 +88,16 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity implements 
 
     @Override
     public void establishNetworkCall() {
-        VolleySingleton.getInstance(this)
-                .getVolleyRequestQueue()
-                .add(new CustomJsonObjectRequest(Request.Method.GET,
-                        NetworkConstants.TV_SERIES_SIMILAR_CREDITS_VIDEOS_URL.replaceFirst("tv_id", results.id.toString()),
-                        this, this, this));
+
+        RetrofitClient.getInstance()
+                .getNetworkClient()
+                .getTVSeriesDetails(results.id)
+                .enqueue(this);
+
     }
 
-    private void addRecyclerViewAdapter(List<TMDBTVSeriesResponse.Results> results) {
+    private void showRecommendations(List<TMDBTVSeriesResponse.Results> results) {
+        textViewBanner.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         ((TVSeriesSimilarAdapter) (recyclerView.getAdapter())).setSimilarTvSeriesResponse(results);
     }
@@ -139,68 +132,55 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity implements 
     }
 
     @Override
-    public void onErrorResponse(VolleyError volleyError) {
-        super.showNetworkErrorSnackbar();
-    }
+    public void onNetworkResponse(Call<TMDBTVRecosCreditsVideosResponse> call, retrofit2.Response<TMDBTVRecosCreditsVideosResponse> response) {
 
-    @Override
-    public void onResponse(JSONObject jsonObject) {
-        try {
-            TextView textViewMovieCast = (TextView) findViewById(R.id.textViewMovieCast);
-            View shareButton = findViewById(R.id.share_button);
-            Button viewTrailer = (Button) findViewById(R.id.view_trailer);
+        TextView textViewMovieCast = (TextView) findViewById(R.id.textViewMovieCast);
+        View shareButton = findViewById(R.id.share_button);
+        Button viewTrailer = (Button) findViewById(R.id.view_trailer);
 
-            TMDBTVSimilarCreditsVideosResponse response = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBTVSimilarCreditsVideosResponse.class);
+        // HANDLING TV SERIES CAST RESPONSE
+        List<TMDBMovieTVCastResponse.Cast> casts = response.body().credits.cast;
 
-            // HANDLING TV SERIES CAST RESPONSE
-            List<TMDBMovieTVCastResponse.Cast> casts = response.credits.cast;
-
-            StringBuilder sb = new StringBuilder();
-            if (casts != null) {
-                for (int i = 0; i < casts.size() && i < 5; i++)
-                    sb.append(Utils.toString(casts.get(i).name)).append(" as ").append(Utils.toString(casts.get(i).character)).append("\n");
-            }
-
-            if (sb.length() > 0)
-                sb.deleteCharAt(sb.length() - 1);
-
-            if (textViewMovieCast != null)
-                textViewMovieCast.setText(Utils.toString(sb));
-
-
-            //  HANDLE SIMILAR TV SERIES RESPONSE:
-            List<TMDBTVSeriesResponse.Results> similarResults = response.similar.results;
-            if (similarResults == null || similarResults.size() == 0) {
-                hideRecyclerView();
-            } else {
-                textViewBanner.setText("SIMILAR CONTENT (" + similarResults.size() + ")");
-                addRecyclerViewAdapter(similarResults);
-            }
-
-
-            //  HANDLE OPENING CREDITS VIDEO RESPONSE:
-            List<TMDBTrailerResponse.Results> results = response.videos.results;
-
-            if (results != null)
-                for (TMDBTrailerResponse.Results result : results) {
-                    if (result.key != null && result.site != null && result.type != null && result.site.equalsIgnoreCase("youtube")) {
-                        super.mYouTubeKey = result.key;
-                        if (viewTrailer != null) {
-                            viewTrailer.setText(result.type.toUpperCase());
-                            viewTrailer.setVisibility(View.VISIBLE);
-                        }
-                        break;
-                    }
-                }
-
-
-            if (shareButton != null)
-                shareButton.setVisibility(View.VISIBLE);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        StringBuilder sb = new StringBuilder();
+        if (casts != null) {
+            for (int i = 0; i < casts.size() && i < 5; i++)
+                sb.append(Utils.toString(casts.get(i).name)).append(" as ").append(Utils.toString(casts.get(i).character)).append("\n");
         }
+
+        if (sb.length() > 0)
+            sb.deleteCharAt(sb.length() - 1);
+
+        if (textViewMovieCast != null)
+            textViewMovieCast.setText(Utils.toString(sb));
+
+
+        //  HANDLE SIMILAR TV SERIES RESPONSE:
+        List<TMDBTVSeriesResponse.Results> similarResults = response.body().recommendations.results;
+        if (similarResults == null || similarResults.size() == 0) {
+            hideRecyclerView();
+        } else {
+            showRecommendations(similarResults);
+        }
+
+
+        //  HANDLE OPENING CREDITS VIDEO RESPONSE:
+        List<TMDBTrailerResponse.Results> results = response.body().videos.results;
+
+        if (results != null)
+            for (TMDBTrailerResponse.Results result : results) {
+                if (result.key != null && result.site != null && result.type != null && result.site.equalsIgnoreCase("youtube")) {
+                    super.mYouTubeKey = result.key;
+                    if (viewTrailer != null) {
+                        viewTrailer.setText(result.type.toUpperCase());
+                        viewTrailer.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                }
+            }
+
+
+        if (shareButton != null)
+            shareButton.setVisibility(View.VISIBLE);
     }
 
 }

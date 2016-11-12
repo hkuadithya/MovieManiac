@@ -13,13 +13,13 @@ import android.view.ViewAnimationUtils;
 /**
  * @author Miguel Catalan Bañuls
  */
-public class AnimationUtil {
+class AnimationUtil {
 
-    public static int ANIMATION_DURATION_SHORT = 150;
-    public static int ANIMATION_DURATION_MEDIUM = 400;
+    private static int ANIMATION_DURATION_SHORT = 150;
+    static int ANIMATION_DURATION_MEDIUM = 400;
     public static int ANIMATION_DURATION_LONG = 800;
 
-    public interface AnimationListener {
+    interface AnimationListener {
         /**
          * @return true to override parent. Else execute Parent method
          */
@@ -34,7 +34,7 @@ public class AnimationUtil {
         crossFadeViews(showView, hideView, ANIMATION_DURATION_SHORT);
     }
 
-    public static void crossFadeViews(View showView, final View hideView, int duration) {
+    private static void crossFadeViews(View showView, final View hideView, int duration) {
         fadeInView(showView, duration);
         fadeOutView(hideView, duration);
     }
@@ -43,11 +43,11 @@ public class AnimationUtil {
         fadeInView(view, ANIMATION_DURATION_SHORT);
     }
 
-    public static void fadeInView(View view, int duration) {
+    private static void fadeInView(View view, int duration) {
         fadeInView(view, duration, null);
     }
 
-    public static void fadeInView(View view, int duration, final AnimationListener listener) {
+    static void fadeInView(View view, int duration, final AnimationListener listener) {
         view.setVisibility(View.VISIBLE);
         view.setAlpha(0f);
         ViewPropertyAnimatorListener vpListener = null;
@@ -113,11 +113,11 @@ public class AnimationUtil {
         fadeOutView(view, ANIMATION_DURATION_SHORT);
     }
 
-    public static void fadeOutView(View view, int duration) {
+    private static void fadeOutView(View view, int duration) {
         fadeOutView(view, duration, null);
     }
 
-    public static void fadeOutView(View view, int duration, final AnimationListener listener) {
+    private static void fadeOutView(View view, int duration, final AnimationListener listener) {
         ViewCompat.animate(view).alpha(0f).setDuration(duration).setListener(new ViewPropertyAnimatorListener() {
             @Override
             public void onAnimationStart(View view) {

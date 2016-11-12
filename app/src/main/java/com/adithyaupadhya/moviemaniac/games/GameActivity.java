@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,35 +17,27 @@ import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBGenericGameResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBImageBackdropResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBImageProfileResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenericGameResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBImageResponse;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.NetworkActivity;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameActivity extends AppCompatActivity implements Response.ErrorListener,
-        Response.Listener<JSONObject>,
+import retrofit2.Call;
+import retrofit2.Response;
+
+public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
         View.OnClickListener,
         RadioGroup.OnCheckedChangeListener,
         MaterialDialog.SingleButtonCallback,
@@ -66,7 +57,7 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        Toast.makeText(GameActivity.this, "Loading Images. Please wait", Toast.LENGTH_SHORT).show();
+        Toast.makeText(GameActivity.this, R.string.game_loading_images, Toast.LENGTH_SHORT).show();
 
         currentIndex = getIntent().getIntExtra(AppIntentConstants.CURRENT_INDEX, 0);
 
@@ -74,22 +65,22 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ((TextView) (toolbar.findViewById(R.id.textViewHeading))).setText("Question " + (currentIndex + 1) + "/9");
+        ((TextView) (toolbar.findViewById(R.id.textViewHeading))).setText(getString(R.string.game_question_number, (currentIndex + 1)));
 
         imageView1 = (ImageView) findViewById(R.id.imageView1);
         imageView2 = (ImageView) findViewById(R.id.imageView2);
         mRadioGroupOptions = (RadioGroup) findViewById(R.id.radioGroupOptions);
 
         if (currentIndex < TOTAL_QUESTIONS / 3) {
-            ((TextView) (findViewById(R.id.textViewQuestion))).setText("Identify this Movie");
+            ((TextView) (findViewById(R.id.textViewQuestion))).setText(R.string.game_identify_movie);
             mDataList = getIntent().getParcelableArrayListExtra(AppIntentConstants.MOVIE_LIST);
             offset = 0;
         } else if (currentIndex < 2 * TOTAL_QUESTIONS / 3) {
-            ((TextView) (findViewById(R.id.textViewQuestion))).setText("Identify this TV Series");
+            ((TextView) (findViewById(R.id.textViewQuestion))).setText(R.string.game_identify_tv_series);
             mDataList = getIntent().getParcelableArrayListExtra(AppIntentConstants.TV_LIST);
             offset = TOTAL_QUESTIONS / 3;
         } else {
-            ((TextView) (findViewById(R.id.textViewQuestion))).setText("Identify this Celebrity");
+            ((TextView) (findViewById(R.id.textViewQuestion))).setText(R.string.game_identify_celebrity);
             mDataList = getIntent().getParcelableArrayListExtra(AppIntentConstants.CELEBRITY_LIST);
             offset = 2 * TOTAL_QUESTIONS / 3;
         }
@@ -114,44 +105,42 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         establishNetworkCall();
     }
 
-    public void establishNetworkCall() {
-        String url;
-        if (currentIndex < TOTAL_QUESTIONS / 3)
-            url = NetworkConstants.MOVIE_IMAGES.replaceFirst("movie_id", String.valueOf(mDataList.get(currentIndex - offset).id));
-        else if (currentIndex < 2 * TOTAL_QUESTIONS / 3)
-            url = NetworkConstants.TV_SERIES_IMAGES.replaceFirst("tv_id", String.valueOf(mDataList.get(currentIndex - offset).id));
-        else
-            url = NetworkConstants.CELEBRITY_IMAGES.replaceFirst("person_id", String.valueOf(mDataList.get(currentIndex - offset).id));
+    private void establishNetworkCall() {
+        RetrofitClient.APIClient apiClient = RetrofitClient.getInstance().getNetworkClient();
 
-        VolleySingleton.getInstance(this).getVolleyRequestQueue().add(new CustomJsonObjectRequest(Request.Method.GET, url, this, this, this));
+        if (currentIndex < TOTAL_QUESTIONS / 3)
+            apiClient.getMovieImages(mDataList.get(currentIndex - offset).id).enqueue(this);
+        else if (currentIndex < 2 * TOTAL_QUESTIONS / 3)
+            apiClient.getTVSeriesImages(mDataList.get(currentIndex - offset).id).enqueue(this);
+        else
+            apiClient.getCelebrityImages(mDataList.get(currentIndex - offset).id).enqueue(this);
+
     }
 
     @Override
-    public void onResponse(JSONObject jsonObject) {
-        // Log.d("MMVOLLEY", jsonObject.toString());
+    public void onNetworkResponse(Call<TMDBImageResponse> call, Response<TMDBImageResponse> response) {
+        List<TMDBImageResponse.Backdrop> imageList = response.body().backdrops;
 
-        List<TMDBImageBackdropResponse.Backdrop> imageList = null;
+        String baseImageUrl;
 
-        String baseImageUrl = null;
 
-        try {
-            if (currentIndex < 2 * TOTAL_QUESTIONS / 3) {
-                imageList = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBImageBackdropResponse.class).backdrops;
-                baseImageUrl = NetworkConstants.IMG_GAME_BACKDROP_URL;
-            } else {
-                imageList = APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBImageProfileResponse.class).profiles;
-                baseImageUrl = NetworkConstants.IMG_GAME_POSTER_URL;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (currentIndex < 2 * TOTAL_QUESTIONS / 3) {
+            baseImageUrl = NetworkConstants.IMG_GAME_BACKDROP_URL;
+        } else {
+            baseImageUrl = NetworkConstants.IMG_GAME_POSTER_URL;
         }
+
 
         if (imageList != null && imageList.size() > 0) {
             url1 = baseImageUrl + imageList.get(0).file_path;
 
             if (imageList.size() > 1)
                 url2 = baseImageUrl + imageList.get(1).file_path;
+        }
+
+        if (!Utils.isConnectedToInternet()) {
+            Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
+            return;
         }
 
         Glide.with(this)
@@ -166,7 +155,11 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
                 .error(R.drawable.not_found)
                 .listener(this)
                 .into(imageView2);
+    }
 
+    @Override
+    public void onNetworkFailure(Call<TMDBImageResponse> call, Throwable t) {
+        Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
     }
 
     private void handleSuccessOrErrorImageLoading() {
@@ -181,28 +174,34 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (checkedId > 0) {
+
             RadioButton radioButtonAnswer = (RadioButton) group.findViewById(checkedId);
+
             String answer = mDataList.get(currentIndex - offset).name;
 
-            try {
-                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(80);
-            } catch (Exception ignored) {
-
-            }
-
             if (radioButtonAnswer.getText().equals(answer)) {
+
+                GameMediaPlayer.getInstance().startPlaying(this);
+
                 radioButtonAnswer.setBackgroundColor(ContextCompat.getColor(this, R.color.gameCorrectAnswer));
+
                 int correctAnswers = getIntent().getIntExtra(AppIntentConstants.CORRECT_ANS_COUNT, 0);
+
                 getIntent().putExtra(AppIntentConstants.CORRECT_ANS_COUNT, correctAnswers + 1);
             } else {
+
+                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(80);
+
                 radioButtonAnswer.setBackgroundColor(ContextCompat.getColor(this, R.color.gameWrongAnswer));
             }
 
             Intent intent;
             if (currentIndex < TOTAL_QUESTIONS - 1) {
-                // FIRST TO LAST BUT ONE QUESTION
+                // FIRST TO (LAST-1)th  QUESTION
                 intent = new Intent(this, GameActivity.class);
+
                 intent.putExtras(getIntent());
+
                 intent.putExtra(AppIntentConstants.CURRENT_INDEX, getIntent().getIntExtra(AppIntentConstants.CURRENT_INDEX, 0) + 1);
             } else {
                 // THIS IS THE LAST QUESTION
@@ -213,11 +212,15 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
                 getIntent().removeExtra(AppIntentConstants.CELEBRITY_LIST);
 
                 intent = new Intent(this, GameSummaryActivity.class);
+
                 intent.putExtra(AppIntentConstants.CORRECT_ANS_COUNT, correctAnswers);
             }
             startActivity(intent);
+
             finish();
+
             overridePendingTransition(R.anim.enter_anim, R.anim.exit_anim);
+
         }
     }
 
@@ -225,6 +228,8 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
     @Override
     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
         super.onBackPressed();
+
+        GameMediaPlayer.getInstance().releaseResources();
         mDataList = null;
         getIntent().getExtras().clear();
     }
@@ -245,31 +250,29 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         establishNetworkCall();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);
-    }
 
     @Override
     public void onBackPressed() {
-        Utils.showGenericMaterilaDialog(this, this, "Do you wish to exit the game?", "All your game progress will be lost!");
+        Utils.showGenericMaterialDialog(this, this, R.string.game_exit_alert_popup, R.string.game_progress_lost_alert);
     }
-
 
     @Override
-    public void onErrorResponse(VolleyError volleyError) {
-        Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
-    }
+    protected void onStop() {
+        super.onStop();
 
+        RetrofitClient.getInstance().cancelAllRequests();
+    }
 
     @Override
     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+
         // Handling connection error
-        if (e != null && (e instanceof NoConnectionError || e.getCause() instanceof NoConnectionError || e.getCause() instanceof TimeoutError)) {
+
+        if (!Utils.isConnectedToInternet()) {
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
             return true;
         }
+
         handleSuccessOrErrorImageLoading();
 
         //  Handling invalid URL error
@@ -288,4 +291,6 @@ public class GameActivity extends AppCompatActivity implements Response.ErrorLis
         handleSuccessOrErrorImageLoading();
         return false;
     }
+
+
 }

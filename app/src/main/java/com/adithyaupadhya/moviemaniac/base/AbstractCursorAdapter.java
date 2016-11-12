@@ -18,7 +18,7 @@ public abstract class AbstractCursorAdapter<RecyclerVH extends RecyclerView.View
     private ZeroStateImageListener listener;
     private DataSetObserver mDataSetObserver;
 
-    public AbstractCursorAdapter(Cursor cursor) {
+    protected AbstractCursorAdapter(Cursor cursor) {
         mCursor = cursor;
         mDataValid = cursor != null;
         //mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
@@ -32,7 +32,7 @@ public abstract class AbstractCursorAdapter<RecyclerVH extends RecyclerView.View
         this.listener = listener;
     }
 
-    public Cursor getCursor() {
+    protected Cursor getCursor() {
         return mCursor;
     }
 
@@ -58,7 +58,7 @@ public abstract class AbstractCursorAdapter<RecyclerVH extends RecyclerView.View
         super.setHasStableIds(false);
     }
 
-    public abstract void onBindViewHolder(RecyclerVH recyclerVH, Cursor cursor);
+    protected abstract void onBindViewHolder(RecyclerVH recyclerVH, Cursor cursor);
 
     @Override
     public void onBindViewHolder(RecyclerVH recyclerVH, int position) {

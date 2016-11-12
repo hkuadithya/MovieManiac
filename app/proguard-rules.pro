@@ -24,12 +24,7 @@
   **[] $VALUES;
   public *;
 }
--keep class com.bumptech.glide.integration.volley.VolleyGlideModule
-
-
-# Volley proguard rules
--keep class com.android.volley.** { *; }
--keep interface com.android.volley.** { *; }
+-keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule
 
 
 # Proguard configuration for Jackson 2.x (fasterxml package instead of codehaus package)
@@ -40,9 +35,12 @@
 -keep class com.fasterxml.jackson.databind.ObjectWriter {
     public ** writeValueAsString(**);
 }
--dontwarn  com.fasterxml.jackson.databind.ext.**
+-dontwarn  com.fasterxml.jackson.databind.**
+-dontnote  com.fasterxml.jackson.databind.**
 
--keep class com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.** { *; }
+-keep class com.adithyaupadhya.newtorkmodule.volley.pojos.** { *; }
+
+
 
 # Proguard rules for material dialog
 -keepnames class com.afollestad.materialdialogs.** { *; }
@@ -55,3 +53,20 @@
 -keep  class * implements java.io.Serializable {
 	*;
 }
+
+
+# Proguard rules for OkHttp and Retrofit
+-dontnote retrofit2.Platform
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions
+
+-dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
+-dontwarn java.nio.file.**
+
+
+# Proguard rules for Crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**

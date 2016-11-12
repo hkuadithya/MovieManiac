@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:scrollbars="none">
+        android:scrollbars="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -21,7 +21,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
 
@@ -42,8 +45,7 @@
                         android:linksClickable="true"
                         android:text="@string/application_credits"
                         android:textColor="@android:color/black"
-                        android:textColorLink="#05c5cf"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:fontType="medium" />
 
                     <LinearLayout
@@ -73,16 +75,13 @@
 
 
                 <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
-                    android:id="@+id/buttonShareApp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
+                    android:id="@+id/buttonReportBugs"
+                    style="@style/shareButtonStyle"
                     android:layout_marginTop="15dp"
                     android:background="@color/app_material_blue"
-                    android:text="@string/share_this_app"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:visibility="visible" />
+                    android:drawableEnd="@drawable/vector_drawer_bug"
+                    android:drawableRight="@drawable/vector_drawer_bug"
+                    android:text="@string/report_bugs" />
 
             </LinearLayout>
 

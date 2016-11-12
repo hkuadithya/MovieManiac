@@ -5,11 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
@@ -17,10 +18,11 @@ import android.widget.Toast;
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBMoviesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBTVSeriesResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBMoviesResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -33,20 +35,20 @@ public class Utils {
         String content, title;
         Drawable icon;
         if (!isFavoriteItem) {
-            content = "Do you wish to add this item to your list of favourites?";
-            title = "Add to favourites";
-            icon = ContextCompat.getDrawable(context, R.drawable.vector_favorite);
+            content = context.getString(R.string.dialog_add_favorite_content);
+            title = context.getString(R.string.dialog_add_favorite_title);
+            icon = ContextCompat.getDrawable(context, R.drawable.vector_dialog_favorite);
         } else {
-            content = "Do you wish to remove this item from your list of favourites?";
-            title = "Remove from favourites";
+            content = context.getString(R.string.dialog_remove_favorite_content);
+            title = context.getString(R.string.dialog_remove_favorite_title);
             icon = ContextCompat.getDrawable(context, R.drawable.vector_dislike);
         }
 
         new MaterialDialog.Builder(context)
                 .title(title)
                 .content(content)
-                .positiveText("ACCEPT")
-                .negativeText("CANCEL")
+                .positiveText(context.getString(R.string.dialog_accept))
+                .negativeText(context.getString(R.string.dialog_cancel))
                 .icon(icon)
                 .positiveColor(ContextCompat.getColor(context, R.color.app_material_blue))
                 .negativeColor(ContextCompat.getColor(context, R.color.app_material_blue))
@@ -56,12 +58,13 @@ public class Utils {
 
     }
 
-    public static void showLogoutMaterialDialog(Context context, MaterialDialog.SingleButtonCallback listener) {
+    public static void showGenericMaterialDialog(Context context, MaterialDialog.SingleButtonCallback listener,
+                                                 @StringRes int titleRes, @StringRes int contentRes) {
         new MaterialDialog.Builder(context)
-                .title("Logout confirmation")
-                .content("Do you wish to Logout from this application?")
-                .positiveText("ACCEPT")
-                .negativeText("CANCEL")
+                .title(titleRes)
+                .content(contentRes)
+                .positiveText(R.string.dialog_accept)
+                .negativeText(R.string.dialog_cancel)
                 .positiveColor(ContextCompat.getColor(context, R.color.app_material_blue))
                 .negativeColor(ContextCompat.getColor(context, R.color.app_material_blue))
                 .onPositive(listener)
@@ -69,54 +72,14 @@ public class Utils {
                 .show();
     }
 
-    public static void showGenericMaterilaDialog(Context context, MaterialDialog.SingleButtonCallback listener, String title, String content) {
+    public static void showAppUpdateDialog(Context context) {
         new MaterialDialog.Builder(context)
-                .title(title)
-                .content(content)
-                .positiveText("ACCEPT")
-                .negativeText("CANCEL")
+                .title(R.string.dialog_app_update_title)
+                .items(R.array.dialog_app_update_content_array)
+                .positiveText(android.R.string.ok)
+                .canceledOnTouchOutside(false)
                 .positiveColor(ContextCompat.getColor(context, R.color.app_material_blue))
-                .negativeColor(ContextCompat.getColor(context, R.color.app_material_blue))
-                .onPositive(listener)
-                .build()
                 .show();
-    }
-
-    public static void insertOrDeleteFromDB(Context context, Uri uri, int itemId, Object detailsObject, boolean isFavoriteItem) {
-
-        String idColumn, detailsColumn, type, userId;
-        userId = AppPreferenceManager.getAppPreferenceInstance(context).getPreferenceData(DBConstants.USER_ID);
-
-        if (uri == DBConstants.MOVIE_TABLE_URI) {
-            idColumn = DBConstants.MOVIE_ID;
-            detailsColumn = DBConstants.MOVIE_DETAILS;
-            type = "movie";
-        } else if (uri == DBConstants.TVSERIES_TABLE_URI) {
-            idColumn = DBConstants.TVSERIES_ID;
-            detailsColumn = DBConstants.TVSERIES_DETAILS;
-            type = "tv series";
-        } else {
-            idColumn = DBConstants.CELEBRITY_ID;
-            detailsColumn = DBConstants.CELEBRITY_DETAILS;
-            type = "celebrity";
-        }
-
-
-        if (!isFavoriteItem) {
-            ContentValues values = new ContentValues();
-            values.put(DBConstants.USER_ID, userId);
-            values.put(idColumn, itemId);
-            try {
-                values.put(detailsColumn, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(detailsObject));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            context.getContentResolver().insert(uri, values);
-            Toast.makeText(context, "This " + type + " has been added to your favourites", Toast.LENGTH_SHORT).show();
-        } else {
-            context.getContentResolver().delete(uri, DBConstants.USER_ID + "=? AND " + idColumn + "=?", new String[]{userId, String.valueOf(itemId)});
-            Toast.makeText(context, "This " + type + " has been removed from your favourites", Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -128,9 +91,9 @@ public class Utils {
             ContentValues values = new ContentValues();
             values.put(DBConstants.USER_ID, userId);
             values.put(DBConstants.MOVIE_ID, results.id);
-            values.put(DBConstants.RELEASE_DATE, results.release_date);
+
             try {
-                values.put(DBConstants.MOVIE_DETAILS, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(results));
+                values.put(DBConstants.MOVIE_DETAILS, APIConstants.getInstance().getObjectMapper().writeValueAsString(results));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -144,6 +107,7 @@ public class Utils {
         }
     }
 
+
     public static void insertDeleteFromTVSeriesTable(Context context, TMDBTVSeriesResponse.Results results, boolean isFavoriteItem) {
 
         String userId = AppPreferenceManager.getAppPreferenceInstance(context).getPreferenceData(DBConstants.USER_ID);
@@ -153,7 +117,7 @@ public class Utils {
             values.put(DBConstants.USER_ID, userId);
             values.put(DBConstants.TVSERIES_ID, results.id);
             try {
-                values.put(DBConstants.TVSERIES_DETAILS, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(results));
+                values.put(DBConstants.TVSERIES_DETAILS, APIConstants.getInstance().getObjectMapper().writeValueAsString(results));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -167,6 +131,7 @@ public class Utils {
         }
     }
 
+
     public static void insertDeleteFromCelebritiesTable(Context context, TMDBCelebrityResponse.Results results, boolean isFavoriteItem) {
 
         String userId = AppPreferenceManager.getAppPreferenceInstance(context).getPreferenceData(DBConstants.USER_ID);
@@ -176,7 +141,7 @@ public class Utils {
             values.put(DBConstants.USER_ID, userId);
             values.put(DBConstants.CELEBRITY_ID, results.id);
             try {
-                values.put(DBConstants.CELEBRITY_DETAILS, APIConstants.getInstance().getJacksonObjectMapper().writeValueAsString(results));
+                values.put(DBConstants.CELEBRITY_DETAILS, APIConstants.getInstance().getObjectMapper().writeValueAsString(results));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -199,9 +164,20 @@ public class Utils {
                     .show();
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        NetworkInfo networkInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    public static boolean isConnectedToInternet() {
+//        NetworkInfo networkInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+//        return networkInfo != null && networkInfo.isConnected();
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process process = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            // Check if exit value == 0, exit status = 0 => success status...
+            return process.waitFor() == 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public static boolean isRecordFavoriteItem(Context context, Uri tableUri, String itemAttribute, int itemId) {
@@ -235,4 +211,11 @@ public class Utils {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
+    public static void showImageDialogFragment(Context context, String url) {
+        ImageDialogFragment dialogFragment = new ImageDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppIntentConstants.BUNDLE_URL, url);
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "ImageDialog");
+    }
 }

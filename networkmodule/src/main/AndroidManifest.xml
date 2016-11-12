@@ -6,7 +6,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
         <meta-data
-            android:name="com.bumptech.glide.integration.volley.VolleyGlideModule"
+            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
             android:value="GlideModule" />
     </application>
 

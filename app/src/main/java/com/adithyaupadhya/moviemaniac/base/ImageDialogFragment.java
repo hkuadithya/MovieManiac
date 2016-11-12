@@ -11,17 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ImageDialogFragment extends DialogFragment {
+public class ImageDialogFragment extends DialogFragment implements RequestListener<String, GlideDrawable>, View.OnClickListener {
+
+    private TextView mTextViewRetry;
+    private String mImageUrl;
+    private ImageView mImageViewPic;
+    private boolean mPreviousNetworkStatus;
 
     public ImageDialogFragment() {
         // Required empty public constructor
@@ -40,25 +49,63 @@ public class ImageDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_image_dialog, container, false);
+        mTextViewRetry = (TextView) view.findViewById(R.id.textViewRetry);
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.networkImageView);
-        imageView.requestLayout();
+        mImageViewPic = (ImageView) view.findViewById(R.id.networkImageView);
+        mImageViewPic.requestLayout();
 
         // 75% width of the screen taken by the image
-        imageView.getLayoutParams().width = (int) (APIConstants.getScreenWidthPixels(getContext()) * 0.75);
+        mImageViewPic.getLayoutParams().width = (int) (APIConstants.getScreenWidthPixels(getContext()) * 0.75);
         // height = 1.5 * width
-        imageView.getLayoutParams().height = (int) (imageView.getLayoutParams().width * 1.5);
+        mImageViewPic.getLayoutParams().height = (int) (mImageViewPic.getLayoutParams().width * 1.5);
 
-        String networkUrl = getArguments().getString(AppIntentConstants.BUNDLE_URL);
+        mImageUrl = getArguments().getString(AppIntentConstants.BUNDLE_URL);
 
-        Glide.with(this)
-                .load(NetworkConstants.IMG_BASE_DIALOG_POSTER_URL + networkUrl)
-                .placeholder(R.drawable.default_img)
-                .error(R.drawable.not_found)
-                .dontAnimate()
-                .into(imageView);
+        loadNetworkImage();
 
+        mTextViewRetry.setOnClickListener(this);
         return view;
     }
 
+    private void loadNetworkImage() {
+
+        mPreviousNetworkStatus = Utils.isConnectedToInternet();
+
+        Glide.with(this)
+                .load(NetworkConstants.IMG_BASE_DIALOG_POSTER_URL + mImageUrl)
+                .placeholder(R.drawable.default_img)
+                .error(R.drawable.not_found)
+                .dontAnimate()
+                .listener(this)
+                .into(mImageViewPic);
+
+    }
+
+    @Override
+    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+
+        // If network not available !!!
+        if (!mPreviousNetworkStatus || !Utils.isConnectedToInternet()) {
+            mTextViewRetry.setVisibility(View.VISIBLE);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+        mTextViewRetry.setVisibility(View.GONE);
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.textViewRetry:
+                loadNetworkImage();
+                mTextViewRetry.setVisibility(View.GONE);
+                break;
+        }
+    }
 }

@@ -5,110 +5,129 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/appGameSummaryBackground"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="20dp"
     tools:context="com.adithyaupadhya.moviemaniac.games.GameSummaryActivity">
 
-    <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thank you for playing!"
-        android:textColor="@android:color/white"
-        android:textSize="25sp"
-        app:fontType="bold" />
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:contentPadding="10dp">
+    <include layout="@layout/toolbar" />
 
-        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="YOUR SCORE"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            app:fontType="medium" />
-
-        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
-            android:id="@+id/textViewScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="9/9"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp"
-            app:fontType="medium" />
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:contentPadding="10dp">
-
-        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ACCOUNT HIGH SCORE"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            app:fontType="medium" />
-
-        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
-            android:id="@+id/textViewHighScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="9/9"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp"
-            app:fontType="medium" />
-    </android.support.v7.widget.CardView>
-
-    <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
-        android:id="@+id/returnToApplication"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:background="@color/app_material_blue"
-        android:text="Return to the application"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <com.facebook.share.widget.LikeView
-            android:id="@+id/facebookLikeView"
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp" />
+            android:text="@string/game_thank_you"
+            android:textColor="@android:color/white"
+            android:textSize="23sp"
+            app:fontType="bold" />
 
-        <com.google.android.gms.plus.PlusOneButton
-            android:id="@+id/googlePlusOneButton"
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="10dp">
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_your_score"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:fontType="medium" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                app:fontType="medium"
+                tools:text="9/9" />
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="10dp">
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/game_high_score"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:fontType="medium" />
+
+            <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
+                android:id="@+id/textViewHighScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                app:fontType="medium"
+                tools:text="9/9" />
+
+        </android.support.v7.widget.CardView>
+
+
+        <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginStart="80dp" />
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/game_like_google_fb"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:fontType="bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <com.facebook.share.widget.LikeView
+                android:id="@+id/facebookLikeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp" />
+
+
+            <com.google.android.gms.plus.PlusOneButton
+                android:id="@+id/googlePlusOneButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginStart="80dp" />
+
+
+        </LinearLayout>
 
 
     </LinearLayout>

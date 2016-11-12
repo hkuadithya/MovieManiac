@@ -177,7 +177,7 @@ public class BaseSlidingTabs extends HorizontalScrollView {
         this.delegatePageListener = listener;
     }
 
-    public void notifyDataSetChanged() {
+    private void notifyDataSetChanged() {
 
         tabsContainer.removeAllViews();
 

@@ -27,7 +27,7 @@ public class RobotoRadioButton extends RadioButton {
         initializeRobotRadioButton(context, attrs, defStyleAttr);
     }
 
-    public void initializeRobotRadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    private void initializeRobotRadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
         if (isInEditMode())
             return;
 

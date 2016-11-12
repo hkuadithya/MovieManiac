@@ -11,35 +11,26 @@ import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractDetailsActivity;
 import com.adithyaupadhya.moviemaniac.base.Utils;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.customjsonrequest.CustomJsonObjectRequest;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityBiodataResponse;
-import com.adithyaupadhya.newtorkmodule.volley.jacksonpojoclasses.TMDBCelebrityResponse;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityBiodataResponse;
+import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBCelebrityResponse;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.List;
 
-public class CelebrityDetailsActivity extends AbstractDetailsActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+import retrofit2.Call;
+import retrofit2.Response;
+
+public class CelebrityDetailsActivity extends AbstractDetailsActivity<TMDBCelebrityBiodataResponse> {
     private static final String SHARE_SUBJECT = "CELEBRITY DETAILS";
     private TMDBCelebrityBiodataResponse biodataResponse;
     private TMDBCelebrityResponse.Results results;
 
-    public static void startActivityIntent(Context context, TMDBCelebrityResponse.Results results, int... intentFlags) {
+    public static void startActivityIntent(Context context, TMDBCelebrityResponse.Results results) {
         Intent intent = new Intent(context, CelebrityDetailsActivity.class);
         intent.putExtra(AppIntentConstants.CELEB_DETAILS, results);
-        for (int flag : intentFlags)
-            intent.addFlags(flag);
-
         context.startActivity(intent);
     }
 
@@ -64,7 +55,7 @@ public class CelebrityDetailsActivity extends AbstractDetailsActivity implements
     }
 
 
-    private void bindMovieData(View view, TMDBCelebrityBiodataResponse results) {
+    private void bindCelebrityData(View view, TMDBCelebrityBiodataResponse results) {
         this.biodataResponse = results;
         view.findViewById(R.id.share_button).setVisibility(View.VISIBLE);
         ((TextView) view.findViewById(R.id.textViewCelebrityName)).setText(results.name);
@@ -102,24 +93,16 @@ public class CelebrityDetailsActivity extends AbstractDetailsActivity implements
 
     @Override
     public void establishNetworkCall() {
-        VolleySingleton.getInstance(this).getVolleyRequestQueue().add(
-                new CustomJsonObjectRequest(Request.Method.GET, NetworkConstants.CELEBRITY_BIODATA_BASE_URL.replaceFirst("person_id", String.valueOf(results.id)), this, this, this));
+        RetrofitClient.getInstance()
+                .getNetworkClient()
+                .getCelebrityDetails(results.id)
+                .enqueue(this);
     }
 
     @Override
-    public void onErrorResponse(VolleyError volleyError) {
-        super.showNetworkErrorSnackbar();
+    public void onNetworkResponse(Call<TMDBCelebrityBiodataResponse> call, Response<TMDBCelebrityBiodataResponse> response) {
+        bindCelebrityData(findViewById(R.id.rootLinearLayout), response.body());
     }
-
-    @Override
-    public void onResponse(JSONObject jsonObject) {
-        try {
-            bindMovieData(findViewById(R.id.rootLinearLayout), APIConstants.getInstance().getJacksonObjectMapper().readValue(jsonObject.toString(), TMDBCelebrityBiodataResponse.class));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public String retrieveShareSubject() {
@@ -144,4 +127,5 @@ public class CelebrityDetailsActivity extends AbstractDetailsActivity implements
         isFavoriteItem = !isFavoriteItem;
         mActionButton.setImageResource(isFavoriteItem ? R.drawable.vector_dislike : R.drawable.vector_favorite);
     }
+
 }

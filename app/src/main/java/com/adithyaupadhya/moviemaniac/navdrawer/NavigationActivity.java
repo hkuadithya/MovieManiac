@@ -2,7 +2,6 @@ package com.adithyaupadhya.moviemaniac.navdrawer;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -20,29 +19,29 @@ import android.widget.Toast;
 
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
+import com.adithyaupadhya.moviemaniac.BuildConfig;
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.moviemaniac.base.ImageDialogFragment;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnFragmentBackPress;
-import com.adithyaupadhya.moviemaniac.base.interfaces.OnImageClickListener;
 import com.adithyaupadhya.moviemaniac.celebrity.CelebrityLaunchFragment;
 import com.adithyaupadhya.moviemaniac.games.GameSplashScreenActivity;
 import com.adithyaupadhya.moviemaniac.login.SignInActivity;
 import com.adithyaupadhya.moviemaniac.movies.MovieLaunchFragment;
 import com.adithyaupadhya.moviemaniac.support.SupportDeveloperActivity;
 import com.adithyaupadhya.moviemaniac.tvseries.TVSeriesLaunchFragment;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.AppIntentConstants;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 
-public class NavigationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnImageClickListener, MaterialDialog.SingleButtonCallback {
+public class NavigationActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        MaterialDialog.SingleButtonCallback {
 
     private DrawerLayout mDrawerLayout;
     private FragmentManager mFragmentManager;
     private int mSelectedNavItem;
     private OnFragmentBackPress mBackPressListener;
+    private long mBackPressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +59,7 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
         View headerView = mNavigationView.getHeaderView(0);
-//        ImageView imageView = (ImageView) headerView.findViewById(R.id.circularImageView);
-//        imageView.setImageUrl(preferences.getPreferenceData(DBConstants.USER_PROFILE_PIC), VolleySingleton.getInstance().getVolleyImageLoader());
+
         Glide.with(this)
                 .load(preferences.getPreferenceData(DBConstants.USER_PROFILE_PIC))
                 .placeholder(R.drawable.vector_default_person)
@@ -76,22 +74,27 @@ public class NavigationActivity extends AppCompatActivity
             mSelectedNavItem = R.id.nav_movie;
             mFragmentManager.beginTransaction().add(R.id.fragment_container, new MovieLaunchFragment()).commit();
         }
+
+        if (preferences.getPreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG) == null) {
+            preferences.setPreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG, String.valueOf(BuildConfig.VERSION_CODE));
+            Utils.showAppUpdateDialog(this);
+        }
     }
 
 
     public void buildActivityDrawerAndToolbar(Toolbar toolbar) {
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                Glide.with(NavigationActivity.this)
-                        .load(AppPreferenceManager.getAppPreferenceInstance(NavigationActivity.this)
-                                .getPreferenceData(DBConstants.USER_PROFILE_PIC))
-                        .placeholder(R.drawable.vector_default_person)
-                        .dontAnimate()
-                        .into((ImageView) drawerView.findViewById(R.id.circularImageView));
-            }
-        };
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//            @Override
+//            public void onDrawerOpened(View drawerView) {
+//                super.onDrawerOpened(drawerView);
+//                Glide.with(NavigationActivity.this)
+//                        .load(AppPreferenceManager.getAppPreferenceInstance(NavigationActivity.this)
+//                                .getPreferenceData(DBConstants.USER_PROFILE_PIC))
+//                        .placeholder(R.drawable.vector_default_person)
+//                        .dontAnimate()
+//                        .into((ImageView) drawerView.findViewById(R.id.circularImageView));
+//            }
+//        };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
     }
@@ -131,36 +134,29 @@ public class NavigationActivity extends AppCompatActivity
                             startActivity(new Intent(NavigationActivity.this, SupportDeveloperActivity.class));
                             break;
 
-                        case R.id.nav_rateapp:
+                        case R.id.nav_share_app:
+                            resetPreviouslySelectedItem = true;
+                            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Movie Maniac Android Application");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.share_app_string));
+                            startActivity(Intent.createChooser(sharingIntent, "Share this app via"));
+                            break;
+
+                        case R.id.nav_rate_app:
                             resetPreviouslySelectedItem = true;
                             try {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
                             } catch (android.content.ActivityNotFoundException exception) {
                                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
-                            }
-                            break;
-
-                        case R.id.nav_bug:
-                            resetPreviouslySelectedItem = true;
-                            String personalDetails = "Manufacturer : " + Build.MANUFACTURER +
-                                    "\nDevice Model : " + Build.MODEL +
-                                    "\nAndroid OS version : " + Build.VERSION.RELEASE +
-                                    "\nSDK version : " + Build.VERSION.SDK_INT +
-                                    "\n\nPLEASE NOTE: Device data is used only for Debugging purposes. Your identity is completely safe :)" +
-                                    "\n++++++++++++++++++++++++++++++++++++++\n\n";
-
-                            try {
-                                Intent emailIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "developer.moviemaniac@gmail.com"));
-                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MovieManiac: Raise a bug / Request new features");
-                                emailIntent.putExtra(Intent.EXTRA_TEXT, personalDetails);
-                                startActivity(emailIntent);
-                            } catch (Exception exception) {
-                                Toast.makeText(NavigationActivity.this, "Error: No email client found in your device...", Toast.LENGTH_LONG).show();
+                            } catch (Exception e) {
+                                Toast.makeText(NavigationActivity.this, "Unable to launch Google Play Store...", Toast.LENGTH_SHORT).show();
                             }
                             break;
 
                         case R.id.nav_logout:
-                            Utils.showLogoutMaterialDialog(NavigationActivity.this, NavigationActivity.this);
+                            Utils.showGenericMaterialDialog(NavigationActivity.this, NavigationActivity.this,
+                                    R.string.dialog_logout_title, R.string.dialog_logout_content);
                             resetPreviouslySelectedItem = true;
                             break;
                     }
@@ -177,15 +173,6 @@ public class NavigationActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onImageClick(String url) {
-        ImageDialogFragment dialogFragment = new ImageDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppIntentConstants.BUNDLE_URL, url);
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(mFragmentManager, "ImageDialog");
-    }
-
     public void setOnFragmentBackPressListener(OnFragmentBackPress listener) {
         mBackPressListener = listener;
     }
@@ -197,8 +184,15 @@ public class NavigationActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         else if (mBackPressListener != null)
             mBackPressListener.handleFragmentSearchView();
-        else
-            super.onBackPressed();
+        else {
+            if (mBackPressedTime == 0 || System.currentTimeMillis() - mBackPressedTime >= 2500) {
+                mBackPressedTime = System.currentTimeMillis();
+                Toast.makeText(this, R.string.double_back_exit_app, Toast.LENGTH_SHORT).show();
+            } else {
+                super.onBackPressed();
+            }
+
+        }
     }
 
     @Override
@@ -215,4 +209,5 @@ public class NavigationActivity extends AppCompatActivity
         super.onDestroy();
         mBackPressListener = null;
     }
+
 }

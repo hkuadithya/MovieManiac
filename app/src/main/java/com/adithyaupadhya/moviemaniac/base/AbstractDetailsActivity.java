@@ -10,23 +10,28 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.adithyaupadhya.moviemaniac.R;
-import com.adithyaupadhya.newtorkmodule.volley.VolleySingleton;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.APIConstants;
-import com.adithyaupadhya.newtorkmodule.volley.networkconstants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.APIConstants;
+import com.adithyaupadhya.newtorkmodule.volley.constants.NetworkConstants;
+import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.NetworkActivity;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+
+import retrofit2.Call;
 
 /**
  * Created by adithya.upadhya on 07-01-2016.
  */
-public abstract class AbstractDetailsActivity extends AppCompatActivity implements View.OnClickListener, MaterialDialog.SingleButtonCallback {
+public abstract class AbstractDetailsActivity<APIResponseClass> extends NetworkActivity<APIResponseClass> implements
+        View.OnClickListener,
+        MaterialDialog.SingleButtonCallback {
+
     protected FloatingActionButton mActionButton;
     protected boolean isFavoriteItem;
     protected String mYouTubeKey;
@@ -57,7 +62,7 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
         Glide.with(this)
                 .load(NetworkConstants.IMG_BASE_BACKDROP_URL + imagePath)
                 .placeholder(R.drawable.backdrop_def_image)
-                .error(R.drawable.not_found)
+                .error(R.drawable.no_img_placeholder)
                 .dontAnimate()
                 .into(networkImageView);
 
@@ -68,11 +73,11 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
             findViewById(R.id.view_trailer).setOnClickListener(this);
     }
 
-    public abstract String retrieveShareSubject();
+    protected abstract String retrieveShareSubject();
 
-    public abstract String retrieveShareBody();
+    protected abstract String retrieveShareBody();
 
-    public abstract void establishNetworkCall();
+    protected abstract void establishNetworkCall();
 
     @Override
     public void onClick(View v) {
@@ -95,25 +100,26 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
 
             case R.id.view_trailer:
                 if (mYouTubeKey != null) {
-                    Intent intent;
+
                     try {
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + mYouTubeKey));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + mYouTubeKey)));
                     } catch (ActivityNotFoundException exception) {
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mYouTubeKey));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mYouTubeKey)));
+                    } catch (Exception exception) {
+                        Toast.makeText(this, "Unable to launch YouTube...", Toast.LENGTH_SHORT).show();
                     }
-                    startActivity(intent);
+
                 }
                 break;
 
             default:
                 // This is to handle SnackBar click event.
-                VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);
                 establishNetworkCall();
         }
     }
 
 
-    protected void showNetworkErrorSnackbar() {
+    private void showNetworkErrorSnackbar() {
         View view = findViewById(android.R.id.content);
         if (view != null) {
             Utils.displayNetworkErrorSnackBar(view, this);
@@ -127,9 +133,9 @@ public abstract class AbstractDetailsActivity extends AppCompatActivity implemen
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
-    protected void onStop() {
-        super.onStop();
-        VolleySingleton.getInstance(this).getVolleyRequestQueue().cancelAll(this);
+    public void onNetworkFailure(Call<APIResponseClass> call, Throwable t) {
+        showNetworkErrorSnackbar();
     }
 }
