@@ -96,7 +96,7 @@
         <com.adithyaupadhya.uimodule.applicationfont.RobotoTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/game_like_google_fb"
             android:textColor="@android:color/white"
@@ -107,7 +107,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:gravity="center"
             android:orientation="horizontal">
 

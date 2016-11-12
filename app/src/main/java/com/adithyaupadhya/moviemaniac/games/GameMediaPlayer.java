@@ -29,7 +29,7 @@ class GameMediaPlayer {
 
             mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.bell);
 
-            final int maxVolume = 100, requiredVolume = 15;
+            final int maxVolume = 100, requiredVolume = 20;
 
             float finalVolume = 1 - (float) (Math.log(maxVolume - requiredVolume) / Math.log(maxVolume));
 

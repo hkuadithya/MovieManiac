@@ -96,7 +96,8 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity<TMDBTVRecos
 
     }
 
-    private void addRecyclerViewAdapter(List<TMDBTVSeriesResponse.Results> results) {
+    private void showRecommendations(List<TMDBTVSeriesResponse.Results> results) {
+        textViewBanner.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         ((TVSeriesSimilarAdapter) (recyclerView.getAdapter())).setSimilarTvSeriesResponse(results);
     }
@@ -158,7 +159,7 @@ public class TVSeriesDetailsActivity extends AbstractDetailsActivity<TMDBTVRecos
         if (similarResults == null || similarResults.size() == 0) {
             hideRecyclerView();
         } else {
-            addRecyclerViewAdapter(similarResults);
+            showRecommendations(similarResults);
         }
 
 

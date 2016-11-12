@@ -92,7 +92,8 @@ public class MovieDetailsActivity extends AbstractDetailsActivity<TMDBMovieRecos
                 .enqueue(this);
     }
 
-    private void addRecyclerViewAdapter(List<TMDBMoviesResponse.Results> results) {
+    private void showRecommendations(List<TMDBMoviesResponse.Results> results) {
+        textViewBanner.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         ((MoviesSimilarAdapter) (recyclerView.getAdapter())).setSimilarMoviesResponse(results);
     }
@@ -156,7 +157,7 @@ public class MovieDetailsActivity extends AbstractDetailsActivity<TMDBMovieRecos
         if (similarResults == null || similarResults.size() == 0) {
             hideRecyclerView();
         } else {
-            addRecyclerViewAdapter(similarResults);
+            showRecommendations(similarResults);
         }
 
         //  HANDLING TRAILER AND VIDEOS
