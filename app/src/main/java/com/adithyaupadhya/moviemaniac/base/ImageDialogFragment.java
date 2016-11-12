@@ -95,6 +95,7 @@ public class ImageDialogFragment extends DialogFragment implements RequestListen
 
     @Override
     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+        mTextViewRetry.setVisibility(View.GONE);
         return false;
     }
 

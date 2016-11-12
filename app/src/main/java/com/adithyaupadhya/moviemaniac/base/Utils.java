@@ -77,6 +77,7 @@ public class Utils {
                 .title(R.string.dialog_app_update_title)
                 .items(R.array.dialog_app_update_content_array)
                 .positiveText(android.R.string.ok)
+                .canceledOnTouchOutside(false)
                 .positiveColor(ContextCompat.getColor(context, R.color.app_material_blue))
                 .show();
     }

@@ -17,7 +17,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -199,7 +198,7 @@ public class MaterialSearchView extends FrameLayout implements
                 // More than 3 characters and 500 ms should have elapsed
                 mOldTimestamp = System.currentTimeMillis();
                 mOnQueryChangeListener.onQueryTextChange(newText.toString());
-                Log.d("MMVOLLEY-", "Search API called");
+//                Log.d("MMVOLLEY-", "Search API called");
             }
         }
 

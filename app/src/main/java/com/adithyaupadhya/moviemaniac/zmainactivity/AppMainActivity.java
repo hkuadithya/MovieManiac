@@ -17,16 +17,16 @@ import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBGenreResponse;
 import com.adithyaupadhya.newtorkmodule.volley.retrofit.RetrofitClient;
 import com.adithyaupadhya.newtorkmodule.volley.retrofit.networkwrappers.CallbackWrapper;
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.util.HashMap;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
+
+//import com.squareup.leakcanary.LeakCanary;
 
 public class AppMainActivity extends AppCompatActivity implements View.OnClickListener {
     private boolean mMovieGenreLoaded, mTvGenreLoaded;
@@ -39,17 +39,19 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
 
         setContentView(R.layout.activity_app_main);
 
-        LeakCanary.install(this.getApplication());
+//        LeakCanary.install(this.getApplication());
 
-        Fabric.with(this, new Crashlytics.Builder()
-                .core(new CrashlyticsCore
-                        .Builder()
-                        .disabled(BuildConfig.DEBUG)
-                        .build())
-                .build());
+//        Fabric.with(this, new Crashlytics.Builder()
+//                .core(new CrashlyticsCore
+//                        .Builder()
+//                        .disabled(BuildConfig.DEBUG)
+//                        .build())
+//                .build());
+//        AlarmManagerUtils.createAlarmInstance(this);
+
+        Fabric.with(this, new Crashlytics());
 
         mApiClient = RetrofitClient.getInstance().getNetworkClient();
-        //AlarmManagerUtils.createAlarmInstance(this);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -64,7 +66,7 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
     private void checkFirstTimeLaunchOrUpdateFlag() {
         String verCode = mPrefManager.getPreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG);
 
-        if (verCode != null && Integer.parseInt(verCode) > BuildConfig.VERSION_CODE) {
+        if (verCode != null && BuildConfig.VERSION_CODE > Integer.parseInt(verCode)) {
             // New version has been installed...
             mPrefManager.removePreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG);
         }

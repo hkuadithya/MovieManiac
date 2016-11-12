@@ -145,7 +145,7 @@
     <string-array name="dialog_app_update_content_array">
         <item>\u2713 Improved Network performance</item>
         <item>\u2713 Search suggestions enabled</item>
-        <item>\u2713 A Card Image click opens a high resolution image</item>
+        <item>\u2713 Click on any card image to open a high resolution image</item>
         <item>\u2713 Minor GUI improvements</item>
     </string-array>
 

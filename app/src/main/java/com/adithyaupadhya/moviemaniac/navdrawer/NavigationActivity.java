@@ -83,18 +83,18 @@ public class NavigationActivity extends AppCompatActivity implements
 
 
     public void buildActivityDrawerAndToolbar(Toolbar toolbar) {
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                Glide.with(NavigationActivity.this)
-                        .load(AppPreferenceManager.getAppPreferenceInstance(NavigationActivity.this)
-                                .getPreferenceData(DBConstants.USER_PROFILE_PIC))
-                        .placeholder(R.drawable.vector_default_person)
-                        .dontAnimate()
-                        .into((ImageView) drawerView.findViewById(R.id.circularImageView));
-            }
-        };
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//            @Override
+//            public void onDrawerOpened(View drawerView) {
+//                super.onDrawerOpened(drawerView);
+//                Glide.with(NavigationActivity.this)
+//                        .load(AppPreferenceManager.getAppPreferenceInstance(NavigationActivity.this)
+//                                .getPreferenceData(DBConstants.USER_PROFILE_PIC))
+//                        .placeholder(R.drawable.vector_default_person)
+//                        .dontAnimate()
+//                        .into((ImageView) drawerView.findViewById(R.id.circularImageView));
+//            }
+//        };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
     }
@@ -155,7 +155,8 @@ public class NavigationActivity extends AppCompatActivity implements
                             break;
 
                         case R.id.nav_logout:
-                            Utils.showGenericMaterialDialog(NavigationActivity.this, null, R.string.dialog_logout_title, R.string.dialog_logout_content);
+                            Utils.showGenericMaterialDialog(NavigationActivity.this, NavigationActivity.this,
+                                    R.string.dialog_logout_title, R.string.dialog_logout_content);
                             resetPreviouslySelectedItem = true;
                             break;
                     }
