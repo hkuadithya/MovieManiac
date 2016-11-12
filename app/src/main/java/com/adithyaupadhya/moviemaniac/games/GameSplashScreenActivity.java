@@ -144,7 +144,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
 
     @Override
     public void onBackPressed() {
-        Utils.showGenericMaterilaDialog(this, this, "Game Exit confirmation!", "Do you wish to exit this game?");
+        Utils.showGenericMaterialDialog(this, this, R.string.dialog_game_exit_title, R.string.dialog_game_exit_content);
     }
 
     @Override
@@ -172,11 +172,21 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPendingList = null;
-        mMoviesList = mTVList = mCelebritiesList = null;
+    protected void onStop() {
+        super.onStop();
+
+        RetrofitClient.getInstance().cancelAllRequests();
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//
+//        mPendingList = null;
+//
+//        mMoviesList = mTVList = mCelebritiesList = null;
+//
+//    }
 
 
     //-----------------------------------------------------------------------------------------------------------
@@ -193,7 +203,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
         }
 
         @Override
-        public void onFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
             mPendingList.add(0);
 
             if (++mResponseCount >= TOTAL_REQUESTS)
@@ -216,7 +226,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
         }
 
         @Override
-        public void onFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
             mPendingList.add(1);
 
             if (++mResponseCount >= TOTAL_REQUESTS)
@@ -239,7 +249,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
         }
 
         @Override
-        public void onFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
             mPendingList.add(2);
 
             if (++mResponseCount >= TOTAL_REQUESTS)
@@ -264,7 +274,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
         }
 
         @Override
-        public void onFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
             mPendingList.add(3);
 
             if (++mResponseCount >= TOTAL_REQUESTS)
@@ -288,7 +298,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
         }
 
         @Override
-        public void onFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
             mPendingList.add(4);
 
             if (++mResponseCount >= TOTAL_REQUESTS)
@@ -313,7 +323,7 @@ public class GameSplashScreenActivity extends AppCompatActivity implements View.
         }
 
         @Override
-        public void onFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenericGameResponse> call, Throwable t) {
             mPendingList.add(5);
 
             if (++mResponseCount >= TOTAL_REQUESTS)

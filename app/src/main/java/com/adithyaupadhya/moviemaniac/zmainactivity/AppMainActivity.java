@@ -55,8 +55,19 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
 
         mPrefManager = AppPreferenceManager.getAppPreferenceInstance(this);
 
+        checkFirstTimeLaunchOrUpdateFlag();
+
         establishNetworkCall();
 
+    }
+
+    private void checkFirstTimeLaunchOrUpdateFlag() {
+        String verCode = mPrefManager.getPreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG);
+
+        if (verCode != null && Integer.parseInt(verCode) > BuildConfig.VERSION_CODE) {
+            // New version has been installed...
+            mPrefManager.removePreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG);
+        }
     }
 
 
@@ -110,7 +121,7 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
     private Callback<TMDBGenreResponse> movieGenreResponse = new CallbackWrapper<TMDBGenreResponse>() {
         @Override
         public void onNetworkResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
-            HashMap<Integer, String> movieMap = new HashMap<>(15);
+            HashMap<Integer, String> movieMap = new HashMap<>(26);
 
             //SparseArray<String> movieMap = new SparseArray<>(10);
 
@@ -134,7 +145,7 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
-        public void onFailure(Call<TMDBGenreResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenreResponse> call, Throwable t) {
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), AppMainActivity.this);
         }
     };
@@ -143,7 +154,7 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onNetworkResponse(Call<TMDBGenreResponse> call, retrofit2.Response<TMDBGenreResponse> response) {
 
-            HashMap<Integer, String> tvMap = new HashMap<>(15);
+            HashMap<Integer, String> tvMap = new HashMap<>(22);
             //SparseArray<String> tvMap = new SparseArray<>(10);
 
             for (TMDBGenreResponse.Genres genres : response.body().genres)
@@ -167,9 +178,14 @@ public class AppMainActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
-        public void onFailure(Call<TMDBGenreResponse> call, Throwable t) {
+        public void onNetworkFailure(Call<TMDBGenreResponse> call, Throwable t) {
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), AppMainActivity.this);
         }
     };
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RetrofitClient.getInstance().cancelAllRequests();
+    }
 }

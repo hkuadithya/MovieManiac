@@ -264,7 +264,7 @@ public abstract class AbstractTabFragment extends NetworkFragment<TMDBGenericSea
     }
 
     @Override
-    public void onFailure(Call<TMDBGenericSearchResults> call, Throwable t) {
+    public void onNetworkFailure(Call<TMDBGenericSearchResults> call, Throwable t) {
 
     }
 

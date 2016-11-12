@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:scrollbars="none">
+        android:scrollbars="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -21,7 +21,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
 
 
@@ -72,8 +75,8 @@
 
 
                 <com.adithyaupadhya.uimodule.applicationfont.RobotoButton
-                    style="@style/shareButtonStyle"
                     android:id="@+id/buttonReportBugs"
+                    style="@style/shareButtonStyle"
                     android:layout_marginTop="15dp"
                     android:background="@color/app_material_blue"
                     android:drawableEnd="@drawable/vector_drawer_bug"

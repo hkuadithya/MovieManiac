@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.AbstractListFragment;
 import com.adithyaupadhya.moviemaniac.base.AbstractSearchActivity;
+import com.adithyaupadhya.moviemaniac.base.AbstractTabFragment;
+import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.newtorkmodule.volley.constants.AppIntentConstants;
 import com.adithyaupadhya.newtorkmodule.volley.pojos.TMDBTVSeriesResponse;
 import com.adithyaupadhya.uimodule.materialprogress.ProgressWheel;
@@ -110,8 +112,13 @@ public class TVSeriesFragment extends AbstractListFragment<TMDBTVSeriesResponse>
     }
 
     @Override
-    public void onFailure(Call<TMDBTVSeriesResponse> call, Throwable t) {
-
+    public void onNetworkFailure(Call<TMDBTVSeriesResponse> call, Throwable t) {
+        mProgressWheel.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
+        if (getParentFragment() != null)
+            ((AbstractTabFragment) getParentFragment()).showNetworkErrorSnackBar();
+        else if (getActivity() instanceof AbstractSearchActivity)
+            Utils.displayNetworkErrorSnackBar(getActivity().findViewById(R.id.coordinatorLayout), (AbstractSearchActivity) getActivity());
     }
 
     @Override

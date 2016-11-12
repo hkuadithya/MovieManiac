@@ -2,7 +2,6 @@ package com.adithyaupadhya.moviemaniac.games;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -53,9 +52,6 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
     private String url1, url2;
     private RadioGroup mRadioGroupOptions;
     private List<TMDBGenericGameResponse.Results> mDataList;
-    private MediaPlayer mediaPlayer;
-
-    private boolean mPreviousNetworkStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +103,6 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
         super.onResume();
         successImageCount = 0;
         establishNetworkCall();
-        mediaPlayer = MediaPlayer.create(this, R.raw.bell);
     }
 
     private void establishNetworkCall() {
@@ -143,7 +138,10 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
                 url2 = baseImageUrl + imageList.get(1).file_path;
         }
 
-        mPreviousNetworkStatus = Utils.isConnectedToInternet();
+        if (!Utils.isConnectedToInternet()) {
+            Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
+            return;
+        }
 
         Glide.with(this)
                 .load(url1)
@@ -160,7 +158,7 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
     }
 
     @Override
-    public void onFailure(Call<TMDBImageResponse> call, Throwable t) {
+    public void onNetworkFailure(Call<TMDBImageResponse> call, Throwable t) {
         Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
     }
 
@@ -176,11 +174,14 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (checkedId > 0) {
+
             RadioButton radioButtonAnswer = (RadioButton) group.findViewById(checkedId);
+
             String answer = mDataList.get(currentIndex - offset).name;
 
             if (radioButtonAnswer.getText().equals(answer)) {
-                mediaPlayer.start();
+
+                GameMediaPlayer.getInstance().startPlaying(this);
 
                 radioButtonAnswer.setBackgroundColor(ContextCompat.getColor(this, R.color.gameCorrectAnswer));
 
@@ -196,7 +197,7 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
 
             Intent intent;
             if (currentIndex < TOTAL_QUESTIONS - 1) {
-                // FIRST TO LAST BUT ONE QUESTION
+                // FIRST TO (LAST-1)th  QUESTION
                 intent = new Intent(this, GameActivity.class);
 
                 intent.putExtras(getIntent());
@@ -220,7 +221,6 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
 
             overridePendingTransition(R.anim.enter_anim, R.anim.exit_anim);
 
-            //mediaPlayer.release();
         }
     }
 
@@ -228,6 +228,8 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
     @Override
     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
         super.onBackPressed();
+
+        GameMediaPlayer.getInstance().releaseResources();
         mDataList = null;
         getIntent().getExtras().clear();
     }
@@ -251,7 +253,14 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
 
     @Override
     public void onBackPressed() {
-        Utils.showGenericMaterilaDialog(this, this, "Do you wish to exit the game?", "All your game progress will be lost!");
+        Utils.showGenericMaterialDialog(this, this, R.string.game_exit_alert_popup, R.string.game_progress_lost_alert);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        RetrofitClient.getInstance().cancelAllRequests();
     }
 
     @Override
@@ -259,7 +268,7 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
 
         // Handling connection error
 
-        if (!mPreviousNetworkStatus || !Utils.isConnectedToInternet()) {
+        if (!Utils.isConnectedToInternet()) {
             Utils.displayNetworkErrorSnackBar(findViewById(android.R.id.content), this);
             return true;
         }
@@ -282,5 +291,6 @@ public class GameActivity extends NetworkActivity<TMDBImageResponse> implements
         handleSuccessOrErrorImageLoading();
         return false;
     }
+
 
 }

@@ -112,7 +112,7 @@ public class MoviesFragment extends AbstractListFragment<TMDBMoviesResponse> {
     }
 
     @Override
-    public void onFailure(Call<TMDBMoviesResponse> call, Throwable t) {
+    public void onNetworkFailure(Call<TMDBMoviesResponse> call, Throwable t) {
         mProgressWheel.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         if (getParentFragment() != null)

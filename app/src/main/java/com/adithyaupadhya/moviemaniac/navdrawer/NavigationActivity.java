@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.adithyaupadhya.database.DBConstants;
 import com.adithyaupadhya.database.sharedpref.AppPreferenceManager;
+import com.adithyaupadhya.moviemaniac.BuildConfig;
 import com.adithyaupadhya.moviemaniac.R;
 import com.adithyaupadhya.moviemaniac.base.Utils;
 import com.adithyaupadhya.moviemaniac.base.interfaces.OnFragmentBackPress;
@@ -72,6 +73,11 @@ public class NavigationActivity extends AppCompatActivity implements
         if (!isRelaunch) {
             mSelectedNavItem = R.id.nav_movie;
             mFragmentManager.beginTransaction().add(R.id.fragment_container, new MovieLaunchFragment()).commit();
+        }
+
+        if (preferences.getPreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG) == null) {
+            preferences.setPreferenceData(DBConstants.UPDATE_FIRST_LAUNCH_VER_CODE_FLAG, String.valueOf(BuildConfig.VERSION_CODE));
+            Utils.showAppUpdateDialog(this);
         }
     }
 
@@ -149,7 +155,7 @@ public class NavigationActivity extends AppCompatActivity implements
                             break;
 
                         case R.id.nav_logout:
-                            Utils.showLogoutMaterialDialog(NavigationActivity.this, NavigationActivity.this);
+                            Utils.showGenericMaterialDialog(NavigationActivity.this, null, R.string.dialog_logout_title, R.string.dialog_logout_content);
                             resetPreviouslySelectedItem = true;
                             break;
                     }

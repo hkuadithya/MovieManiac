@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -34,20 +35,20 @@ public class Utils {
         String content, title;
         Drawable icon;
         if (!isFavoriteItem) {
-            content = "Do you wish to add this item to your list of favourites?";
-            title = "Add to favourites";
+            content = context.getString(R.string.dialog_add_favorite_content);
+            title = context.getString(R.string.dialog_add_favorite_title);
             icon = ContextCompat.getDrawable(context, R.drawable.vector_dialog_favorite);
         } else {
-            content = "Do you wish to remove this item from your list of favourites?";
-            title = "Remove from favourites";
+            content = context.getString(R.string.dialog_remove_favorite_content);
+            title = context.getString(R.string.dialog_remove_favorite_title);
             icon = ContextCompat.getDrawable(context, R.drawable.vector_dislike);
         }
 
         new MaterialDialog.Builder(context)
                 .title(title)
                 .content(content)
-                .positiveText("ACCEPT")
-                .negativeText("CANCEL")
+                .positiveText(context.getString(R.string.dialog_accept))
+                .negativeText(context.getString(R.string.dialog_cancel))
                 .icon(icon)
                 .positiveColor(ContextCompat.getColor(context, R.color.app_material_blue))
                 .negativeColor(ContextCompat.getColor(context, R.color.app_material_blue))
@@ -57,12 +58,13 @@ public class Utils {
 
     }
 
-    public static void showLogoutMaterialDialog(Context context, MaterialDialog.SingleButtonCallback listener) {
+    public static void showGenericMaterialDialog(Context context, MaterialDialog.SingleButtonCallback listener,
+                                                 @StringRes int titleRes, @StringRes int contentRes) {
         new MaterialDialog.Builder(context)
-                .title("Logout confirmation")
-                .content("Do you wish to Logout from this application?")
-                .positiveText("ACCEPT")
-                .negativeText("CANCEL")
+                .title(titleRes)
+                .content(contentRes)
+                .positiveText(R.string.dialog_accept)
+                .negativeText(R.string.dialog_cancel)
                 .positiveColor(ContextCompat.getColor(context, R.color.app_material_blue))
                 .negativeColor(ContextCompat.getColor(context, R.color.app_material_blue))
                 .onPositive(listener)
@@ -70,16 +72,12 @@ public class Utils {
                 .show();
     }
 
-    public static void showGenericMaterilaDialog(Context context, MaterialDialog.SingleButtonCallback listener, String title, String content) {
+    public static void showAppUpdateDialog(Context context) {
         new MaterialDialog.Builder(context)
-                .title(title)
-                .content(content)
-                .positiveText("ACCEPT")
-                .negativeText("CANCEL")
+                .title(R.string.dialog_app_update_title)
+                .items(R.array.dialog_app_update_content_array)
+                .positiveText(android.R.string.ok)
                 .positiveColor(ContextCompat.getColor(context, R.color.app_material_blue))
-                .negativeColor(ContextCompat.getColor(context, R.color.app_material_blue))
-                .onPositive(listener)
-                .build()
                 .show();
     }
 

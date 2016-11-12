@@ -135,7 +135,7 @@ public abstract class AbstractDetailsActivity<APIResponseClass> extends NetworkA
 
 
     @Override
-    public void onFailure(Call<APIResponseClass> call, Throwable t) {
+    public void onNetworkFailure(Call<APIResponseClass> call, Throwable t) {
         showNetworkErrorSnackbar();
     }
 }

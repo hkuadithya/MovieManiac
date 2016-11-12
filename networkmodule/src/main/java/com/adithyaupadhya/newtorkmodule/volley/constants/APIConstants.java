@@ -20,7 +20,7 @@ import java.util.List;
  * Created by adithya.upadhya on 19-01-2016.
  */
 public class APIConstants {
-    private static APIConstants mInstance = new APIConstants();
+    private static final APIConstants mInstance = new APIConstants();
     private HashMap<Integer, String> mMovieGenre, mTVGenre;
     private HashMap<String, Integer> mCountryLanguageMap;
     private final ObjectMapper mObjectMapper;

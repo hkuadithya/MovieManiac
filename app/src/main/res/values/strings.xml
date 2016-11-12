@@ -41,6 +41,16 @@
         \nAdithya H K Upadhya
     </string>
 
+    <string name="report_bugs_email_subject">MovieManiac: Raise a bug / Request new features</string>
+
+    <string name="report_bugs_email_body">
+        Manufacturer : %1$s
+        \nDevice Model : %2$s
+        \nAndroid OS version : %3$s
+        \nSDK version : %4$s
+        \n\nPLEASE NOTE: Device data is used only for Debugging purposes. Your identity is completely safe. \n\n\n
+    </string>
+
     <string name="report_bugs">REPORT BUGS</string>
 
     <string name="share_app_string">Hey There…
@@ -64,15 +74,19 @@
     <string name="game_identify_movie">Identify this Movie</string>
     <string name="game_identify_tv_series">Identify this TV Series</string>
     <string name="game_identify_celebrity">Identify this Celebrity</string>
-    <string name="game_thank_you">Thank you for playing!</string>
+    <string name="game_thank_you">Thank you for playing</string>
     <string name="game_your_score">YOUR SCORE</string>
-    <string name="game_high_score">HIGH SCORE</string>
+    <string name="game_high_score">YOUR HIGH SCORE</string>
     <string name="game_return">RETURN TO THE APP</string>
     <string name="game_please_wait">LOADING GAME. PLEASE WAIT…</string>
     <string name="game_begin">LET\'S HAVE FUN!</string>
     <string name="game_score_value">%1$s/9</string>
     <string name="game_loading_images">Loading Images. Please wait</string>
     <string name="game_question_number">Question %1$d/9</string>
+    <string name="game_like_google_fb">Support us by liking us on Google &amp; Facebook</string>
+    <string name="game_toolbar_title_summary">Game Summary</string>
+    <string name="game_exit_alert_popup">Do you wish to exit the game?</string>
+    <string name="game_progress_lost_alert">All your game progress will be lost!</string>
 
 
     <string name="nav_movies">Movies</string>
@@ -110,14 +124,36 @@
     <string name="zerostate_search_instructions">Try entering a different keyword\nfor your search</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="double_back_exit_app">Press back once again to exit Movie Maniac</string>
+
     <string name="toast_net_error_check_conn">Network Error! Please check your internet connection…</string>
     <string name="toast_google_auth_failure">Google Authentication Failed! Please try again</string>
+    <string name="toast_no_email_app_found">Error: No email application found in your device…</string>
+
+
+    <string name="dialog_accept">Accept</string>
+    <string name="dialog_cancel">@android:string/cancel</string>
+    <string name="dialog_logout_title">Logout confirmation</string>
+    <string name="dialog_logout_content">Do you wish to Logout from this application?</string>
+    <string name="dialog_game_exit_title">Game Exit confirmation!</string>
+    <string name="dialog_game_exit_content">Do you wish to exit this game?</string>
+    <string name="dialog_add_favorite_title">Add to favourites</string>
+    <string name="dialog_add_favorite_content">Do you wish to add this item to your list of favourites?</string>
+    <string name="dialog_remove_favorite_title">Remove from favourites</string>
+    <string name="dialog_remove_favorite_content">Do you wish to remove this item from your list of favourites?</string>
+    <string name="dialog_app_update_title">Update v1.1</string>
+
+    <string-array name="dialog_app_update_content_array">
+        <item>\u2713 Improved Network performance</item>
+        <item>\u2713 Search suggestions enabled</item>
+        <item>\u2713 A Card Image click opens a high resolution image</item>
+        <item>\u2713 Minor GUI improvements</item>
+    </string-array>
 
     <string-array name="movie_toolbar_hint_array">
         <item>Upcoming Movies</item>
         <item>Popular Movies</item>
         <item>My Favourites</item>
-        <item>Search for movies…</item>
+        <item>Search for Movies…</item>
     </string-array>
 
     <string-array name="tv_toolbar_hint_array">
@@ -130,7 +166,7 @@
     <string-array name="celeb_toolbar_hint_array">
         <item>Popular Celebrities</item>
         <item>My Favourites</item>
-        <item>Search for celebrities…</item>
+        <item>Search for Celebrities…</item>
     </string-array>
 
 

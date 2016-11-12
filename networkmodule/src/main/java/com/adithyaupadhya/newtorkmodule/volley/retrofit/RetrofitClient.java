@@ -33,22 +33,22 @@ import retrofit2.http.Query;
  */
 public class RetrofitClient implements Interceptor {
 
-    private static RetrofitClient mRetrofitClientInstance = new RetrofitClient();
+    private static final RetrofitClient mRetrofitClientInstance = new RetrofitClient();
     private APIClient mApiClient;
+    private OkHttpClient mOkHttpClient;
 
     private RetrofitClient() {
 
-        OkHttpClient okHttpClient = new OkHttpClient
+        mOkHttpClient = new OkHttpClient
                 .Builder()
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(this)
                 .build();
 
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(NetworkConstants.NETWORK_BASE_URL)
                 .addConverterFactory(JacksonConverterFactory.create(APIConstants.getInstance().getObjectMapper()))
-                .client(okHttpClient)
+                .client(mOkHttpClient)
                 .build();
 
         mApiClient = retrofit.create(APIClient.class);
@@ -83,6 +83,9 @@ public class RetrofitClient implements Interceptor {
         return mApiClient;
     }
 
+    public void cancelAllRequests() {
+        mOkHttpClient.dispatcher().cancelAll();
+    }
 
     public interface APIClient {
 

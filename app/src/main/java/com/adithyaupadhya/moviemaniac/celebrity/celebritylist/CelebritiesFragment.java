@@ -108,7 +108,7 @@ public class CelebritiesFragment extends AbstractListFragment<TMDBCelebrityRespo
     }
 
     @Override
-    public void onFailure(Call<TMDBCelebrityResponse> call, Throwable t) {
+    public void onNetworkFailure(Call<TMDBCelebrityResponse> call, Throwable t) {
         mProgressWheel.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(false);
         if (getParentFragment() != null)
