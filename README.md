@@ -8,7 +8,7 @@ Movie Maniac currently consists of features pertaining to movies, tv series, cel
 - Minor GUI improvements
 - Better network performance
 - Search suggestions in Movies, TVSeries & Celebrities
-- Click on the card image to load a high res Image
+- Click on the card image to load a high resolution Image
 - Minor bug fixes
 
 <a href="https://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac&hl=en"><h3>Download from play store Now</h3></a>
