@@ -1,30 +1,40 @@
 # Movie Maniac
 
-Movie Maniac is an open source Android project powered by [TMDb](https://www.themoviedb.org/) APIs.<br/>
+Movie Maniac is an open source Android project powered by the [TMDb](https://www.themoviedb.org/) APIs.<br/>
 I strive to keep it in an active state of development. Your suggestions for improvements and feedback are most welcome.<br/>
-Movie Maniac currently consists of features pertaining to movies, tv series, celebrities and game.
+Movie Maniac currently consists of features pertaining to movies, tv series, celebrities and game.<br/>
+
+<h3>Release v1.1 is now out on Play store</h3>
+- Minor GUI improvements
+- Better network performance
+- Search suggestions in Movies, TVSeries & Celebrities
+- Click on the card image to load a high res Image
+- Minor bug fixes
+
+<a href="https://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac&hl=en"><h3>Download from play store Now</h3></a>
 
 ![Movie Maniac App logo](app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 
-## Background Screen
+## Background Overlay Screen
 <img src="app/src/main/res/drawable/app_background.jpg" align="middle" width="300" height="450"/>
+
 
 ## Getting Started
 
-If you wish to get this project up and running, you'll need to follow these steps:
+To get this project up and running, please follow these steps...
 
-1. Download Google Android Studio
-2. Create a TMDb account and register for an [API key](https://www.themoviedb.org/documentation/api)
-3. Insert the API key in the NetworkConstants.java file
-4. Run the project from Android Studio
+1. Create a TMDb account and register for an [API key](https://www.themoviedb.org/documentation/api)
+2. Insert your developer API key in the NetworkConstants.java(networkmodule/src/main/java/com/adithyaupadhya/newtorkmodule/volley/constants/NetworkConstants.java) file
+3. Run the project from Android Studio
 
 ## Powered by these open source projects
 
 1. [Jackson Databind, Jackson Annotations](https://github.com/FasterXML)
-2. [Android Volley](https://github.com/mcxiaoke/android-volley)
-3. [Glide Image Library](https://github.com/bumptech/glide)
-4. [Materialish Progress](https://github.com/pnikosis/materialish-progress)
-5. [Pager Sliding Tab Strip](https://github.com/astuetz/PagerSlidingTabStrip)
+2. [Square Retrofit](https://github.com/square/retrofit)
+3. [OkHttp](https://github.com/square/okhttp)
+4. [Glide Image Library](https://github.com/bumptech/glide)
+5. [Materialish Progress](https://github.com/pnikosis/materialish-progress)
+6. [Pager Sliding Tab Strip](https://github.com/astuetz/PagerSlidingTabStrip)
 
 ## Authors
 
