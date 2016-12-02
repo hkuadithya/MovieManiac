@@ -23,9 +23,9 @@ Movie Maniac currently consists of features pertaining to movies, tv series, cel
 
 To get this project up and running, please follow these steps...
 
-1. Create a TMDb account and register for an [API key](https://www.themoviedb.org/documentation/api)
-2. Insert your developer API key in the NetworkConstants.java(networkmodule/src/main/java/com/adithyaupadhya/newtorkmodule/volley/constants/NetworkConstants.java) file
-3. Run the project from Android Studio
+1. Create a TMDb account and register for an [API key](https://www.themoviedb.org/documentation/api). <br/>This project will not work without your private API key.
+2. Insert your developer API key in the [NetworkConstants.java](networkmodule/src/main/java/com/adithyaupadhya/newtorkmodule/volley/constants/NetworkConstants.java) file
+4. Run the project from Android Studio
 
 ## Powered by these open source projects
 
