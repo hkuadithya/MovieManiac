@@ -5,12 +5,13 @@ I strive to keep it in an active state of development. Your suggestions for impr
 Movie Maniac currently consists of features pertaining to movies, tv series, celebrities and game.<br/>
 
 <h3>Release v1.1 is now out on Play store</h3>
-- Minor GUI improvements
-- Better network performance
-- Search suggestions in Movies, TVSeries & Celebrities
-- Click on the card image to load a high resolution Image
-- Minor bug fixes
-
+<ul>
+<li>Minor GUI improvements</li>
+<li>Better network performance</li>
+<li>Search suggestions in Movies, TVSeries & Celebrities</li>
+<li>Click on the card image to load a high resolution Image</li>
+<li>Minor bug fixes</li>
+</ul>
 <a href="https://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac&hl=en"><h3>Download from play store Now</h3></a>
 
 ![Movie Maniac App logo](app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
