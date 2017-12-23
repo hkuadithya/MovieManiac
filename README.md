@@ -12,6 +12,7 @@ Movie Maniac currently consists of features pertaining to movies, tv series, cel
 <li>Click on the card image to load a high resolution Image</li>
 <li>Minor bug fixes</li>
 </ul>
+
 <a href="https://play.google.com/store/apps/details?id=com.adithyaupadhya.moviemaniac&hl=en"><h3>Download from play store Now</h3></a>
 
 ![Movie Maniac App logo](app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
